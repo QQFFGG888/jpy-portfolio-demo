@@ -16,3 +16,25 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.ac
  secs.forEach(function(s){io.observe(s)});
 })();
 
+/* 博客主页：主题矩阵筛选 + 列/卡片联动 + 数字滚动 */
+(function(){var mx=document.getElementById('mx');if(!mx)return;
+ var SHOT=/[?&]shot/.test(location.search),list=document.getElementById('biList'),cnt=document.getElementById('biCount'),empty=document.getElementById('biEmpty');
+ var rows=[].slice.call(mx.querySelectorAll('.mx-row')),cols=[].slice.call(mx.querySelectorAll('.mx-col')),cards=[].slice.call(list.querySelectorAll('.bc'));
+ function apply(k){rows.forEach(function(r){r.setAttribute('aria-pressed',r.dataset.k===k?'true':'false')});
+  var n=0;[cols,cards].forEach(function(g){g.forEach(function(el){var hit=!k||el.dataset.t.indexOf(k)>-1;el.classList.toggle('out',!hit);if(hit&&g===cards)n++})});
+  mx.classList.toggle('filtered',!!k);list.classList.toggle('filtered',!!k);
+  cnt.textContent=n+' / '+cards.length;empty.hidden=n>0;
+  var u=new URL(location.href);k?u.searchParams.set('t',k):u.searchParams.delete('t');history.replaceState(null,'',u)}
+ rows.forEach(function(r){r.addEventListener('click',function(){apply(r.getAttribute('aria-pressed')==='true'?null:r.dataset.k)})});
+ document.getElementById('biReset').addEventListener('click',function(){apply(null)});
+ function hl(d,on){cols.concat(cards).forEach(function(el){if(el.dataset.d===d)el.classList.toggle('hl',on)})}
+ cols.concat(cards).forEach(function(el){el.addEventListener('mouseenter',function(){hl(el.dataset.d,true)});el.addEventListener('mouseleave',function(){hl(el.dataset.d,false)})});
+ var q=new URLSearchParams(location.search).get('t');if(q&&rows.some(function(r){return r.dataset.k===q}))apply(q);
+ if(RM||SHOT)return;
+ mx.classList.add('js-anim');
+ new IntersectionObserver(function(es,o){if(!es[0].isIntersecting)return;o.disconnect();
+   cols.forEach(function(c,i){setTimeout(function(){c.querySelector('.mx-bar').style.transform='scaleY(1)'},i*60)})},{threshold:.3}).observe(mx);
+ [].slice.call(document.querySelectorAll('.bi-stats dd')).forEach(function(el){var to=+el.dataset.n,t0=performance.now();
+   (function f(t){var k=Math.min(1,(t-t0)/600);el.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(t0)});
+})();
+

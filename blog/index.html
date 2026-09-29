@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="acid" data-scheme="ink">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>论文精读 · 简沛言 JIANPEIYAN</title>
+<meta name="description" content="每周一篇模型评测方向的一手论文，写成中文导读。">
+<script>(function(){try{var s=localStorage.getItem('jpy-scheme');if(s==='light'||s==='ink')document.documentElement.setAttribute('data-scheme',s)}catch(e){}})();</script>
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="bi-page">
+<header class="nav"><div class="nav-in"><a class="brand" href="../作品集_vibecoding_DEMO_v9.html" aria-label="简沛言 · 作品集主页"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M 36.82 9.16 L 51.00 9.16 L 51.00 67.83 A 1.35 1.35 0 0 1 49.65 69.18 L 45.26 69.18 A 8.44 8.44 0 0 1 36.82 60.74 Z" fill="currentColor"/><path d="M 80.40 32.98 L 80.40 55.69 A 34.42 34.42 0 0 1 45.98 90.11 A 34.42 34.42 0 0 1 11.59 57.17" fill="none" stroke="currentColor" stroke-width="15.69"/><path d="M 58.64 16.18 L 88.38 16.18" fill="none" stroke="currentColor" stroke-width="14.04"/></svg><span class="px">JPY</span></a><nav class="links" aria-label="站点导航"><div class="menu"><a class="menu-btn" href="../作品集_vibecoding_DEMO_v9.html#works">作品</a><div class="menu-pop"><a href="../作品集_vibecoding_DEMO_v9.html#works"><small>01</small>核心项目</a><a href="../作品集_vibecoding_DEMO_v9.html#rent"><small>02</small>找房 Agent</a><a href="../作品集_vibecoding_DEMO_v9.html#ledger"><small>03</small>细节账本</a><a href="../作品集_vibecoding_DEMO_v9.html#flow"><small>04</small>工作流</a><a href="../作品集_vibecoding_DEMO_v9.html#contact"><small>07</small>联系</a></div></div><div class="menu"><a class="menu-btn" href="../作品集_vibecoding_DEMO_v9.html#more">博客</a><div class="menu-pop"><a href="paper-20260928.html"><small>09.28 · 论文精读</small>Who Wrote This Line? · 古典诗词检测</a><a href="paper-20260925.html"><small>09.25 · 论文精读</small>StoryAlign · 故事生成奖励模型</a><a href="paper-20260922.html"><small>09.22 · 论文精读</small>LegalCiteTrust · 法律报告引用可信度</a><a href="paper-20260919.html"><small>09.19 · 论文精读</small>Auditing Deep Research Writing · 深研报告可信度审计</a><a href="paper-20260916.html"><small>09.16 · 论文精读</small>HoWToBench · 人类级写作能力评测</a><a href="index.html" aria-current="page"><small>ALL</small>全部博客</a></div></div></nav><div class="tools"><a class="back" href="../作品集_vibecoding_DEMO_v9.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>返回作品集</span></a><button class="ibtn" id="schemeBtn" type="button" aria-label="切换明暗"></button></div></div></header>
+<main class="bi">
+  <section class="bi-hero">
+    <h1><span class="px bi-en">PAPER NOTES</span><span class="bi-zh">论文精读</span></h1>
+    <p class="bi-lead">每周一篇模型评测方向的一手论文。</p>
+    <dl class="bi-stats">
+      <div><dt>篇论文</dt><dd data-n="5">5</dd></div>
+      <div><dt>个名词</dt><dd data-n="88">88</dd></div>
+      <div><dt>段导读</dt><dd data-n="60">60</dd></div>
+      <div><dt>分钟阅读</dt><dd title="按中文字数 ÷ 400 估算" data-n="135">135</dd></div>
+    </dl>
+  </section>
+
+  <section class="bi-mx" aria-label="主题矩阵">
+    <div class="mx" id="mx">
+      <div class="mx-rows"><button class="mx-row" type="button" data-k="w" aria-pressed="false">写作评测<small>3</small></button><button class="mx-row" type="button" data-k="c" aria-pressed="false">可信度与引用<small>2</small></button><button class="mx-row" type="button" data-k="d" aria-pressed="false">生成内容检测<small>1</small></button><button class="mx-row" type="button" data-k="r" aria-pressed="false">奖励模型<small>1</small></button><button class="mx-row" type="button" data-k="b" aria-pressed="false">基准构造<small>4</small></button></div>
+      <div class="mx-cols"><a class="mx-col" href="paper-20260916.html" data-d="20260916" data-t="wb" aria-label="HoWToBench，约 26 分钟"><span class="mx-bar" style="--h:0.765"><b>26</b></span><span class="mx-date">09.16</span><i class="mx-dot on" data-k="w"></i><i class="mx-dot" data-k="c"></i><i class="mx-dot" data-k="d"></i><i class="mx-dot" data-k="r"></i><i class="mx-dot on" data-k="b"></i></a><a class="mx-col" href="paper-20260919.html" data-d="20260919" data-t="wc" aria-label="Auditing Deep Research Writing，约 26 分钟"><span class="mx-bar" style="--h:0.765"><b>26</b></span><span class="mx-date">09.19</span><i class="mx-dot on" data-k="w"></i><i class="mx-dot on" data-k="c"></i><i class="mx-dot" data-k="d"></i><i class="mx-dot" data-k="r"></i><i class="mx-dot" data-k="b"></i></a><a class="mx-col" href="paper-20260922.html" data-d="20260922" data-t="cb" aria-label="LegalCiteTrust，约 34 分钟"><span class="mx-bar" style="--h:1.000"><b>34</b></span><span class="mx-date">09.22</span><i class="mx-dot" data-k="w"></i><i class="mx-dot on" data-k="c"></i><i class="mx-dot" data-k="d"></i><i class="mx-dot" data-k="r"></i><i class="mx-dot on" data-k="b"></i></a><a class="mx-col" href="paper-20260925.html" data-d="20260925" data-t="wrb" aria-label="StoryAlign，约 31 分钟"><span class="mx-bar" style="--h:0.912"><b>31</b></span><span class="mx-date">09.25</span><i class="mx-dot on" data-k="w"></i><i class="mx-dot" data-k="c"></i><i class="mx-dot" data-k="d"></i><i class="mx-dot on" data-k="r"></i><i class="mx-dot on" data-k="b"></i></a><a class="mx-col" href="paper-20260928.html" data-d="20260928" data-t="db" aria-label="Who Wrote This Line?，约 18 分钟"><span class="mx-bar" style="--h:0.529"><b>18</b></span><span class="mx-date">09.28</span><i class="mx-dot" data-k="w"></i><i class="mx-dot" data-k="c"></i><i class="mx-dot on" data-k="d"></i><i class="mx-dot" data-k="r"></i><i class="mx-dot on" data-k="b"></i></a></div>
+    </div>
+    <p class="bi-hint"><span id="biCount">5 / 5</span> · 点主题筛选，点柱进入文章</p>
+  </section>
+
+  <ul class="bi-list" id="biList"><li class="bc" data-d="20260928" data-t="db"><a href="paper-20260928.html"><span class="bc-date">09.28</span><span class="bc-en">Who Wrote This Line?</span><span class="bc-zh">AI 写的古典诗词，能被检测出来吗</span><span class="bc-tags"><em>生成内容检测</em><em>基准构造</em></span><span class="bc-meta">18 个名词 · 约 18 分钟</span></a></li><li class="bc" data-d="20260925" data-t="wrb"><a href="paper-20260925.html"><span class="bc-date">09.25</span><span class="bc-en">StoryAlign</span><span class="bc-zh">怎么训练和评测故事生成的奖励模型</span><span class="bc-tags"><em>写作评测</em><em>奖励模型</em><em>基准构造</em></span><span class="bc-meta">18 个名词 · 约 31 分钟</span></a></li><li class="bc" data-d="20260922" data-t="cb"><a href="paper-20260922.html"><span class="bc-date">09.22</span><span class="bc-en">LegalCiteTrust</span><span class="bc-zh">中文法律长报告里，引用靠不靠得住</span><span class="bc-tags"><em>可信度与引用</em><em>基准构造</em></span><span class="bc-meta">18 个名词 · 约 34 分钟</span></a></li><li class="bc" data-d="20260919" data-t="wc"><a href="paper-20260919.html"><span class="bc-date">09.19</span><span class="bc-en">Auditing Deep Research Writing</span><span class="bc-zh">深度研究报告的可信度，怎么审</span><span class="bc-tags"><em>写作评测</em><em>可信度与引用</em></span><span class="bc-meta">18 个名词 · 约 26 分钟</span></a></li><li class="bc" data-d="20260916" data-t="wb"><a href="paper-20260916.html"><span class="bc-date">09.16</span><span class="bc-en">HoWToBench</span><span class="bc-zh">用写作树评测人类级写作能力</span><span class="bc-tags"><em>写作评测</em><em>基准构造</em></span><span class="bc-meta">16 个名词 · 约 26 分钟</span></a></li></ul>
+  <p class="bi-empty" id="biEmpty" hidden>这个方向还没有文章。<button class="btn-text" type="button" id="biReset">看全部</button></p>
+
+  <section class="bi-cta">
+    <p>想一起讨论哪一篇，发邮件给我。</p>
+    <a class="bi-btn" href="mailto:18382308038@163.com">18382308038@163.com</a>
+  </section>
+</main>
+<footer class="site-foot"><nav class="pn" aria-label="出口">
+  <a class="prev" href="../作品集_vibecoding_DEMO_v9.html"><small>← 作品集主页</small>简沛言 JIANPEIYAN</a>
+  <a class="next" href="paper-20260928.html"><small>最新一篇 · 09.28 →</small>Who Wrote This Line?</a>
+</nav><p class="copy">© 2026 简沛言 · 论文精读</p></footer>
+<script src="blog.js"></script>
+</body>
+</html>
