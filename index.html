@@ -531,7 +531,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
         <span class="dl-line" aria-hidden="true"><span style="--i:4">P</span><span style="--i:5">E</span><span style="--i:6">I</span><span style="--i:7">Y</span><span style="--i:8">A</span><span style="--i:9">N</span></span>
       </h1>
       <p class="statement zh-title rise" style="--i:1">我把搜索评测，做成了一套可复用的方法论。</p>
-      <p class="lead rise" style="--i:2">我是简沛言，在 AI 产品方向做数据标注和评测方法。平时也常用 AI 把想法直接做成能用的工具和页面，你现在看到的这个网站就是其中之一。</p>
+      <p class="lead rise" style="--i:2">我是简沛言，在 AI 产品方向做数据标注和评测方法。也常把想法交给 AI，直接做成能用的东西。这个网站就是其中之一。</p>
       <ol class="core rise" style="--i:3" aria-label="三个核心项目与关键数字" data-spec="证据先行 · 3 项目 + 关键数字">
         <li><a href="#w1"><span class="n mono">01</span><span><span class="t">搜索必要性三级判定</span><span class="u">判断回答前是否需要联网搜索</span></span><b class="k" data-count data-to="9" data-suf=" 版">9 版</b></a></li>
         <li><a href="#w2"><span class="n mono">02</span><span><span class="t">写作评测题库</span><span class="u">13 个大类，对应 81 项评测标准</span></span><b class="k" data-count data-to="363" data-suf=" 条">363 条</b></a></li>
@@ -567,8 +567,8 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
 <section class="section" id="works" aria-labelledby="h-works">
   <div class="wrap">
     <header class="sec-head reveal">
-      <h2 class="zh-title" id="h-works">三个项目，都用同一种方式讲清楚。</h2>
-      <p>每个项目都讲清楚三件事：当时要解决什么问题、我具体做了什么、最后拿到了什么结果。暂时没有数据的部分，我会标注出来，不做推测。</p>
+      <h2 class="zh-title" id="h-works">三个项目，只回答三个问题。</h2>
+      <p>要解决什么，我做了什么，结果如何。数字没有核实过，我宁可留白，也不写成结论。</p>
     </header>
 
     <article class="proj reveal" id="w1" data-spec="背景 → 动作 → 结果">
@@ -581,7 +581,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
         <dl class="star">
           <div><dt>背景</dt><dd>模型在回答之前该不该先联网搜索，团队里一直没有统一的标准，不同的人标注出来的结论经常不一致。</dd></div>
           <div><dt>我做了什么</dt><dd>我设计了一套三步判断流程：先判断安全性，再判断写作需求，最后判断要不要搜索，把问题分成必须搜索、可搜索可不搜索、不需要搜索三级。为了校准这套标准，我用到了 KANO 五点量表和信息增益（信息增益来自两种做法的对比，不是给单道题打分）。之后又用边界案例和歧义提问做压力测试，检查规则还有没有漏洞。</dd></div>
-          <div class="res"><dt>结果</dt><dd>从 v1 修改到 v4.2，一共 <b data-count data-to="9">9</b> 个版本，规则已经同步给团队。<br><span class="todo">待填：标注的一致性和规则的采纳范围</span></dd></div>
+          <div class="res"><dt>结果</dt><dd>从 v1 修改到 v4.2，一共 <b data-count data-to="9">9</b> 个版本，规则已经同步给团队。<br><span class="todo">补齐中 · 标注一致性与规则采纳范围</span></dd></div>
         </dl>
         <figure class="viz tilt" data-spec="tilt ≤6deg">
           <svg viewBox="0 0 480 300" role="img" aria-label="三步判定流程、三级结果与 9 个版本的时间线">
@@ -613,7 +613,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
         <dl class="star">
           <div><dt>背景</dt><dd>写作类回答的质量过去靠主观打分，同一个回答，不同标注员给出的分数常常不一样。</dd></div>
           <div><dt>我做了什么</dt><dd>我搭了一套从 13 个大类到 L2、L3 层级的题库映射，逐条对照 81 项评测标准；把评分改成 0、1、2 三档的单维度判断，暂时定不出量化规则的条目就如实标注；再按子问题、引文、答案质量分成三类，用 P0、P1、P2 标记优先级。</dd></div>
-          <div class="res"><dt>结果</dt><dd>建成了 <b data-count data-to="363">363</b> 条的主表和一份偏差清单。<br><span class="todo">待填：标注一致性的前后对比</span></dd></div>
+          <div class="res"><dt>结果</dt><dd>建成了 <b data-count data-to="363">363</b> 条的主表和一份偏差清单。<br><span class="todo">补齐中 · 标注一致性的前后对比</span></dd></div>
         </dl>
         <figure class="viz tilt">
           <svg viewBox="0 0 480 300" role="img" aria-label="题库层级：13 大类、L2、L3、363 条主表；评分 0、1、2 三档，P0 到 P2 分级，对照 81 项标准">
@@ -625,7 +625,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
             <rect class="vz-node" x="172" y="252" width="136" height="32" rx="16"/><text class="vz-m" x="240" y="273" text-anchor="middle" style="fill:var(--color-text-2)">P0 · P1 · P2</text>
             <rect class="vz-node" x="324" y="252" width="136" height="32" rx="16"/><text class="vz-m" x="392" y="273" text-anchor="middle" style="fill:var(--color-text-2)">对照 81 项标准</text>
           </svg>
-          <figcaption>L2 和 L3 的具体数量我没有写，因为手上没有核实过的数字。</figcaption>
+          <figcaption>只列到能核实的层级；L2、L3 的数量还在确认。</figcaption>
         </figure>
       </div>
     </article>
@@ -639,7 +639,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
       <div class="proj-grid">
         <dl class="star">
           <div><dt>背景</dt><dd>这个作品集要给 AI 产品方向的面试官看：既要在 30 秒内看完重点，也得能证明我真的能把东西做出来。</dd></div>
-          <div><dt>我做了什么</dt><dd>我先写了 15 份设计规范和一个自检脚本，再让 AI 按规范生成页面；3D 模型、LOGO、配色这些细节，全部用真实浏览器渲染出来验证，或者用实际计算的数值核对，不靠目测。</dd></div>
+          <div><dt>我做了什么</dt><dd>15 份设计规范和一个自检脚本先落地，再让 AI 按规范生成页面；3D 模型、LOGO、配色的每一处改动，都用真实浏览器渲染验证，或用实算数值核对，不靠目测。</dd></div>
           <div class="res"><dt>结果</dt><dd>3D 模型从 <b>84.4 MB 压缩到 1.58 MB</b>；LOGO 矢量化的保真度（IoU）从 <b>0.7982 提升到 0.9103</b>；暗色荧光块上的文字对比度从 <b>1.12:1 提升到 16.71:1</b>。</dd></div>
         </dl>
         <figure class="viz tilt">
@@ -670,7 +670,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
   <div class="wrap">
     <header class="sec-head reveal">
       <h2 class="zh-title" id="h-rent">找房，先圈出通勤范围，再去问人。</h2>
-      <p>这是一个租房助手：先按公交通勤时间圈出能住的范围，再去小红书的点点 AI 里问真实房源，最后整理成一份报告。整个过程里最难的是第一步，范围到底怎么确定。</p>
+      <p>一个帮我找房的助手：先按通勤时间圈定能住的范围，再去小红书的点点 AI 里打听真实房源，最后整理成报告。真正难的是第一步，范围怎么定。</p>
     </header>
 
     <div class="rh-grid reveal">
@@ -696,7 +696,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
 
     <div class="rh-sub reveal" style="margin-top:32px">
       <h3 class="zh-title">每一层都想好了出问题怎么办。</h3>
-      <p>点击下面的按钮，看看通勤圈层会切换到哪条备用轨道。有一条规矩始终不变：取不到的数据一律标注为 unknown，不做推测。</p>
+      <p>点几下按钮，看通勤圈层会退到哪条备用轨道。有一条规矩我从没破过：取不到的数据一律标注为 unknown，不做推测。</p>
     </div>
     <div class="rh-grid b">
       <ol class="layers reveal">
@@ -730,7 +730,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
 
     <div class="rh-sub reveal">
       <h3 class="zh-title">没测过，就不算通过。</h3>
-      <p>这个项目从 v1 修改到 v4，一共四版，常驻上下文从 7,128B 压缩到 2,733B，减少了 54%。过程中还纠正了两个流传很广的配额说法：基础搜索服务每月只有 5,000 次，公交策略官方只提供了 5 种。上线之前，下面这些还没有实测：</p>
+      <p>从 v1 改到 v4，常驻上下文由 7,128B 压到 2,733B，减少 54%。途中还纠正了两个流传很广的配额说法：基础搜索服务每月只有 5,000 次，公交策略官方只提供了 5 种。上线之前，下面这些还没有实测：</p>
       <div class="rh-open">
         <span class="todo">linename 的真实日配额</span><span class="todo">reachcircle 是否可用</span><span class="todo">distance 是否包含路况</span><span class="todo">点点 AI 的回答里有没有笔记链接</span><span class="todo">连续提问会不会触发风控</span>
       </div>
@@ -743,7 +743,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
   <div class="wrap">
     <header class="sec-head reveal">
       <h2 class="zh-title" id="h-ledger">返工记录：改了什么，为什么改</h2>
-      <p>用 AI 写代码，写得快不算本事，能看出哪里不对、再用可以复现的方法证明改对了，才算。下面这七条都来自这个网站的真实返工。</p>
+      <p>用 AI 写代码，快不算本事。能看出哪里不对，再用可以复现的方法证明改对了，才算。这七条都来自这个网站的真实返工。</p>
     </header>
     <div class="ledger-grid">
       <div class="specimen reveal">
@@ -796,15 +796,15 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
   <div class="wrap">
     <header class="sec-head reveal">
       <h2 class="zh-title" id="h-flow">我是怎么和 AI 一起工作的</h2>
-      <p>这不是一句话生成一个网站，而是一套有检查点的流程：先把规范写清楚，做完再验收，每一步都留下记录。</p>
+      <p>一句话生成一个网站，我做不到。我更信一套有检查点的流程：先写清规范，做完就验收，每一步都留下记录。</p>
     </header>
     <div class="flow-track reveal" id="flowTrack" aria-hidden="true"><i class="flow-dot is-accent"></i></div>
     <ol class="flow-steps" data-spec="stagger 50ms">
-      <li class="reveal" style="--i:0"><span class="fs-n px">1</span><h3>写规范</h3><p>先定下 5 条设计原则和 3 个标志性元素，再落实到具体数值。</p><p class="fs-m mono">15 份规范文档</p></li>
-      <li class="reveal" style="--i:1"><span class="fs-n px">2</span><h3>写指令</h3><p>把风格决策整理成固定清单，AI 每次照同一份清单生成，不会跑偏。</p><p class="fs-m mono">生成前自检</p></li>
+      <li class="reveal" style="--i:0"><span class="fs-n px">1</span><h3>写规范</h3><p>先定 5 条设计原则、3 个标志性元素，再落到具体数值。</p><p class="fs-m mono">15 份规范文档</p></li>
+      <li class="reveal" style="--i:1"><span class="fs-n px">2</span><h3>写指令</h3><p>把风格决策整理成固定清单，让 AI 每次照同一份生成，不跑偏。</p><p class="fs-m mono">生成前自检</p></li>
       <li class="reveal" style="--i:2"><span class="fs-n px">3</span><h3>AI 生成</h3><p>单文件、不用框架、不引外部 CDN，双击就能打开。</p><p class="fs-m mono">没有任何外部请求</p></li>
-      <li class="reveal" style="--i:3"><span class="fs-n px">4</span><h3>用真实浏览器验收</h3><p>不看 AI 的描述，只看无头浏览器的截图和实际计算出来的数值。</p><p class="fs-m mono">IoU · 对比度 · 边缘剖面</p></li>
-      <li class="reveal" style="--i:4"><span class="fs-n px">5</span><h3>归档经验</h3><p>规则写进 AGENTS.md，过程写进每日日志，下一次不再犯同样的错。</p><p class="fs-m mono">18 份日志</p></li>
+      <li class="reveal" style="--i:3"><span class="fs-n px">4</span><h3>用真实浏览器验收</h3><p>不信描述，只信无头浏览器的截图和实算出来的数值。</p><p class="fs-m mono">IoU · 对比度 · 边缘剖面</p></li>
+      <li class="reveal" style="--i:4"><span class="fs-n px">5</span><h3>归档经验</h3><p>规则写进 AGENTS.md，过程写进每日日志，同一个错不犯第二次。</p><p class="fs-m mono">18 份日志</p></li>
     </ol>
   </div>
 </section>
@@ -843,7 +843,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
         <li><span class="y">2026</span><b>大狗识别器 · AR 捕捉 Demo</b><span class="d">480×352 的绿色 HUD，识别到狗之后进入宝可梦式的捕捉环节。</span></li>
         <li><span class="y">2026</span><b>AI 论文追踪流水线</b><span class="d">每 3 天整理一批经典 LLM 论文和中文导读，上传脚本已经稳定运行到第 28 轮。</span></li>
         <li><span class="y">2026</span><b>社媒用户声音采集</b><span class="d">一个多平台采集工具，规则是同一时间只占用一个采集器，标签页预算不超过 5 个。</span></li>
-        <li><span class="y">2026</span><b>Diff Review 会议 SOP</b><span class="d">把首轮、二轮的工作流和会前清单固定下来，做成一页 5 步手风琴网页，同时提供可复制的 Mermaid 源码。</span></li>
+        <li><span class="y">2026</span><b>Diff Review 会议 SOP</b><span class="d">把首轮、二轮的工作流和会前清单固定下来，做成一页 5 步手风琴网页，附可复制的 Mermaid 源码。</span></li>
         <li><span class="y">2026</span><b>AI 感评测框架</b><span class="d">从模式固化、用词堆砌、滥用隐喻等维度建立负样本库，覆盖 4 类文体。</span></li>
       </ul>
     </div>
@@ -862,7 +862,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
     <p class="statement zh-title reveal">30 分钟，聊一个你们团队正在头疼的评测问题。</p>
     <div class="cta reveal">
       <a class="btn btn-primary is-accent" href="mailto:">发邮件约聊</a>
-      <span class="todo">公开邮箱和简历文件还在准备中</span>
+      <span class="todo">公开邮箱与简历仍在整理</span>
     </div>
   </div>
 </section>
@@ -1090,9 +1090,9 @@ trackW();addEventListener('resize',trackW);
 
 /* ---------- 选择页状态机 ---------- */
 var SEL=[
-  {desc:'先看三个有结果数据的项目，都按同一种结构写。',target:'#works',
+  {desc:'三个项目，都有结果数据，都按同一种结构写。',target:'#works',
    cards:[['01','搜索必要性三级判定','9 个版本','#w1'],['02','写作评测题库','363 条主表','#w2'],['03','这个作品集网站','3D 资源 −98.1%','#w3']]},
-  {desc:'我每周读一篇模型评测方向的新论文，读完写成容易看懂的版本。',target:'#more',
+  {desc:'每周读一篇模型评测方向的新论文，读完写成能看懂的样子。',target:'#more',
    cards:[['09.28','Who Wrote This Line?','论文精读','blog/paper-20260928.html'],['09.25','StoryAlign','论文精读','blog/paper-20260925.html'],['09.22','LegalCiteTrust','论文精读','blog/paper-20260922.html']]}
 ];
 var selList=$('#selList'), opts=$$('[role=option]',selList), selDesc=$('#selDesc'), selCards=$('#selCards'), cur=0, selVisible=false, busy=false;
