@@ -386,22 +386,21 @@ li[aria-selected="true"] .band{transform:scaleX(1)}
 }
 
 
-/* ---- 导航菜单：作品 / 博客（主页与博客页同一份） ---- */
+/* ---- 导航菜单：作品 / 博客，悬停展开（下拉菜单 Dropdown） ---- */
 .menu{position:relative}
-.menu>summary{list-style:none;display:inline-flex;align-items:center;gap:8px;min-height:var(--tap-min);padding:0 12px;border-radius:var(--r-ctl);font-size:14px;color:var(--color-text-2);cursor:pointer;user-select:none;transition:background-color var(--t-fast) var(--ease),color var(--t-fast) var(--ease)}
-.menu>summary::-webkit-details-marker{display:none}
-.menu>summary::after{content:"";width:8px;height:5px;background:currentColor;clip-path:polygon(0 0,100% 0,50% 100%);transition:transform var(--t-fast) var(--ease-back)}
-.menu[open]>summary::after{transform:rotate(180deg)}
-.menu>summary:hover,.menu[open]>summary{background:var(--color-surface-2);color:var(--color-text)}
-.menu>summary:active{transform:scale(.97)}
-.menu-pop{position:absolute;top:calc(100% + 8px);left:0;z-index:70;width:max-content;min-width:240px;max-width:min(360px,calc(100vw - 32px));padding:8px;display:grid;gap:2px;border-radius:var(--r-ctl);background:var(--color-surface);box-shadow:var(--shadow-pop)}
+.menu-btn{display:inline-flex;align-items:center;gap:8px;min-height:var(--tap-min);padding:0 12px;border-radius:var(--r-ctl);font-size:14px;color:var(--color-text-2);text-decoration:none;transition:background-color var(--t-fast) var(--ease),color var(--t-fast) var(--ease)}
+.menu-btn::after{content:"";width:8px;height:5px;background:currentColor;clip-path:polygon(0 0,100% 0,50% 100%);transition:transform var(--t-fast) var(--ease-back)}
+.menu:hover .menu-btn,.menu:focus-within .menu-btn{background:var(--color-surface-2);color:var(--color-text)}
+.menu:hover .menu-btn::after,.menu:focus-within .menu-btn::after{transform:rotate(180deg)}
+.menu-pop{position:absolute;top:100%;left:0;z-index:70;width:max-content;min-width:260px;max-width:min(380px,calc(100vw - 32px));padding:8px;display:grid;gap:2px;border-radius:var(--r-ctl);background:var(--color-surface);box-shadow:var(--shadow-pop);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity var(--t-fast) var(--ease),transform var(--t-fast) var(--ease),visibility 0s linear var(--t-fast)}
+.menu:hover .menu-pop,.menu:focus-within .menu-pop{opacity:1;visibility:visible;transform:none;transition-delay:0s}
 .menu:last-child .menu-pop{left:auto;right:0}
-.menu .menu-pop a{display:grid;gap:2px;min-height:var(--tap-min);padding:8px 12px;border-radius:var(--r-ctl);background:none;font-size:14px;line-height:1.4;color:var(--color-text);transition:background-color var(--t-fast) var(--ease)}
+.menu .menu-pop a{display:grid;gap:2px;min-height:44px;padding:8px 12px;border-radius:var(--r-ctl);background:none;font-size:14px;line-height:1.4;color:var(--color-text);text-decoration:none;transition:background-color var(--t-fast) var(--ease)}
 .menu .menu-pop a small{font-family:var(--font-mono);font-size:12px;color:var(--color-text-3)}
 .menu .menu-pop a:hover{background:var(--color-surface-2)}
 .menu .menu-pop a[aria-current="page"]{background:var(--color-text);color:var(--color-bg)}
 .menu .menu-pop a[aria-current="page"] small{color:inherit;opacity:.72}
-
+.menu-pop::before{content:"";position:absolute;left:0;right:0;top:-8px;height:8px}
 /* ============ SPEC 叠层（按 S） ============ */
 .hud{display:none}
 body.spec .hud{display:grid;position:fixed;left:16px;bottom:16px;z-index:80;min-width:248px;gap:4px;padding:12px 16px;border-radius:var(--r-ctl);background:var(--color-surface);box-shadow:var(--shadow-pop);font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--color-text-2)}
@@ -506,7 +505,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
 <header class="nav" id="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#top" aria-label="简沛言 · 回到顶部" data-spec="--nav-h 56"><svg aria-hidden="true"><use href="#logo"/></svg><span class="px">JPY</span></a>
-    <nav class="links" aria-label="页面导航"><details class="menu"><summary>作品</summary><div class="menu-pop"><a href="#works"><small>01</small>核心项目</a><a href="#rent"><small>02</small>找房 Agent</a><a href="#ledger"><small>03</small>细节账本</a><a href="#flow"><small>04</small>工作流</a><a href="#contact"><small>07</small>联系</a></div></details><details class="menu"><summary>博客</summary><div class="menu-pop"><a href="blog/paper-20260928.html"><small>09.28 · 论文精读</small>Who Wrote This Line?</a><a href="blog/paper-20260925.html"><small>09.25 · 论文精读</small>StoryAlign</a><a href="blog/paper-20260922.html"><small>09.22 · 论文精读</small>LegalCiteTrust</a><a href="#more"><small>ALL</small>全部博客</a></div></details></nav>
+    <nav class="links" aria-label="页面导航"><div class="menu"><a class="menu-btn" href="#works">作品</a><div class="menu-pop"><a href="#works"><small>01</small>核心项目</a><a href="#rent"><small>02</small>找房 Agent</a><a href="#ledger"><small>03</small>细节账本</a><a href="#flow"><small>04</small>工作流</a><a href="#contact"><small>07</small>联系</a></div></div><div class="menu"><a class="menu-btn" href="#more">博客</a><div class="menu-pop"><a href="blog/paper-20260928.html"><small>09.28 · 论文精读</small>Who Wrote This Line? · 古典诗词检测</a><a href="blog/paper-20260925.html"><small>09.25 · 论文精读</small>StoryAlign · 故事生成奖励模型</a><a href="blog/paper-20260922.html"><small>09.22 · 论文精读</small>LegalCiteTrust · 法律报告引用可信度</a><a href="blog/paper-20260919.html"><small>09.19 · 论文精读</small>Auditing Deep Research Writing · 深研报告可信度审计</a><a href="blog/paper-20260916.html"><small>09.16 · 论文精读</small>HoWToBench · 人类级写作能力评测</a><a href="#more"><small>ALL</small>全部博客</a></div></div></nav>
     <div class="tools">
       <button class="tbtn" id="specBtn" type="button" aria-pressed="false" title="规范叠层（快捷键 S）">SPEC</button>
       <button class="ibtn" id="schemeBtn" type="button" aria-label="切换明暗（快捷键 T）" title="切换明暗（T）">
@@ -517,7 +516,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
       </button>
     </div>
   </div>
-  <nav class="drawer" id="drawer" aria-label="移动端导航"><a href="#works">01 · 核心项目</a><a href="#rent">02 · 找房 Agent</a><a href="#ledger">03 · 细节账本</a><a href="#flow">04 · 工作流</a><a href="#contact">07 · 联系</a><a href="blog/paper-20260928.html">Who Wrote This Line?</a><a href="blog/paper-20260925.html">StoryAlign</a><a href="blog/paper-20260922.html">LegalCiteTrust</a></nav>
+  <nav class="drawer" id="drawer" aria-label="移动端导航"><a href="#works">01 · 核心项目</a><a href="#rent">02 · 找房 Agent</a><a href="#ledger">03 · 细节账本</a><a href="#flow">04 · 工作流</a><a href="#contact">07 · 联系</a><p class="eyebrow" style="margin-top:8px">博客</p><a href="blog/paper-20260928.html">Who Wrote This Line? · 古典诗词检测</a><a href="blog/paper-20260925.html">StoryAlign · 故事生成奖励模型</a><a href="blog/paper-20260922.html">LegalCiteTrust · 法律报告引用可信度</a><a href="blog/paper-20260919.html">Auditing Deep Research Writing · 深研报告可信度审计</a><a href="blog/paper-20260916.html">HoWToBench · 人类级写作能力评测</a></nav>
 </header>
 
 <main id="top">
@@ -849,7 +848,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
     </div>
     <div class="reveal" style="--i:1">
       <h2 class="zh-title">博客 · 论文精读</h2>
-      <ul class="mlist"><li><span class="y">09.28</span><b><a class="btn-text" href="blog/paper-20260928.html">Who Wrote This Line? · AI 写的古典诗词，能被检测出来吗</a></b><span class="d">论文精读 · 评测方法</span></li><li><span class="y">09.25</span><b><a class="btn-text" href="blog/paper-20260925.html">StoryAlign · 怎么评测和训练故事生成的奖励模型</a></b><span class="d">论文精读 · 评测方法</span></li><li><span class="y">09.22</span><b><a class="btn-text" href="blog/paper-20260922.html">LegalCiteTrust · 中文法律长报告里，引用靠不靠得住</a></b><span class="d">论文精读 · 评测方法</span></li></ul>
+      <ul class="mlist"><li><span class="y">09.28</span><b><a class="btn-text" href="blog/paper-20260928.html">Who Wrote This Line? · AI 写的古典诗词，能被检测出来吗</a></b><span class="d">论文精读 · 模型评测方向</span></li><li><span class="y">09.25</span><b><a class="btn-text" href="blog/paper-20260925.html">StoryAlign · 怎么训练和评测故事生成的奖励模型</a></b><span class="d">论文精读 · 模型评测方向</span></li><li><span class="y">09.22</span><b><a class="btn-text" href="blog/paper-20260922.html">LegalCiteTrust · 中文法律长报告里，引用靠不靠得住</a></b><span class="d">论文精读 · 模型评测方向</span></li><li><span class="y">09.19</span><b><a class="btn-text" href="blog/paper-20260919.html">Auditing Deep Research Writing · 深度研究报告的可信度，怎么审</a></b><span class="d">论文精读 · 模型评测方向</span></li><li><span class="y">09.16</span><b><a class="btn-text" href="blog/paper-20260916.html">HoWToBench · 用写作树评测人类级写作能力</a></b><span class="d">论文精读 · 模型评测方向</span></li></ul>
     </div>
   </div>
 </section>
@@ -861,8 +860,8 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
     <h2 class="display reveal" id="h-contact" data-spec="签名② 右出血">SAY HI</h2>
     <p class="statement zh-title reveal">30 分钟，聊一个你们团队正在头疼的评测问题。</p>
     <div class="cta reveal">
-      <a class="btn btn-primary is-accent" href="mailto:">发邮件约聊</a>
-      <span class="todo">公开邮箱与简历，稍后补充</span>
+      <a class="btn btn-primary is-accent" href="mailto:18382308038@163.com">发邮件约聊</a>
+      <a class="btn-text" href="mailto:18382308038@163.com">18382308038@163.com</a>
     </div>
   </div>
 </section>
@@ -870,7 +869,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
 
 <footer class="footer">
   <div class="wrap foot-in">
-    <p>© 2026 简沛言 · 单文件 HTML，没有任何外部请求 · 字体全部本地加载</p>
+    <p>© 2026 简沛言 · <a href="mailto:18382308038@163.com">18382308038@163.com</a> · 单文件 HTML，无外部请求</p>
     <p>按 <kbd>S</kbd> 打开规范叠层，按 <kbd>T</kbd> 切换明暗，工牌可以拖动</p>
   </div>
 </footer>
@@ -1189,7 +1188,7 @@ if(root.classList.contains('intro')){
   if(intro)intro.remove();
   requestAnimationFrame(startPage);
 }
-document.addEventListener('click',function(e){document.querySelectorAll('details.menu[open]').forEach(function(d){if(!d.contains(e.target)||e.target.closest('.menu-pop a'))d.removeAttribute('open')})});document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('details.menu[open]').forEach(function(d){d.removeAttribute('open')})});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.activeElement&&document.activeElement.closest('.menu'))document.activeElement.blur()});
 })();
 </script>
 </body>

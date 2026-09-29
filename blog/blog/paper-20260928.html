@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="acid" data-scheme="ink">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Who Wrote This Line? · AI 写的古典诗词，能被检测出来吗 · 简沛言 JIANPEIYAN</title>
+<script>(function(){try{var s=localStorage.getItem('jpy-scheme');if(s==='light'||s==='ink')document.documentElement.setAttribute('data-scheme',s)}catch(e){}})();</script>
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<header class="nav"><div class="nav-in"><a class="brand" href="../作品集_vibecoding_DEMO_v8.html" aria-label="简沛言 · 作品集主页"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M 36.82 9.16 L 51.00 9.16 L 51.00 67.83 A 1.35 1.35 0 0 1 49.65 69.18 L 45.26 69.18 A 8.44 8.44 0 0 1 36.82 60.74 Z" fill="currentColor"/><path d="M 80.40 32.98 L 80.40 55.69 A 34.42 34.42 0 0 1 45.98 90.11 A 34.42 34.42 0 0 1 11.59 57.17" fill="none" stroke="currentColor" stroke-width="15.69"/><path d="M 58.64 16.18 L 88.38 16.18" fill="none" stroke="currentColor" stroke-width="14.04"/></svg><span class="px">JPY</span></a><nav class="links" aria-label="站点导航"><div class="menu"><a class="menu-btn" href="../作品集_vibecoding_DEMO_v8.html#works">作品</a><div class="menu-pop"><a href="../作品集_vibecoding_DEMO_v8.html#works"><small>01</small>核心项目</a><a href="../作品集_vibecoding_DEMO_v8.html#rent"><small>02</small>找房 Agent</a><a href="../作品集_vibecoding_DEMO_v8.html#ledger"><small>03</small>细节账本</a><a href="../作品集_vibecoding_DEMO_v8.html#flow"><small>04</small>工作流</a><a href="../作品集_vibecoding_DEMO_v8.html#contact"><small>07</small>联系</a></div></div><div class="menu"><a class="menu-btn" href="../作品集_vibecoding_DEMO_v8.html#more">博客</a><div class="menu-pop"><a href="paper-20260928.html" aria-current="page"><small>09.28 · 论文精读</small>Who Wrote This Line? · 古典诗词检测</a><a href="paper-20260925.html"><small>09.25 · 论文精读</small>StoryAlign · 故事生成奖励模型</a><a href="paper-20260922.html"><small>09.22 · 论文精读</small>LegalCiteTrust · 法律报告引用可信度</a><a href="paper-20260919.html"><small>09.19 · 论文精读</small>Auditing Deep Research Writing · 深研报告可信度审计</a><a href="paper-20260916.html"><small>09.16 · 论文精读</small>HoWToBench · 人类级写作能力评测</a><a href="../作品集_vibecoding_DEMO_v8.html#more"><small>ALL</small>全部博客</a></div></div></nav><div class="tools"><a class="back" href="../作品集_vibecoding_DEMO_v8.html#more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>返回作品集</span></a><button class="ibtn" id="schemeBtn" type="button" aria-label="切换明暗"></button></div></div></header>
+<script>document.documentElement.classList.add('js')</script>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-title">PAPER <span class="cn">AI 论文<em>每周精读</em></span></div>
+    <nav class="topbar-nav"><a href="#paper1"><span class="dot"></span>Who Wrote This…</a><a href="#glossary"><span class="dot"></span>名词表·18</a></nav>
+  </div>
+</header>
+<div class="read-progress" id="readProgress"></div>
+
+<div class="masthead">
+  <div class="masthead-badge">📅 生成于 2026-09-28 · 全文通读 · 零基础可读</div>
+  <h1>AI 论文<em>每周精读</em></h1>
+  <p class="masthead-sub">本期 1 篇模型评测领域的一手文献（含评测方法 / Bench 构造），覆盖 Benchmark与Rubric。全文通读后按四层金字塔重写：生活比喻建立直觉 → 术语对照知晓名词 → 技术语言准确理解 → 实操配置便于上手；并附「一线可借鉴要点」与「给读者的思考题」。正文术语可点击查看释义。</p>
+  <div class="masthead-stats"><div class="stat"><div class="stat-num">1</div><div class="stat-label">篇论文</div></div><div class="stat"><div class="stat-num">18</div><div class="stat-label">个名词</div></div><div class="stat"><div class="stat-num">1</div><div class="stat-label">大方向</div></div><div class="stat"><div class="stat-num">12</div><div class="stat-label">段导读</div></div></div>
+</div>
+
+<main class="container">
+<details class="toc" id="toc" aria-label="本页目录" open><summary>本页目录</summary><ol id="tocList"></ol></details>
+  <section id="paper1" class="section"><article class="paper-card reveal"><div class="paper-head"><div class="paper-seq">01</div><h2 class="paper-title">Who Wrote This Line? Evaluating the Detection of LLM-Generated Classical Chinese Poetry</h2><p class="paper-oneliner">用同一道题考 12 种 AI 文本检测器和 4 位受过十年以上古典文学训练的读者：在 30,664 首已知真伪的古典诗词上，判定式检测器平均只有 32.15% 的准确率，最好的统计检测器 AUROC 能到 95.03%，而人类读者也只有约 51.25%——在古典诗词这一门类里，机器的通用鉴别力尚未成立，人的直觉也不可靠。</p><div class="paper-meta"><span class="difficulty">⭐⭐</span><span class="paper-date">2026-04-11</span><span class="tag-badge tag-bench">Benchmark与Rubric</span></div></div><div class="links-box"><div class="link-item"><span class="link-label">📄 原文：</span><a href="https://arxiv.org/abs/2604.10101" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2604.10101</a></div><div class="link-item"><span class="link-label">📥 PDF：</span><a href="https://arxiv.org/pdf/2604.10101" target="_blank" rel="noopener noreferrer">https://arxiv.org/pdf/2604.10101</a></div></div><div class="stage"><h4><span class="num">1</span>一句话核心结论</h4><div class="stage-body"><p>先看一个场面。一位文物鉴定师面前摆着一件瓷碗，要判它是古代真品还是当代高仿——没有传承记录、没有碳十四，只能看器型、釉色、纹样。本文测量的就是这件事的「诗词版」：把 12 种 AI 文本<span class="tbs" data-term="detector"><input type="checkbox" id="tbs1" class="tbs-toggle"><label for="tbs1" class="tbs-term">检测器</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">检测器</span><span class="tbs-en">Detector <span class="abbr">—</span></span><label for="tbs1" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">判断一段文本「是人写的还是机器写的」的系统。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文共评测 12 个：判定式 5 个 + 概率式 7 个（§5, p5；表 2、表 3, p6）。</span></span><a class="tbs-more" href="#term-detector">查看完整释义 ›</a></span></span>请来当鉴定师，让它们在一批已知真伪的古典诗词上做判断。</p>
+<p>结果是<strong class="hl">判定式检测器（直接回答「人写的还是 AI 写的」）平均只有 32.15% 的判断正确</strong>（表 2, p6）——远低于抛硬币；概率式检测器（给出 AI 概率分）里最好的一档，微调后的中文 Roberta 能到 <strong>95.03% 的 <span class="tbs" data-term="auroc"><input type="checkbox" id="tbs2" class="tbs-toggle"><label for="tbs2" class="tbs-term">AUROC</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">AUROC</span><span class="tbs-en">Area Under the ROC Curve <span class="abbr">AUROC</span></span><label for="tbs2" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">随机抽一首 AI 诗和一首人类诗，检测器把 AI 那首排在前的概率。50% 等于抛硬币，100% 是全对。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">单首设定下从 Fast-DetectGPT 的 49.67 到微调 Roberta 的 95.03（表 3, p6）。</span></span><a class="tbs-more" href="#term-auroc">查看完整释义 ›</a></span></span></strong>（表 3, p6），但换一个更难的条件就会掉到 71.10%（表 6, p7）。与此同时，四位受过十年以上古典文学训练的读者，平均正确率只有约 <strong>51.25%</strong>（表 10, p15）。</p>
+<p>所以核心结论是：<strong class="hl">在古典诗词这一门类里，真假难辨不是模型的问题，是人机共同的天花板；而现有通用检测器基本不具备可用的鉴别力。</strong>支撑这个结论的，是作者建的一座「标准器库」——<span class="tbs" data-term="changan"><input type="checkbox" id="tbs3" class="tbs-toggle"><label for="tbs3" class="tbs-term">30,664 首已知真伪的诗词</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">长安基准</span><span class="tbs-en">ChangAn Benchmark <span class="abbr">ChangAn</span></span><label for="tbs3" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">「已知真伪的标准器库」：一批人类作品与模型作品混在一起、标签已知的诗词集合。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">30,664 首 = 人类 10,276 首（282 位当代作者）+ AI 20,388 首（Doubao Seed-1.6 5,136 / DeepSeek-V3.2 5,138 / Kimi-K2 5,017 / GPT-4.1 5,097），共 1,802,646 字（§3.1、表 1, p3–4）。</span></span><a class="tbs-more" href="#term-changan">查看完整释义 ›</a></span></span>，人类作品 10,276 首、四个大模型生成 20,388 首（§3.1, p3）。</p></div></div><div class="stage"><h4><span class="num">2</span>术语表：先把鉴定所里的八个词认全</h4><div class="stage-body"><p>全篇只用一个比喻系统——文物鉴定所：一首诗词是一件待鉴定的器物，人类作品是真品、模型生成的是高仿，检测器是鉴定师，ChangAn 是已知真伪的标准器库。先把最关键的八个词对齐（文末有 18 条完整名词表）。</p>
+<table class="compare-table">
+<tr><th>喻体（鉴定所）</th><th>术语</th><th>一句话解释</th></tr>
+<tr><td>标准器库</td><td>ChangAn</td><td>30,664 首已知真伪的诗词：人类 10,276 首 + AI 20,388 首（§3.1）</td></tr>
+<tr><td>鉴定师</td><td>检测器</td><td>判断一段文本「是人写的还是机器写的」的系统（§5）</td></tr>
+<tr><td>肉眼目鉴、当场给结论</td><td>判定式检测器</td><td>直接问大模型，只拿到一个离散标签（§5）</td></tr>
+<tr><td>仪器测成分密度</td><td>概率式检测器</td><td>给出「像不像 AI 写的」的连续分数（§5）</td></tr>
+<tr><td>单件上手看</td><td>单首检测</td><td>一次只判一首，最贴近投稿平台的真实场景（§4.1）</td></tr>
+<tr><td>整箱货一起看器型</td><td>多首检测</td><td>一次判 6 首或 12 首，让风格特征累积（§4.1）</td></tr>
+<tr><td>照图样仿制</td><td>直接生成</td><td>给标题让模型直接写，不做后处理（§4.2）</td></tr>
+<tr><td>按老师傅意见返工做旧</td><td>推敲式返工</td><td>模型先自评不足，再据此重写一版（§4.2）</td></tr>
+</table></div></div><div class="stage"><h4><span class="num">3</span>研究背景：为什么古典诗词是最难鉴定的那一类</h4><div class="stage-body"><p>大模型的生成能力已经伸进文学领域，古典诗词是其中形式约束最强的一支（§1, p1）。原文引用的现实背景很具体：多家诗歌刊物与文学平台已公开谴责未标注的 AI 投稿，单靠人类判断已不足以应付大规模、低成本的机器创作（§1, p1 及脚注 1–3）。</p>
+<p>但检测研究此前基本没碰这个门类。已有工作覆盖现代语言、当代文体、英文诗、俳句、中文现代诗，古典诗词是空白（§2.2, p3）。为什么难？原文给了三条结构性理由（§1, p2）：</p>
+<ul class="keypoint">
+<li><strong>格律太整齐。</strong>平仄、押韵、对仗都是强规则，检测模型分不清「人在守传统」还是「机器在模仿模式」（§1, p2）。</li>
+<li><strong>意象共用一套词库。</strong>西风、相思、江南、天涯这些词，人和模型都在用，词汇分布高度重叠（§1, p2；附录 C, p13）。</li>
+<li><strong>句法本身就不合现代汉语。</strong>词性活用与倒装是常态：「春风又绿江南岸」的「绿」当动词用，「竹喧归浣女」为合律而倒装（§1, p2）。</li>
+</ul>
+<p>三条叠起来的结果是：<strong class="hl">通用检测器赖以工作的统计痕迹，被古典诗词的形式约束本身掩盖了。</strong>而此前也没有一个公开的、同时含当代人作品与模型作品的古典诗词数据集（§3.1, p3）。</p></div></div><div class="stage"><h4><span class="num">4</span>核心问题：三个互相咬合的问题</h4><div class="stage-body"><p>把上面那段背景拆开，论文实际要回答三个互相咬合的问题（§1, p2–3）：</p>
+<ul class="keypoint">
+<li><strong>问题一：能不能建一个不含「背过答案」的诗词基准？</strong><br>如果用古人名篇做人类样本，模型可能靠预训练记忆直接认出来，测到的是内存不是眼力。作者的对策是只收当代人的作品（§3.2, p4）。</li>
+<li><strong>问题二：检测难度到底由什么决定？</strong><br>原文没有停在给一个总分，而是把场景切成两个轴——一次判几首（<span class="tbs" data-term="spd"><input type="checkbox" id="tbs4" class="tbs-toggle"><label for="tbs4" class="tbs-term">单首</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">单首检测</span><span class="tbs-en">Single-Poem Detection <span class="abbr">SPD</span></span><label for="tbs4" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">一次只判一首诗，等价于社媒或投稿平台上的真实鉴别场景。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">可供判断的信息最少，判定式检测器平均准确率只有 32.15%（§4.1, p5；表 7, p8）。</span></span><a class="tbs-more" href="#term-spd">查看完整释义 ›</a></span></span> / 6 首 / <span class="tbs" data-term="mpd"><input type="checkbox" id="tbs5" class="tbs-toggle"><label for="tbs5" class="tbs-term">12 首</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">多首检测</span><span class="tbs-en">Multi-Poem Detection <span class="abbr">MPD</span></span><label for="tbs5" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">一次判 6 首或 12 首，模拟「一位作者的组诗」成组出现，让风格特征累积。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">6 首与 12 首两组设定取自三吏三别、塞下曲六首这类成组传统；概率式平均 AUROC 由 75.74 升到 87.95 / 88.68（§4.1, p5；表 8, p8）。</span></span><a class="tbs-more" href="#term-mpd">查看完整释义 ›</a></span></span>），以及机器是怎么写出来的（直接写 / 按自评意见返工）（§4, p4–5）。</li>
+<li><strong>问题三：大模型认得出自己的诗吗？</strong><br>在普通文本上，模型有明显的「自我偏好」——倾向于给自己写的东西打高分。这个现象在古典诗词上还成立吗（§6.2, p6）？</li>
+</ul>
+<p>三个问题的落点很一致：<strong class="hl">如果连最强的通才模型、最对口的中文专用检测器都失效，那么「用机器守住诗歌真实性」这条路就还没有走通。</strong></p></div></div><div class="stage"><h4><span class="num">5</span>关键洞见：把「怎么测检测器」拆成四个动作</h4><div class="stage-body"><p>这篇论文的价值不在它提出了什么新检测器（它没有），而在它把「怎么测检测器」这件事拆成了四个可复制的动作。</p>
+<ul class="keypoint">
+<li><strong>洞见一：为了防「数据泄漏」，人类样本必须换一批。</strong><br>古代名篇几乎都在大模型的预训练语料里。用它们做真品，模型可能靠<span class="tbs" data-term="leak"><input type="checkbox" id="tbs6" class="tbs-toggle"><label for="tbs6" class="tbs-term">记忆</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">数据泄漏</span><span class="tbs-en">Data Leakage <span class="abbr">—</span></span><label for="tbs6" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">模型不是「看出来」而是「背过」——因为测试内容已经躺在预训练语料里。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文因此放弃古代名篇、只收当代 282 位作者的作品（§3.2, p4）。</span></span><a class="tbs-more" href="#term-leak">查看完整释义 ›</a></span></span>而非风格判断得分。作者因此只用当代 282 位作者的作品（§3.2, p4）——这是一个会直接改变数据源选择的决定。</li>
+<li><strong>洞见二：把「一次判几首」当成评测变量，而不是固定设置。</strong><br>单首诗太短，可供判断的特征太少。作者额外做了 6 首与 12 首的聚合设定，模拟「一位作者的组诗」——三吏三别、塞下曲六首这类成组发表的传统（§4.1, p5）。</li>
+<li><strong>洞见三：把「让模型自己改稿」当成对抗手段。</strong><br>模型先按格律、炼字、意境连贯性、新颖性四个维度自评，再据此重写一版。这模拟了人类「推敲」的过程，也让机器痕迹变淡（§4.2, p5；附录 D, p19）。</li>
+<li><strong>洞见四：人类的成绩也是数据，而且必须摆上桌。</strong><br>作者找了 4 位受过十年以上古典文学教育的读者各判 600 首，把人类成绩放进同一张表（附录 D.1, p14–15）。没有这条基线，「机器不行」这个结论就无从比较。</li>
+</ul></div></div><div class="stage"><h4><span class="num">6</span>方法架构：从建库到考评的一条流水线</h4><div class="stage-body"><p>原文的方法可以画成一条从建库到考评的流水线，中间有一次分叉：数据分两路造出来，最后汇到同一场考试。下图每一格都对应正文的一节，可以逐格回查。</p>
+<svg viewBox="0 0 680 430" width="100%" role="img" aria-label="ChangAn 的建造与考评流程">
+<rect x="0" y="0" width="680" height="430" rx="12" fill="#14171c"/>
+<text x="24" y="30" fill="#ccff00" font-size="14" font-weight="700">ChangAn 的建造与考评流程（图内锚点对应正文节号）</text>
+<defs><marker id="w28arr" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#8a8f98"/></marker></defs>
+<rect x="24" y="48" width="632" height="56" rx="8" fill="#1b1f26" stroke="#3a4048"/>
+<text x="40" y="72" fill="#EDEDED" font-size="12.5" font-weight="600">① 建库：人类真品 10,276 首</text>
+<text x="40" y="90" fill="#B9B9B9" font-size="11">当代 282 位作者：社交平台 + 文学刊物（§3.2）</text>
+<line x1="340" y1="104" x2="340" y2="124" stroke="#8a8f98" stroke-width="1.4" marker-end="url(#w28arr)"/>
+<rect x="24" y="128" width="632" height="56" rx="8" fill="#1b1f26" stroke="#3a4048"/>
+<text x="40" y="152" fill="#EDEDED" font-size="12.5" font-weight="600">② 造高仿：4 个模型生成 20,388 首</text>
+<text x="40" y="170" fill="#B9B9B9" font-size="11">Doubao 5,136｜DeepSeek 5,138｜Kimi 5,017｜GPT-4.1 5,097（表 1）</text>
+<path d="M340,184 L340,196" stroke="#8a8f98" stroke-width="1.4"/>
+<path d="M176,196 L176,204 L340,204 L340,216" stroke="#8a8f98" stroke-width="1.4" fill="none"/>
+<path d="M504,196 L504,204 L340,204" stroke="#8a8f98" stroke-width="1.4" fill="none"/>
+<path d="M340,216 L340,224" stroke="#8a8f98" stroke-width="1.4" marker-end="url(#w28arr)"/>
+<rect x="24" y="196" width="304" height="66" rx="8" fill="#1b1f26" stroke="#3a4048"/>
+<text x="40" y="220" fill="#EDEDED" font-size="12.5" font-weight="600">③a 直接仿制 Direct</text>
+<text x="40" y="238" fill="#B9B9B9" font-size="11">给标题直接写，无后处理</text>
+<text x="40" y="254" fill="#B9B9B9" font-size="11">严守格律、禁口语（§4.2）</text>
+<rect x="352" y="196" width="304" height="66" rx="8" fill="#1b1f26" stroke="#3a4048"/>
+<text x="368" y="220" fill="#EDEDED" font-size="12.5" font-weight="600">③b 按自评返工 Critique</text>
+<text x="368" y="238" fill="#B9B9B9" font-size="11">先自评四维度不足，再重写</text>
+<text x="368" y="254" fill="#B9B9B9" font-size="11">模拟人类「推敲」（§4.2）</text>
+<path d="M176,262 L176,276 L340,276 L340,286" stroke="#8a8f98" stroke-width="1.4" fill="none"/>
+<path d="M504,262 L504,276 L340,276" stroke="#8a8f98" stroke-width="1.4" fill="none"/>
+<path d="M340,286 L340,296" stroke="#8a8f98" stroke-width="1.4" marker-end="url(#w28arr)"/>
+<rect x="24" y="300" width="632" height="56" rx="8" fill="#1b1f26" stroke="#3a4048"/>
+<text x="40" y="324" fill="#EDEDED" font-size="12.5" font-weight="600">④ 双轴切分：粒度 × 策略</text>
+<text x="40" y="342" fill="#B9B9B9" font-size="11">单首 SPD｜6 首 MPD-6｜12 首 MPD-12 ⨯ 直接生成 / 推敲式返工（§4）</text>
+<line x1="340" y1="356" x2="340" y2="376" stroke="#8a8f98" stroke-width="1.4" marker-end="url(#w28arr)"/>
+<rect x="24" y="380" width="632" height="40" rx="8" fill="#1b1f26" stroke="#ccff00"/>
+<text x="40" y="405" fill="#EDEDED" font-size="12">⑤ 考评：4 个判定式 + 8 个概率式检测器 ｜ 人类基线 4 人 × 600 首（表 2、表 3、表 10）</text>
+</svg>
+<p>三个地方值得单独指出：</p>
+<ul class="keypoint">
+<li><strong>种子隔离。</strong>人类真品中抽出 2,569 首当<span class="tbs" data-term="seed"><input type="checkbox" id="tbs7" class="tbs-toggle"><label for="tbs7" class="tbs-term">种子</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">种子诗</span><span class="tbs-en">Seed Poems <span class="abbr">—</span></span><label for="tbs7" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">从人类作品中抽出的一小批，只把它们的标题与体裁当作给模型的命题。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">共 2,569 首（约占人类作品的四分之一）；其余 7,707 首彻底不参与生成，只进入考评集（§3.3, p4）。</span></span><a class="tbs-more" href="#term-seed">查看完整释义 ›</a></span></span>（约占四分之一），只把标题与体裁交给模型做提示；剩下的 7,707 首完全不参与生成，只用于考评（§3.3, p4）。</li>
+<li><strong>模型侧对称。</strong>四个模型各生成约 5,000 首：Doubao Seed-1.6 5,136、DeepSeek-V3.2 5,138、Kimi-K2 5,017、GPT-4.1 5,097（表 1, p4）。生成温度按创作场景调高：DeepSeek-V3.2 用 1.5，其余 1.0（§3.3, p4）。</li>
+<li><strong>考评侧两类鉴定师。</strong><span class="tbs" data-term="decision"><input type="checkbox" id="tbs8" class="tbs-toggle"><label for="tbs8" class="tbs-term">判定式</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">判定式检测器</span><span class="tbs-en">Decision-based Detector <span class="abbr">—</span></span><label for="tbs8" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">直接问大模型「人写的还是 AI 写的」、只输出一个标签的检测器；因为拿不到概率分，只能算准确率与召回。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文 5 个：DeepSeek-V3.2、Kimi-K2、Doubao Seed-1.6、GPT-4.1、LLM-Detector-Small-zh；五者平均准确率 32.15%（表 2, p6）。</span></span><a class="tbs-more" href="#term-decision">查看完整释义 ›</a></span></span> 5 个（4 个通才大模型 + 1 个中文专用检测器）；<span class="tbs" data-term="prob"><input type="checkbox" id="tbs9" class="tbs-toggle"><label for="tbs9" class="tbs-term">概率式</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">概率式检测器</span><span class="tbs-en">Probability-based Detector <span class="abbr">—</span></span><label for="tbs9" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">用统计量或分类模型给出「这段文本像不像 AI 写的」的连续分数，因此可以算 AUROC。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文 7 个：Log-Likelihood、Log-Rank、LRR（底座 Qwen2.5-3B）、Fast-DetectGPT（Qwen2.5-3B 参考 / Qwen2.5-7B 评分）、AIGC-Detector-v3 的 Zh-v3 与 Zh-v3-short、微调中文 Roberta（§5, p5）。</span></span><a class="tbs-more" href="#term-prob">查看完整释义 ›</a></span></span> 7 个（Log-Likelihood、Log-Rank、LRR、Fast-DetectGPT、AIGC-Detector-v3 两个变体、微调 Roberta）（表 2、表 3, p6）。</li>
+</ul></div></div><div class="stage"><h4><span class="num">7</span>方法深挖：两条造高仿的路，和一份文体构成</h4><div class="stage-body"><p>这一段是全文最能直接搬走的部分——它把「造高仿」拆成了两条有明确差异的路径，并把文体构成也交代清楚了。</p>
+<table class="compare-table">
+<tr><th>维度</th><th><span class="tbs" data-term="direct"><input type="checkbox" id="tbs10" class="tbs-toggle"><label for="tbs10" class="tbs-term">直接生成</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">直接生成</span><span class="tbs-en">Direct Generation <span class="abbr">—</span></span><label for="tbs10" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">给一个标题让模型直接写一首，不做任何后处理。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">提示词要求严守格律、禁口语、JSON 输出（附录 B, p16）。该子集上概率式检测器平均 AUROC 为 80.93（表 6, p7）。</span></span><a class="tbs-more" href="#term-direct">查看完整释义 ›</a></span></span> Direct</th><th><span class="tbs" data-term="refine"><input type="checkbox" id="tbs11" class="tbs-toggle"><label for="tbs11" class="tbs-term">推敲式返工</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">推敲式返工</span><span class="tbs-en">Critique-driven Refinement <span class="abbr">—</span></span><label for="tbs11" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">模型先自己批评一版，再按批评意见重写一版——模拟人类的「推敲」。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">第一轮从格律、炼字、意境连贯性、新颖性四维度挑毛病，第二轮据意见深度修改（附录 B, p16；附录 D, p19）。该子集概率式平均 AUROC 掉到 71.10（表 6, p7）。</span></span><a class="tbs-more" href="#term-refine">查看完整释义 ›</a></span></span> Critique-driven</th></tr>
+<tr><td>做法</td><td>给标题直接写一首，无后处理（§4.2）</td><td>先自评四维度不足，再据意见深度修改（§4.2）</td></tr>
+<tr><td>提示词要点</td><td>严守格律（平仄、押韵、对仗），禁口语，JSON 输出（附录 B, p16）</td><td>第一轮只出批评、第二轮才改稿（附录 B, p16）</td></tr>
+<tr><td>模拟的人类动作</td><td>一次性成稿</td><td>「推敲」的往复过程（§4.2）</td></tr>
+<tr><td>概率式平均 AUROC</td><td>80.93（表 6）</td><td><strong>71.10，降幅 9.83 个点</strong>（表 6）</td></tr>
+</table>
+<p>文体构成方面，人类子集包含 17,193 首<span class="tbs" data-term="ci"><input type="checkbox" id="tbs12" class="tbs-toggle"><label for="tbs12" class="tbs-term">词</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">词</span><span class="tbs-en">Ci <span class="abbr">—</span></span><label for="tbs12" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">按词牌填写的长短句。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">人类子集中 17,193 首，是数量最多的一类（§3.1, p3）。</span></span><a class="tbs-more" href="#term-ci">查看完整释义 ›</a></span></span>、9,699 首<span class="tbs" data-term="lvshi"><input type="checkbox" id="tbs13" class="tbs-toggle"><label for="tbs13" class="tbs-term">律诗</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">律诗</span><span class="tbs-en">Lvshi <span class="abbr">—</span></span><label for="tbs13" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">八句、平仄与对仗都有严格规定的近体诗。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">人类子集 9,699 首（§3.1, p3）。</span></span><a class="tbs-more" href="#term-lvshi">查看完整释义 ›</a></span></span>与 3,773 首<span class="tbs" data-term="jveju"><input type="checkbox" id="tbs14" class="tbs-toggle"><label for="tbs14" class="tbs-term">绝句</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">绝句</span><span class="tbs-en">Jueju <span class="abbr">—</span></span><label for="tbs14" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">四句的短篇近体诗。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">人类子集 3,773 首（§3.1, p3）。</span></span><a class="tbs-more" href="#term-jveju">查看完整释义 ›</a></span></span>（§3.1, p3）。数据集整体 1,802,646 字、307,760 句，平均每首 10.04 句、每句 5.86 字（表 1, p4）——<strong class="hl">「短」是这个世界里的核心物理约束，也是单首检测失灵的物理解释。</strong></p>
+<p>实验设置也值得记下来，因为它划出了可复现性的下限：概率式检测器用 Qwen2.5-3B 作打分底座（Fast-DetectGPT 另用 Qwen2.5-7B 作评分模型）；微调 Roberta 用 3 个 epoch、学习率 1e-4、批大小 16，数据按 8:1:1 随机划分；所有实验在 2 张 A100（80G）上重复三次取平均（§5, p5）。</p></div></div><div class="stage"><h4><span class="num">8</span>实验与证据：两个总榜、两个旋钮、一条人类基线</h4><div class="stage-body"><p>原文的实验有四关：判定式总榜、概率式总榜、粒度效应、生成策略效应，最后补一条人类基线。把四关的数字放在一起，它们指向同一个结论。</p>
+<p>第一关，判定式检测器的总榜——<strong class="hl">全部低于抛硬币</strong>（表 2, p6）：</p>
+<table class="compare-table">
+<tr><th>检测器</th><th>准确率</th><th>AI 召回</th><th>人类召回</th><th>Macro-F1</th></tr>
+<tr><td>DeepSeek-V3.2</td><td>39.56</td><td>31.79</td><td>60.96</td><td>39.42</td></tr>
+<tr><td>Kimi-K2</td><td>31.98</td><td>16.06</td><td>75.83</td><td>31.30</td></tr>
+<tr><td>Doubao Seed-1.6</td><td>33.80</td><td>22.08</td><td>66.07</td><td>33.96</td></tr>
+<tr><td>GPT-4.1</td><td>26.02</td><td>5.10</td><td>83.63</td><td>23.31</td></tr>
+<tr><td>LLM-Detector-Small-zh</td><td>29.38</td><td>3.86</td><td>98.74</td><td>25.16</td></tr>
+<tr><td>平均</td><td>32.15</td><td>15.78</td><td>77.05</td><td>30.63</td></tr>
+</table>
+<p>读法：AI 召回越低、人类召回越高，说明这位「鉴定师」越倾向于把什么都判成真品。中文专用检测器 LLM-Detector-Small-zh 的人类召回高达 98.74%，AI 召回只有 3.86%——它基本上把每一首都判成人类作品（表 2, p6）。</p>
+<p>第二关，概率式检测器——这一档才有区分度（表 3, p6）：</p>
+<svg viewBox="0 0 680 330" width="100%" role="img" aria-label="12 种检测器在单首检测下的 AUROC"><rect x="0" y="0" width="680" height="330" rx="12" fill="#14171c"/><text x="24" y="26" fill="#ccff00" font-size="13.5" font-weight="700">单首检测（SPD）下的 AUROC：7 种概率式检测器（表 3, p6）</text><line x1="386" y1="42" x2="386" y2="308" stroke="#6d737c" stroke-width="1" stroke-dasharray="4 4"/><text x="196" y="65" fill="#B9B9B9" font-size="11.5" text-anchor="end">Log-Likelihood</text><rect x="208" y="54" width="298.8" height="18" rx="3" fill="#5A5A5A"/><text x="498.8" y="67" fill="#F0F0F0" font-size="11" font-weight="700" text-anchor="end">83.94</text><title>Log-Likelihood: AUROC 83.94</title><text x="196" y="101" fill="#B9B9B9" font-size="11.5" text-anchor="end">Log-Rank</text><rect x="208" y="90" width="305.7" height="18" rx="3" fill="#5A5A5A"/><text x="505.7" y="103" fill="#F0F0F0" font-size="11" font-weight="700" text-anchor="end">85.86</text><title>Log-Rank: AUROC 85.86</title><text x="196" y="137" fill="#B9B9B9" font-size="11.5" text-anchor="end">LRR</text><rect x="208" y="126" width="253.1" height="18" rx="3" fill="#5A5A5A"/><text x="453.1" y="139" fill="#F0F0F0" font-size="11" font-weight="700" text-anchor="end">71.09</text><title>LRR: AUROC 71.09</title><text x="196" y="173" fill="#B9B9B9" font-size="11.5" text-anchor="end">Roberta（微调）</text><rect x="208" y="162" width="338.3" height="18" rx="3" fill="#ccff00"/><text x="538.3" y="175" fill="#0B0E14" font-size="11" font-weight="700" text-anchor="end">95.03</text><title>Roberta（微调）: AUROC 95.03</title><text x="196" y="209" fill="#B9B9B9" font-size="11.5" text-anchor="end">Zh-v3</text><rect x="208" y="198" width="257.6" height="18" rx="3" fill="#5A5A5A"/><text x="457.6" y="211" fill="#F0F0F0" font-size="11" font-weight="700" text-anchor="end">72.37</text><title>Zh-v3: AUROC 72.37</title><text x="196" y="245" fill="#B9B9B9" font-size="11.5" text-anchor="end">Zh-v3-short</text><rect x="208" y="234" width="257.2" height="18" rx="3" fill="#5A5A5A"/><text x="457.2" y="247" fill="#F0F0F0" font-size="11" font-weight="700" text-anchor="end">72.25</text><title>Zh-v3-short: AUROC 72.25</title><text x="196" y="281" fill="#B9B9B9" font-size="11.5" text-anchor="end">Fast-DetectGPT</text><rect x="208" y="270" width="176.8" height="18" rx="3" fill="#5A5A5A"/><text x="376.8" y="283" fill="#F0F0F0" font-size="11" font-weight="700" text-anchor="end">49.67</text><title>Fast-DetectGPT: AUROC 49.67</title><text x="386" y="324" fill="#8a8f98" font-size="10.5" text-anchor="middle">50%＝抛硬币</text><text x="24" y="344" fill="#B9B9B9" font-size="11">灰色＝统计与专用检测器；亮绿＝微调后的中文 Roberta，全榜唯一 AUROC 超过 90% 的一档。</text></svg>
+<p>第三关与第四关各是「一个旋钮」的效应，画成图更直观：</p>
+<svg viewBox="0 0 680 300" width="100%" role="img" aria-label="粒度与生成策略对检测难度的影响">
+<rect x="0" y="0" width="680" height="300" rx="12" fill="#14171c"/>
+<text x="24" y="26" fill="#ccff00" font-size="13.5" font-weight="700">两个旋钮怎样改变检测难度（概率式检测器平均 AUROC）</text>
+<text x="24" y="52" fill="#EDEDED" font-size="12" font-weight="600">旋钮一：一次判几首（表 8, p8）</text>
+<line x1="40" y1="210" x2="330" y2="210" stroke="#3a4048" stroke-width="1.2"/>
+<rect x="70" y="111.5" width="60" height="98.5" rx="3" fill="#5A5A5A"/>
+<text x="100" y="103" fill="#EDEDED" font-size="11" font-weight="700" text-anchor="middle">75.74</text>
+<text x="100" y="228" fill="#B9B9B9" font-size="11" text-anchor="middle">单首</text>
+<rect x="150" y="95.7" width="60" height="114.3" rx="3" fill="#ccff00"/>
+<text x="180" y="87" fill="#EDEDED" font-size="11" font-weight="700" text-anchor="middle">87.95</text>
+<text x="180" y="228" fill="#B9B9B9" font-size="11" text-anchor="middle">6 首</text>
+<rect x="230" y="94.7" width="60" height="115.3" rx="3" fill="#ccff00"/>
+<text x="260" y="86" fill="#EDEDED" font-size="11" font-weight="700" text-anchor="middle">88.68</text>
+<text x="260" y="228" fill="#B9B9B9" font-size="11" text-anchor="middle">12 首</text>
+<text x="24" y="252" fill="#8a8f98" font-size="10.5">12 首只比 6 首多 0.73 分，收益在 6 首就见顶。</text>
+<text x="360" y="52" fill="#EDEDED" font-size="12" font-weight="600">旋钮二：直接写 vs 返工（表 6, p7）</text>
+<line x1="372" y1="210" x2="656" y2="210" stroke="#3a4048" stroke-width="1.2"/>
+<rect x="410" y="104.8" width="60" height="105.2" rx="3" fill="#5A5A5A"/>
+<text x="440" y="96" fill="#EDEDED" font-size="11" font-weight="700" text-anchor="middle">80.93</text>
+<text x="440" y="228" fill="#B9B9B9" font-size="11" text-anchor="middle">直接生成</text>
+<rect x="530" y="117.6" width="60" height="92.4" rx="3" fill="#ccff00"/>
+<text x="560" y="109" fill="#EDEDED" font-size="11" font-weight="700" text-anchor="middle">71.10</text>
+<text x="560" y="228" fill="#B9B9B9" font-size="11" text-anchor="middle">推敲式返工</text>
+<text x="24" y="268" fill="#8a8f98" font-size="10.5">推敲式返工让平均 AUROC 掉 9.83 分，统计型方法掉 17–18 分。</text>
+<text x="24" y="282" fill="#B9B9B9" font-size="11">两条趋势方向相反：多看几首让检测变容易，让模型自己改稿让检测变难。</text>
+</svg>
+<p>把两个旋钮的结果并起来看（表 6 与表 8, p7–8）：</p>
+<ul class="keypoint">
+<li><strong>粒度越大越好，但收益在 6 首就到顶。</strong>概率式平均 AUROC 从单首的 75.74 升到 6 首的 87.95，再到 12 首的 88.68；Log-Rank 与 LRR 在 12 首设定下达 100.0（表 8, p8）。判定式的平均准确率则是 32.15 → 56.10 → 54.52，<strong>第三档反而回落</strong>（表 7, p8）。</li>
+<li><strong>返工让检测变难，而且专打统计方法。</strong>概率式平均 AUROC 由 80.93 掉到 71.10（−9.83）；Log-Likelihood 与 Log-Rank 的跌幅最大，分别是 −18.63 与 −17.61，而微调 Roberta 只掉 5.31（表 6, p7）。</li>
+<li><strong>人类基线不乐观。</strong>4 位读者各判 600 首（约占全库 2%），准确率 47.00–53.83、平均约 <span class="tbs" data-term="humanbase"><input type="checkbox" id="tbs15" class="tbs-toggle"><label for="tbs15" class="tbs-term">51.25%</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">人类基线</span><span class="tbs-en">Human Baseline <span class="abbr">—</span></span><label for="tbs15" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">让真人做同一套题，作为「机器成绩」的参照尺。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">4 位受过十年以上古典文学教育的非职业诗人读者，每人随机判 600 首（约全库 2%）；准确率 47.00–53.83、平均约 51.25%，Macro-F1 平均 39.28%（附录 D.1, p14–15；表 10, p15）。</span></span><a class="tbs-more" href="#term-humanbase">查看完整释义 ›</a></span></span>，平均 <span class="tbs" data-term="macrof1"><input type="checkbox" id="tbs16" class="tbs-toggle"><label for="tbs16" class="tbs-term">Macro-F1</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">宏平均 F1</span><span class="tbs-en">Macro-F1 <span class="abbr">M-F1</span></span><label for="tbs16" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">分别算「人类」「AI」两类的 F1 再取平均，避免样本多的一类掩盖弱类。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">判定式平均 30.63、概率式平均 67.14（表 2、表 3, p6）；人类基线平均 39.28（表 10, p15）。</span></span><a class="tbs-more" href="#term-macrof1">查看完整释义 ›</a></span></span> 39.28%（表 10, p15）。</li>
+</ul>
+<p>一处必须诚实标注的地方：<strong>表 3 与表 8 对同一个单首设定给出的平均值并不一致</strong>——平均 AUROC 表 3 写 75.89、表 8 写 75.74；平均 Macro-F1 表 3 写 67.14、表 8 写 68.59。按表内各行数值自行复算，结果是 75.74 与 68.60，即表 8 那一列才对得上（表 3 / 表 8, p6–8；我的复算）。</p></div></div><div class="stage"><h4><span class="num">9</span>反直觉发现：四个「按常理不该这样」的结果</h4><div class="stage-body"><p>这篇论文最有价值的部分，是四处与直觉相反的结果。它们直接影响「该怎么造评测数据」这个决策。</p>
+<ul class="keypoint">
+<li><strong>反直觉一：<span class="tbs" data-term="selfrecog"><input type="checkbox" id="tbs17" class="tbs-toggle"><label for="tbs17" class="tbs-term">模型认不出自己写的诗</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">自我识别</span><span class="tbs-en">Self-recognition <span class="abbr">—</span></span><label for="tbs17" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">模型能不能认出「这首是我自己写的」。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文发现该能力在古典诗词上显著削弱：Doubao Seed-1.6 认自己作品召回 16.09%，认 GPT-4.1 的作品却有 37.27%（§6.2, p6）。</span></span><a class="tbs-more" href="#term-selfrecog">查看完整释义 ›</a></span></span>。</strong><br>在普通文本上，模型有稳定的「自我偏好」。但在这里，Doubao Seed-1.6 认自己作品的召回只有 16.09%，反而认 GPT-4.1 的作品能到 37.27%（§6.2, p6）。原文的判断是：诗词的形式约束把模型赖以自我识别的「身份信号」抹掉了。</li>
+<li><strong>反直觉二：把一首写成一组，判定式检测器会「立场翻转」。</strong><br>GPT-4.1 在单首设定下 AI 召回只有 5.10%、人类召回 83.63%（几乎全判人类）；换成 6 首一组，AI 召回冲到 92.48%、人类召回掉到 6.31%（几乎全判 AI）（§6.5, p8）。同一个模型，只换了个装箱方式，偏置方向整个掉头。</li>
+<li><strong>反直觉三：专为中文优化的检测器，成绩垫底。</strong><br>LLM-Detector-Small-zh 是这批里唯一针对中文训练的判定式检测器，准确率 29.38%，低于全部通才大模型（表 2, p6）。原文的解释是通用中文语料上的能力无法迁移到古典文体；<span class="tbs" data-term="imagery"><input type="checkbox" id="tbs18" class="tbs-toggle"><label for="tbs18" class="tbs-term">意象</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">意象</span><span class="tbs-en">Poetic Imagery <span class="abbr">—</span></span><label for="tbs18" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">古典诗词里反复出现的词汇符号，如西风、相思、江南、天涯。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">人与 AI 的高频意象高度重叠（表 9, p14）；人类独占区域多含具体小动作、生物名（狸花、蜻蜓）与拟声词（滴答），AI 更偏「万里」「凭栏」「几度」这类宽泛词（附录 C, p13）。</span></span><a class="tbs-more" href="#term-imagery">查看完整释义 ›</a></span></span>词库高度共用，让「中文」这个标签不构成优势（附录 C, p13）。</li>
+<li><strong>反直觉四：AI 的诗缺的不是词汇，是生活。</strong><br>词频统计显示双方共享高频意象；但在语义聚类里，有些区域几乎被人类作品独占。作者对这些区域的定性分析是：人类常写具体的小动作、生物名（狸花、蜻蜓）、拟声词（滴答）；AI 更爱用「万里」「凭栏」「几度」这类宽泛词，而人类会用「三千里」「二十年」这类精确的时空表达（附录 C, p13；表 9, p14）。</li>
+</ul></div></div><div class="stage"><h4><span class="num">10</span>一线可借鉴要点</h4><div class="stage-body"><p>面向中文文字创作方向（语言 / 写作 / 创作）的评测设计者、基准构造者与 SFT / RLHF 工程师。八条，四要素齐全（结论 / 依据 / 可迁移场景 / 迁移风险），其中四条是批判性的。</p>
+<ul class="keypoint">
+<li><strong>一：建基准前先做「记忆体检」。</strong><br>依据：作者明确放弃古人名篇、只用当代 282 位作者的作品，理由是古代文本多已进入预训练语料，模型可能靠记忆判断（§3.2, p4）。<br>可迁移：检查你的中文写作题库，标出「极可能已在预训练语料中」的高频经典范文，做一次剔除前后的对照实验。<br>风险：换数据源会改变题型分布与难度可比性，历史分数不能直接续用；且「当代」不等于「未泄漏」，样本若来自公开平台仍可能被抓取。</li>
+<li><strong>二：把「一次给几道题」当成独立变量。</strong><br>依据：概率式平均 AUROC 从单首 75.74 升到 6 首 87.95（表 8, p8）；判定式的立场翻转也只出现在聚合之后（§6.5, p8）。<br>可迁移：手上区分度低的题目，先不动评分标准，只把每次提交的样本数从 1 提到 6，看分数分布是否移动。<br>风险：聚合会掩盖单条错误，若业务结论要逐条给出（如逐篇审稿），聚合提升不能替代单条能力；6 首以后收益递减，继续加样本是浪费。</li>
+<li><strong>三：用「让模型按自评意见返工」当低成本的难度旋钮。</strong><br>依据：返工使概率式平均 AUROC 从 80.93 降到 71.10（−9.83），统计型方法跌幅达 17–18 个点（表 6, p7）。<br>可迁移：造困难样本时加一轮「自评 + 重写」，成本只是两次调用，可复现、可版本化。<br>风险：这条对统计型检测器有效，对监督式模型效果有限（微调 Roberta 只掉 5.31）；把返工产物当训练数据会引入模型自身的偏好。</li>
+<li><strong>四：人类基线要报，而且不能只看准确率。</strong><br>依据：4 位读者的准确率约 51.25%，但 Macro-F1 平均只有 39.28%（表 10, p15）——只看准确率会误判成「和随机差不多」。<br>可迁移：任何主观质量评测立项时，先定「人类基线由几人、判多少条、报哪几个指标」。<br>风险：n=4、每人 600 条且无显著性检验，这条基线只能当参考区间，不足以支撑「人类不可靠」的强断言（见第八条）。</li>
+<li><strong>五【批判】：该基准测的是鉴定师，不是诗人的水平。</strong><br>依据：全文的评测对象是 12 个检测器，论文自述贡献是数据集与评测协议，没有提出新检测器（§1, p2）。<br>可迁移：把它当「鉴别难度标定工具」引用，而不是「AI 写作质量」的证据。<br>风险：把「检测不出」读成「AI 已达同等人文创造力」是越界解读；反过来也不能用它证明 AI 写得差——它根本没有测量质量。</li>
+<li><strong>六【批判】：论文自己承认的泛化边界比结论窄。</strong><br>依据：作者在 Limitations 里写明只用 4 个生成模型、检测器范围也有限，结论可能不推广到其他生成系统与新兴检测技术（§7 Limitations, p9）。<br>可迁移：引用「现有检测器失效」时，应限定为「这 4 个模型 × 这 12 个检测器 × 古典诗词」这一格。<br>风险：新出的检测方法可能已在部分条件上翻盘，而二手解读常把限定条件略去。</li>
+<li><strong>七【批判】：专项优化的「中文」标签不等于「文体对口」。</strong><br>依据：唯一的中文专用判定式检测器 LLM-Detector-Small-zh 准确率 29.38%，低于全部通才模型（表 2, p6）。<br>可迁移：选型评测工具时，别用「中文模型 / 中文基准」当质量担保，要按文体与任务形态分别验证。<br>风险：单次对比不足以断定该检测器在其它中文文体上也弱，别过度外推。</li>
+<li><strong>八【批判】：人类基线薄，平均值口径还前后不一致。</strong><br>依据：人类基线只有 4 人 × 600 首、无误差棒与显著性检验（附录 D.1, p14–15）；同一单首设定的平均 AUROC 在表 3 与表 8 分别是 75.89 与 75.74，平均 Macro-F1 是 67.14 与 68.59（我的复算：75.74 / 68.60，与表 8 一致）。<br>可迁移：把这两处当「引用前的自查清单」——先复算再用。<br>风险：若你拿它的数字对外立论，先在内部把口径对齐，否则同一份材料会出现互相矛盾的数字。</li>
+</ul></div></div><div class="stage"><h4><span class="num">11</span>给读者的思考题</h4><div class="stage-body"><p>四道题，前三道指向具体动作，最后一道要求你去查证一个本文自己没验的结论。不给标准答案，只给思考路径。</p>
+<ul class="keypoint">
+<li><strong>题一：</strong>把「单首 vs 组诗」这个粒度旋钮套到你手上的中文写作评测题上——你现有的题目里，哪一类是「一条看不出、一组才露馅」的？先别动评分标准，只改每次提交的样本数（1 → 6），记录分数分布怎么走。</li>
+<li><strong>题二：</strong>（要动手）用你自己的 60 条小样本（30 条人类 / 30 条模型），跑一次 Log-Likelihood 或 Log-Rank 这类零样本统计量，分别记录单条与 6 条聚合的 AUROC。若聚合后跳升超过 10 个点，说明你的题库里藏着一个「聚合依赖」，而它此前没有出现在任何评分标准里。</li>
+<li><strong>题三：</strong>找 3 位同事各判 30 条，看你们的一致率落在哪。若在 50% 附近，想清楚该怎么向业务方解释：这是难度标定，不是能力打分；越接近 50%，越说明你手上的题「无法用直觉裁决」。</li>
+<li><strong>题四：</strong>（要动手 + 批判向）按本文的做法检查你的题库：其中有多少样本是模型极可能已在预训练语料里见过的高频经典？做个剔除实验，看原有结论还站不站得住。若结论翻转，说明你此前的成绩里混着「记忆分」。</li>
+</ul></div></div><div class="stage"><h4><span class="num">12</span>局限、影响与阅读路线</h4><div class="stage-body"><p>先分清哪些是原文自述的局限，哪些是我在通读中另外标记的。</p>
+<ul class="keypoint">
+<li>原文自述的局限：只用了 4 个生成模型与一批当时主流的检测工具，作者明确说明结论可能不推广到其他生成系统与新兴检测技术（§7 Limitations, p9）；人类作品依中国著作权法第 24 条处理，仅作非商业研究使用（Ethics Statement, p9）。</li>
+<li><strong>我另外标记的第一处：数字之间对不齐。</strong>体裁三项之和 17,193 + 3,773 + 9,699 = 30,665，比全文总数 30,664 多 1（§3.1, p3）；测试集在 §3.3 写 28,096，但按「剩余 7,707 + AI 20,388」应为 28,095（§3.3, p4）。（我的复算）</li>
+<li><strong>我另外标记的第二处：统计严谨性缺口。</strong>所有表格都是点估计，没有误差棒或显著性检验；人类基线只有 4 人（附录 D.1, p14–15）。</li>
+<li><strong>我另外标记的第三处：一句话的措辞含混。</strong>人类基线一节写「randomly sampled 600 identical poems for each participant」，4 人判的是否同一批 600 首并未说明；同时该节被编在「附录 D 模型批评」之下（附录 D.1, p14）。</li>
+<li>它的影响：论文已被 ACL 2026 主会接收（据 NASA ADS 书目记录），并被多个第三方论文平台收录与解读，附带开源仓库提供数据与代码。它给这个方向的定位是「把问题定义清楚 + 交出可复用的标准器库」，而不是给出解决方案。</li>
+<li>怎么读这篇：想复现评测的，直接看 §3–§5 与附录 B 的两段提示词；想拿结论去用的，重点看表 2 / 表 3 / 表 6 / 表 8 与 §6.5；关心「AI 的诗到底好不好」的读者要注意，本文不回答这个问题。<br>原文：<a href="https://arxiv.org/abs/2604.10101">arxiv.org/abs/2604.10101</a>｜数据集与代码：<a href="https://github.com/VelikayaScarlet/ChangAn">github.com/VelikayaScarlet/ChangAn</a></li>
+</ul></div></div></article></section>
+  <div class="sec-divider"><span></span></div><section id="glossary" class="section section--glossary"><header class="sec-head"><span class="sec-dot"></span><h2 class="sec-title">📖 专有名词表</h2><span class="sec-count">18 条</span></header><article class="glossary-card reveal" id="term-changan"><div class="term-head"><span class="term-zh">长安基准</span><span class="term-en">ChangAn Benchmark</span><span class="chip chip-abbr">ChangAn</span></div><div class="term-def">「已知真伪的标准器库」：一批人类作品与模型作品混在一起、标签已知的诗词集合。</div><div class="term-expand">30,664 首 = 人类 10,276 首（282 位当代作者）+ AI 20,388 首（Doubao Seed-1.6 5,136 / DeepSeek-V3.2 5,138 / Kimi-K2 5,017 / GPT-4.1 5,097），共 1,802,646 字（§3.1、表 1, p3–4）。</div></article><article class="glossary-card reveal" id="term-detector"><div class="term-head"><span class="term-zh">检测器</span><span class="term-en">Detector</span><span class="chip chip-abbr">—</span></div><div class="term-def">判断一段文本「是人写的还是机器写的」的系统。</div><div class="term-expand">本文共评测 12 个：判定式 5 个 + 概率式 7 个（§5, p5；表 2、表 3, p6）。</div></article><article class="glossary-card reveal" id="term-decision"><div class="term-head"><span class="term-zh">判定式检测器</span><span class="term-en">Decision-based Detector</span><span class="chip chip-abbr">—</span></div><div class="term-def">直接问大模型「人写的还是 AI 写的」、只输出一个标签的检测器；因为拿不到概率分，只能算准确率与召回。</div><div class="term-expand">本文 5 个：DeepSeek-V3.2、Kimi-K2、Doubao Seed-1.6、GPT-4.1、LLM-Detector-Small-zh；五者平均准确率 32.15%（表 2, p6）。</div></article><article class="glossary-card reveal" id="term-prob"><div class="term-head"><span class="term-zh">概率式检测器</span><span class="term-en">Probability-based Detector</span><span class="chip chip-abbr">—</span></div><div class="term-def">用统计量或分类模型给出「这段文本像不像 AI 写的」的连续分数，因此可以算 AUROC。</div><div class="term-expand">本文 7 个：Log-Likelihood、Log-Rank、LRR（底座 Qwen2.5-3B）、Fast-DetectGPT（Qwen2.5-3B 参考 / Qwen2.5-7B 评分）、AIGC-Detector-v3 的 Zh-v3 与 Zh-v3-short、微调中文 Roberta（§5, p5）。</div></article><article class="glossary-card reveal" id="term-auroc"><div class="term-head"><span class="term-zh">AUROC</span><span class="term-en">Area Under the ROC Curve</span><span class="chip chip-abbr">AUROC</span></div><div class="term-def">随机抽一首 AI 诗和一首人类诗，检测器把 AI 那首排在前的概率。50% 等于抛硬币，100% 是全对。</div><div class="term-expand">单首设定下从 Fast-DetectGPT 的 49.67 到微调 Roberta 的 95.03（表 3, p6）。</div></article><article class="glossary-card reveal" id="term-macrof1"><div class="term-head"><span class="term-zh">宏平均 F1</span><span class="term-en">Macro-F1</span><span class="chip chip-abbr">M-F1</span></div><div class="term-def">分别算「人类」「AI」两类的 F1 再取平均，避免样本多的一类掩盖弱类。</div><div class="term-expand">判定式平均 30.63、概率式平均 67.14（表 2、表 3, p6）；人类基线平均 39.28（表 10, p15）。</div></article><article class="glossary-card reveal" id="term-spd"><div class="term-head"><span class="term-zh">单首检测</span><span class="term-en">Single-Poem Detection</span><span class="chip chip-abbr">SPD</span></div><div class="term-def">一次只判一首诗，等价于社媒或投稿平台上的真实鉴别场景。</div><div class="term-expand">可供判断的信息最少，判定式检测器平均准确率只有 32.15%（§4.1, p5；表 7, p8）。</div></article><article class="glossary-card reveal" id="term-mpd"><div class="term-head"><span class="term-zh">多首检测</span><span class="term-en">Multi-Poem Detection</span><span class="chip chip-abbr">MPD</span></div><div class="term-def">一次判 6 首或 12 首，模拟「一位作者的组诗」成组出现，让风格特征累积。</div><div class="term-expand">6 首与 12 首两组设定取自三吏三别、塞下曲六首这类成组传统；概率式平均 AUROC 由 75.74 升到 87.95 / 88.68（§4.1, p5；表 8, p8）。</div></article><article class="glossary-card reveal" id="term-direct"><div class="term-head"><span class="term-zh">直接生成</span><span class="term-en">Direct Generation</span><span class="chip chip-abbr">—</span></div><div class="term-def">给一个标题让模型直接写一首，不做任何后处理。</div><div class="term-expand">提示词要求严守格律、禁口语、JSON 输出（附录 B, p16）。该子集上概率式检测器平均 AUROC 为 80.93（表 6, p7）。</div></article><article class="glossary-card reveal" id="term-refine"><div class="term-head"><span class="term-zh">推敲式返工</span><span class="term-en">Critique-driven Refinement</span><span class="chip chip-abbr">—</span></div><div class="term-def">模型先自己批评一版，再按批评意见重写一版——模拟人类的「推敲」。</div><div class="term-expand">第一轮从格律、炼字、意境连贯性、新颖性四维度挑毛病，第二轮据意见深度修改（附录 B, p16；附录 D, p19）。该子集概率式平均 AUROC 掉到 71.10（表 6, p7）。</div></article><article class="glossary-card reveal" id="term-seed"><div class="term-head"><span class="term-zh">种子诗</span><span class="term-en">Seed Poems</span><span class="chip chip-abbr">—</span></div><div class="term-def">从人类作品中抽出的一小批，只把它们的标题与体裁当作给模型的命题。</div><div class="term-expand">共 2,569 首（约占人类作品的四分之一）；其余 7,707 首彻底不参与生成，只进入考评集（§3.3, p4）。</div></article><article class="glossary-card reveal" id="term-leak"><div class="term-head"><span class="term-zh">数据泄漏</span><span class="term-en">Data Leakage</span><span class="chip chip-abbr">—</span></div><div class="term-def">模型不是「看出来」而是「背过」——因为测试内容已经躺在预训练语料里。</div><div class="term-expand">本文因此放弃古代名篇、只收当代 282 位作者的作品（§3.2, p4）。</div></article><article class="glossary-card reveal" id="term-imagery"><div class="term-head"><span class="term-zh">意象</span><span class="term-en">Poetic Imagery</span><span class="chip chip-abbr">—</span></div><div class="term-def">古典诗词里反复出现的词汇符号，如西风、相思、江南、天涯。</div><div class="term-expand">人与 AI 的高频意象高度重叠（表 9, p14）；人类独占区域多含具体小动作、生物名（狸花、蜻蜓）与拟声词（滴答），AI 更偏「万里」「凭栏」「几度」这类宽泛词（附录 C, p13）。</div></article><article class="glossary-card reveal" id="term-ci"><div class="term-head"><span class="term-zh">词</span><span class="term-en">Ci</span><span class="chip chip-abbr">—</span></div><div class="term-def">按词牌填写的长短句。</div><div class="term-expand">人类子集中 17,193 首，是数量最多的一类（§3.1, p3）。</div></article><article class="glossary-card reveal" id="term-lvshi"><div class="term-head"><span class="term-zh">律诗</span><span class="term-en">Lvshi</span><span class="chip chip-abbr">—</span></div><div class="term-def">八句、平仄与对仗都有严格规定的近体诗。</div><div class="term-expand">人类子集 9,699 首（§3.1, p3）。</div></article><article class="glossary-card reveal" id="term-jveju"><div class="term-head"><span class="term-zh">绝句</span><span class="term-en">Jueju</span><span class="chip chip-abbr">—</span></div><div class="term-def">四句的短篇近体诗。</div><div class="term-expand">人类子集 3,773 首（§3.1, p3）。</div></article><article class="glossary-card reveal" id="term-humanbase"><div class="term-head"><span class="term-zh">人类基线</span><span class="term-en">Human Baseline</span><span class="chip chip-abbr">—</span></div><div class="term-def">让真人做同一套题，作为「机器成绩」的参照尺。</div><div class="term-expand">4 位受过十年以上古典文学教育的非职业诗人读者，每人随机判 600 首（约全库 2%）；准确率 47.00–53.83、平均约 51.25%，Macro-F1 平均 39.28%（附录 D.1, p14–15；表 10, p15）。</div></article><article class="glossary-card reveal" id="term-selfrecog"><div class="term-head"><span class="term-zh">自我识别</span><span class="term-en">Self-recognition</span><span class="chip chip-abbr">—</span></div><div class="term-def">模型能不能认出「这首是我自己写的」。</div><div class="term-expand">本文发现该能力在古典诗词上显著削弱：Doubao Seed-1.6 认自己作品召回 16.09%，认 GPT-4.1 的作品却有 37.27%（§6.2, p6）。</div></article></section>
+</main>
+
+<footer class="footer">
+  <p>共 1 篇 · 18 个名词 · 20260928 自动整理</p>
+  <p class="disclaimer">本导读基于论文<strong>全文</strong>撰写，具体数值与结论以原文为准。归属原文版权归原作者所有。</p>
+</footer>
+
+<script>
+/* ── 滚动揭示 + 导航高亮 + 阅读进度 ── */
+(function(){
+  function revealAll(){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in-view');});}
+  try{
+    if(!('IntersectionObserver' in window)){revealAll();return;}
+    var navLinks=document.querySelectorAll('.topbar-nav a');
+    var sections=document.querySelectorAll('.section[id]');
+    var navObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var id=en.target.id;
+          navLinks.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+id);});
+        }
+      });
+    },{rootMargin:'-70px 0px -65% 0px',threshold:0});
+    sections.forEach(function(s){navObs.observe(s);});
+    var revealEls=document.querySelectorAll('.reveal');
+    revealEls.forEach(function(el,i){el.style.transitionDelay=((i%6)*55)+'ms';});
+    var revObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){en.target.classList.add('in-view');revObs.unobserve(en.target);}
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    revealEls.forEach(function(el){revObs.observe(el);});
+    setTimeout(revealAll,1600);
+  }catch(e){revealAll();}
+  var bar=document.getElementById('readProgress');
+  if(bar){
+    var raf=null;
+    window.addEventListener('scroll',function(){
+      if(raf)return;
+      raf=requestAnimationFrame(function(){
+        var h=document.documentElement.scrollHeight-window.innerHeight;
+        bar.style.width=(h>0?Math.min(1,(window.scrollY||0)/h)*100:0)+'%';
+        raf=null;
+      });
+    },{passive:true});
+  }
+})();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   名词卡交互（v4.0）
+   · 互斥：同时只允许一个卡片打开；点另一个 → 旧的丝滑退出、新的丝滑进场
+   · 外部点击 / ✕ / Esc → 卡片丝滑消失
+   · 「查看完整释义」→ 记录当前位置 → 跳名词表对应条目 → 丝滑淡入「返回浏览位置」
+   · 返回按钮 → 平滑滚回原位置
+   · IMA 零 JS 时：纯 CSS :checked 仍可打开卡片，仅缺上述增强
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  var toggles=Array.prototype.slice.call(document.querySelectorAll('.tbs-toggle'));
+  if(!toggles.length)return;
+  var panelOf={};
+  toggles.forEach(function(t){panelOf[t.id]=t.parentNode.querySelector('.tbs-panel');});
+  var openId=null, savedY=0;
+
+  var backBtn=document.createElement('button');
+  backBtn.type='button';
+  backBtn.className='tbs-back-btn';
+  backBtn.textContent='\u2190 \u8fd4\u56de\u6d4f\u89c8\u4f4d\u7f6e';
+  document.body.appendChild(backBtn);
+
+  function leave(id){
+    var t=document.getElementById(id),p=panelOf[id];
+    if(t)t.checked=false;
+    if(p){p.classList.remove('is-open');p.classList.add('is-leaving');
+      setTimeout(function(){if(!p.classList.contains('is-open'))p.classList.remove('is-leaving');},300);}
+  }
+  function setOpen(id){
+    if(openId&&openId!==id)leave(openId);
+    var t=document.getElementById(id),p=panelOf[id];
+    if(t)t.checked=true;
+    if(p){p.classList.remove('is-leaving');p.classList.add('is-open');openId=id;}
+  }
+  function closeAll(){if(openId){leave(openId);openId=null;}}
+  function hideBack(){backBtn.classList.remove('show');}
+
+  document.querySelectorAll('.tbs-term').forEach(function(lbl){
+    lbl.addEventListener('click',function(){
+      var id=lbl.getAttribute('for');
+      setTimeout(function(){
+        var t=document.getElementById(id);
+        if(t&&t.checked){setOpen(id);}
+        else{var p=panelOf[id];
+             if(p){p.classList.remove('is-open');p.classList.add('is-leaving');}
+             if(openId===id)openId=null;}
+        hideBack();
+      },0);
+    });
+  });
+
+  document.querySelectorAll('.tbs-close').forEach(function(c){
+    c.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();closeAll();hideBack();});
+  });
+
+  document.addEventListener('click',function(e){
+    if(e.target===backBtn)return;
+    if(e.target.closest&&e.target.closest('.tbs'))return;
+    closeAll();hideBack();
+  });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){closeAll();hideBack();}
+  });
+
+  document.querySelectorAll('.tbs-more').forEach(function(a){
+    a.addEventListener('click',function(e){
+      e.preventDefault();
+      savedY=window.scrollY||window.pageYOffset||0;
+      closeAll();
+      var target=document.querySelector(a.getAttribute('href'));
+      if(target){
+        document.querySelectorAll('.glossary-card.is-target').forEach(function(c){c.classList.remove('is-target');});
+        target.scrollIntoView({behavior:'smooth',block:'start'});
+        if(target.classList&&target.classList.contains('glossary-card')){
+          target.classList.add('is-target');
+          setTimeout(function(){target.classList.remove('is-target');},2400);
+        }
+      }
+      setTimeout(function(){backBtn.classList.add('show');},430);
+    });
+  });
+
+  backBtn.addEventListener('click',function(){
+    hideBack();
+    window.scrollTo({top:savedY,behavior:'smooth'});
+  });
+})();
+</script>
+
+<footer class="site-foot"><nav class="pn" aria-label="上下篇"><a class="prev" href="paper-20260925.html"><small>← 上一篇 · 09.25</small>StoryAlign · 怎么训练和评测故事生成的奖励模型</a><a class="next" href="../作品集_vibecoding_DEMO_v8.html"><small>作品集主页 →</small>简沛言 JIANPEIYAN</a></nav><p class="copy">© 2026 简沛言 · 论文精读 · <a href="../作品集_vibecoding_DEMO_v8.html">返回作品集主页</a> · <a href="mailto:18382308038@163.com">18382308038@163.com</a></p></footer>
+<script src="blog.js"></script>
+</body>
+</html>

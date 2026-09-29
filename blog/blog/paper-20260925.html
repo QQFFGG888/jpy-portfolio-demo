@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="acid" data-scheme="ink">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>StoryAlign · 怎么训练和评测故事生成的奖励模型 · 简沛言 JIANPEIYAN</title>
+<script>(function(){try{var s=localStorage.getItem('jpy-scheme');if(s==='light'||s==='ink')document.documentElement.setAttribute('data-scheme',s)}catch(e){}})();</script>
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<header class="nav"><div class="nav-in"><a class="brand" href="../作品集_vibecoding_DEMO_v8.html" aria-label="简沛言 · 作品集主页"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M 36.82 9.16 L 51.00 9.16 L 51.00 67.83 A 1.35 1.35 0 0 1 49.65 69.18 L 45.26 69.18 A 8.44 8.44 0 0 1 36.82 60.74 Z" fill="currentColor"/><path d="M 80.40 32.98 L 80.40 55.69 A 34.42 34.42 0 0 1 45.98 90.11 A 34.42 34.42 0 0 1 11.59 57.17" fill="none" stroke="currentColor" stroke-width="15.69"/><path d="M 58.64 16.18 L 88.38 16.18" fill="none" stroke="currentColor" stroke-width="14.04"/></svg><span class="px">JPY</span></a><nav class="links" aria-label="站点导航"><div class="menu"><a class="menu-btn" href="../作品集_vibecoding_DEMO_v8.html#works">作品</a><div class="menu-pop"><a href="../作品集_vibecoding_DEMO_v8.html#works"><small>01</small>核心项目</a><a href="../作品集_vibecoding_DEMO_v8.html#rent"><small>02</small>找房 Agent</a><a href="../作品集_vibecoding_DEMO_v8.html#ledger"><small>03</small>细节账本</a><a href="../作品集_vibecoding_DEMO_v8.html#flow"><small>04</small>工作流</a><a href="../作品集_vibecoding_DEMO_v8.html#contact"><small>07</small>联系</a></div></div><div class="menu"><a class="menu-btn" href="../作品集_vibecoding_DEMO_v8.html#more">博客</a><div class="menu-pop"><a href="paper-20260928.html"><small>09.28 · 论文精读</small>Who Wrote This Line? · 古典诗词检测</a><a href="paper-20260925.html" aria-current="page"><small>09.25 · 论文精读</small>StoryAlign · 故事生成奖励模型</a><a href="paper-20260922.html"><small>09.22 · 论文精读</small>LegalCiteTrust · 法律报告引用可信度</a><a href="paper-20260919.html"><small>09.19 · 论文精读</small>Auditing Deep Research Writing · 深研报告可信度审计</a><a href="paper-20260916.html"><small>09.16 · 论文精读</small>HoWToBench · 人类级写作能力评测</a><a href="../作品集_vibecoding_DEMO_v8.html#more"><small>ALL</small>全部博客</a></div></div></nav><div class="tools"><a class="back" href="../作品集_vibecoding_DEMO_v8.html#more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>返回作品集</span></a><button class="ibtn" id="schemeBtn" type="button" aria-label="切换明暗"></button></div></div></header>
+<script>document.documentElement.classList.add('js')</script>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-title">PAPER <span class="cn">AI 论文<em>每周精读</em></span></div>
+    <nav class="topbar-nav"><a href="#paper1"><span class="dot"></span>StoryAlign: Ev…</a><a href="#glossary"><span class="dot"></span>名词表·18</a></nav>
+  </div>
+</header>
+<div class="read-progress" id="readProgress"></div>
+
+<div class="masthead">
+  <div class="masthead-badge">📅 生成于 2026-09-25 · 全文通读 · 零基础可读</div>
+  <h1>AI 论文<em>每周精读</em></h1>
+  <p class="masthead-sub">本期 1 篇模型评测领域的一手文献（含评测方法 / Bench 构造），覆盖 Benchmark与Rubric。全文通读后按四层金字塔重写：生活比喻建立直觉 → 术语对照知晓名词 → 技术语言准确理解 → 实操配置便于上手；并附「一线可借鉴要点」与「给读者的思考题」。正文术语可点击查看释义。</p>
+  <div class="masthead-stats"><div class="stat"><div class="stat-num">1</div><div class="stat-label">篇论文</div></div><div class="stat"><div class="stat-num">18</div><div class="stat-label">个名词</div></div><div class="stat"><div class="stat-num">1</div><div class="stat-label">大方向</div></div><div class="stat"><div class="stat-num">12</div><div class="stat-label">段导读</div></div></div>
+</div>
+
+<main class="container">
+<details class="toc" id="toc" aria-label="本页目录" open><summary>本页目录</summary><ol id="tocList"></ol></details>
+  <section id="paper1" class="section"><article class="paper-card reveal"><div class="paper-head"><div class="paper-seq">01</div><h2 class="paper-title">StoryAlign: Evaluating and Training Reward Models for Story Generation</h2><p class="paper-oneliner">一家出版社要考核终审编辑，不给他打分标准，只给他同一个约稿题目的四份匿名稿，问他挑哪一份——本文发现市面上最强的通才编辑（GPT-4o）只挑对 66.3%；而要让新编辑学会这门口味，不必请老编辑逐篇写评语，只需批量做「好稿／坏稿」对照稿（约 10 万对），8B 规模就能把准确率推到 75.0%。最反直觉的一条是：直接把人类原文当「好稿」去教，模型反而训废（准确率不足 30%）。</p><div class="paper-meta"><span class="difficulty">⭐⭐</span><span class="paper-date">2026-05-06</span><span class="tag-badge tag-bench">Benchmark与Rubric</span></div></div><div class="links-box"><div class="link-item"><span class="link-label">📄 原文：</span><a href="https://arxiv.org/abs/2605.04831" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2605.04831</a></div><div class="link-item"><span class="link-label">📥 PDF：</span><a href="https://arxiv.org/pdf/2605.04831" target="_blank" rel="noopener noreferrer">https://arxiv.org/pdf/2605.04831</a></div></div><div class="stage"><h4><span class="num">1</span>一句话核心结论</h4><div class="stage-body"><p>先看一个场面。一家出版社的终审编辑拿到同一个约稿题目的四份匿名稿，必须挑出最该上刊的那一篇——他没有绝对标准，全靠「选稿口味」。这篇论文测量的就是：<strong class="hl">市面上最会挑的那位通才编辑（GPT-4o），在故事上只挑对了 66.3%</strong>（表 1, p7）。换句话说，人类已经认定更好的那篇故事摆在面前，最强的通用模型有三成多的情况会把票投给另一篇。</p>
+<p>论文的后半篇更值得记住。它的解法不是「再训一个更大的模型」，而是改教材：与其请老编辑逐篇写评语（本文的标注成本约 1 万美元，附录 C.2, p17），不如批量制造「好稿／坏稿」的对照稿，让新编辑自己在对照里总结口味。作者用三条自动路径凑出约 10 万对对照稿（§3.1, p5–6），训出一个只有 8B 规模的<span class="tbs" data-term="storyreward"><input type="checkbox" id="tbs1" class="tbs-toggle"><label for="tbs1" class="tbs-term">专用编辑 StoryReward</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">StoryReward</span><span class="tbs-en">StoryReward</span><label for="tbs1" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">本文训练的专用故事偏好奖励模型，8B 规模，分 Llama 与 Qwen 两版。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">底座为 Llama-3.1-8B-Instruct 与 Qwen3-8B；batch size 1、1 epoch，学习率分别 9×10⁻⁶ 与 2×10⁻⁵（§3.2, p6）。主榜平均准确率：StoryReward-Qwen 75.0%、StoryReward-Llama 61.4%（表 1, p7）。</span></span><a class="tbs-more" href="#term-storyreward">查看完整释义 ›</a></span></span>，把准确率推到 75.0%（表 1, p7）。</p>
+<p>本期全篇只用一个比喻系统——出版社编辑部的选稿与培训：编辑就是<span class="tbs" data-term="rm"><input type="checkbox" id="tbs2" class="tbs-toggle"><label for="tbs2" class="tbs-term">奖励模型</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">奖励模型</span><span class="tbs-en">Reward Model <span class="abbr">RM</span></span><label for="tbs2" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">把「哪一篇更好」变成一个可打分函数的模型；评测时给候选集逐篇打分，取最高分者。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文的任务形式：给定四篇候选故事 {s₁…s₄}，RM 逐篇打分 f(sᵢ)，argmax f(sᵢ) = s* 即判对，指标为准确率（§4.1, p6）。基线含两类：显式奖励模型（InternLM2-Reward、Skywork-Reward、ArmoRM、QRM、GRM、WQRM）与 LLM 生成式评委（GPT-4o、Gemini-2.5-Pro、Grok、Llama-3.1-8B-Instruct、Qwen3-8B）（§4.1, p6）。</span></span><a class="tbs-more" href="#term-rm">查看完整释义 ›</a></span></span>，匿名候选稿就是模型生成的候选故事，编辑的选稿口味就是<span class="tbs" data-term="preference"><input type="checkbox" id="tbs3" class="tbs-toggle"><label for="tbs3" class="tbs-term">人类故事偏好</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">人类故事偏好</span><span class="tbs-en">Human Story Preference</span><label for="tbs3" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">人类读者在两个故事之间更偏好哪一个；主观、多维，是本文要建模的目标。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">原文指出主流 RLHF 只训一个通用奖励模型，容易忽略故事特有偏好，并带有冗长偏置（§1, p2）；故事偏好需同时兼顾创造力、连贯性、人物塑造、流畅度与切题度，很难从通用偏好直接泛化（§1, p2）。</span></span><a class="tbs-more" href="#term-preference">查看完整释义 ›</a></span></span>，考核用的标准稿就是基准 STORYRMB，成对的「好稿／坏稿」就是训练用的偏好对。后面所有说法都从这套比喻长出来。</p></div></div><div class="stage"><h4><span class="num">2</span>术语表：先把编辑部里的八个词认全</h4><div class="stage-body"><p>全篇只用一个比喻系统——出版社编辑部：一篇待评的故事是一份投稿，四篇候选是一个约稿题目下的四份匿名稿，奖励模型是终审编辑，评测基准是考核用的评审样书，偏好对是带新编辑时用的「好稿／坏稿」对照稿。先把这八个词对齐（文末有 18 条完整名词表）。</p>
+<table class="compare-table"><tr><th>编辑部的话</th><th>论文术语</th><th>缩写</th><th>在本文里的角色</th></tr>
+<tr><td>终审编辑：决定哪篇上刊的人</td><td><span class="tbs" data-term="rm"><input type="checkbox" id="tbs4" class="tbs-toggle"><label for="tbs4" class="tbs-term">奖励模型 Reward Model</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">奖励模型</span><span class="tbs-en">Reward Model <span class="abbr">RM</span></span><label for="tbs4" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">把「哪一篇更好」变成一个可打分函数的模型；评测时给候选集逐篇打分，取最高分者。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文的任务形式：给定四篇候选故事 {s₁…s₄}，RM 逐篇打分 f(sᵢ)，argmax f(sᵢ) = s* 即判对，指标为准确率（§4.1, p6）。基线含两类：显式奖励模型（InternLM2-Reward、Skywork-Reward、ArmoRM、QRM、GRM、WQRM）与 LLM 生成式评委（GPT-4o、Gemini-2.5-Pro、Grok、Llama-3.1-8B-Instruct、Qwen3-8B）（§4.1, p6）。</span></span><a class="tbs-more" href="#term-rm">查看完整释义 ›</a></span></span></td><td>RM</td><td>被评测的对象。给定候选集 {s₁…s₄} 逐篇打分 f(sᵢ)，argmax f(sᵢ) = s* 即判对（§4.1, p6）</td></tr>
+<tr><td>编辑的选稿口味</td><td><span class="tbs" data-term="preference"><input type="checkbox" id="tbs5" class="tbs-toggle"><label for="tbs5" class="tbs-term">人类故事偏好</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">人类故事偏好</span><span class="tbs-en">Human Story Preference</span><label for="tbs5" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">人类读者在两个故事之间更偏好哪一个；主观、多维，是本文要建模的目标。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">原文指出主流 RLHF 只训一个通用奖励模型，容易忽略故事特有偏好，并带有冗长偏置（§1, p2）；故事偏好需同时兼顾创造力、连贯性、人物塑造、流畅度与切题度，很难从通用偏好直接泛化（§1, p2）。</span></span><a class="tbs-more" href="#term-preference">查看完整释义 ›</a></span></span></td><td>—</td><td>主观且多维，是本文要建模的目标；现有 RM 忽略它、还带冗长偏置（§1, p2）</td></tr>
+<tr><td>五栏审稿评分表</td><td><span class="tbs" data-term="dim"><input type="checkbox" id="tbs6" class="tbs-toggle"><label for="tbs6" class="tbs-term">五个评价维度</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">五个评价维度</span><span class="tbs-en">Five Evaluation Dimensions</span><label for="tbs6" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">本文把故事质量拆成五栏：连贯、创意、人物塑造、流畅、切题。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">coherence / creativity / characterization / fluency / relevance，参照 Yang &amp; Jin (2024) 的故事评测综述（§2.2, p4）。STORYRMB 的 1,133 条实例按「最起决定作用的那一维」归类，得到 creativity 292 / coherence 265 / fluency 225 / characterization 215 / relevance 136（§2.2, p4）。</span></span><a class="tbs-more" href="#term-dim">查看完整释义 ›</a></span></span></td><td>—</td><td>coherence / creativity / characterization / fluency / relevance（§2.2, p4）</td></tr>
+<tr><td>定稿用的评审样书</td><td><span class="tbs" data-term="storyrmb"><input type="checkbox" id="tbs7" class="tbs-toggle"><label for="tbs7" class="tbs-term">STORYRMB</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">STORYRMB</span><span class="tbs-en">StoryRMB</span><label for="tbs7" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">首个面向奖励模型的故事偏好评测基准，含 1,133 条人工校验实例。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">每条实例＝一个命题 + 1 篇 chosen 故事 + 3 篇 rejected 故事（摘要, p1；§2.2, p4）。构造分两步：候选故事生成（GPT-4o / Gemini 2.5 Pro / Grok 4 / Qwen-Long 各写一篇，另含人类故事）与两阶段偏好判定（四家 LLM 打分投票 + 人工核验）（§2.1–2.2, p3–4）。子集分 LLM–LLM 对与 Human–LLM 对（§4.2, p7）。</span></span><a class="tbs-more" href="#term-storyrmb">查看完整释义 ›</a></span></span></td><td>—</td><td>1,133 条「1 篇 chosen + 3 篇 rejected」实例，按主导维度分五组（§2.2, p4）</td></tr>
+<tr><td>成对的好稿／坏稿教材</td><td><span class="tbs" data-term="pair"><input type="checkbox" id="tbs8" class="tbs-toggle"><label for="tbs8" class="tbs-term">偏好对 Preference Pair</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">偏好对</span><span class="tbs-en">Preference Pair</span><label for="tbs8" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">训练奖励模型的基本单位：一条更受偏好的样本（chosen）与一条较差的样本（rejected）。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文共构造约 10 万对，来自三条自动路径（豆瓣同题材按读者量判优约 6,000 对；按受控指令改写人类故事约 30,000 对；只给真人开头的续写对照约 10,000 对）加一条 LLM 互评路径（§3.1, p5–6）。表 9（p25）给出训练数据实际为 93,729 条，平均 2,802 词、中位 1,858 词。</span></span><a class="tbs-more" href="#term-pair">查看完整释义 ›</a></span></span></td><td>—</td><td>训练数据的基本单位，约 10 万对，chosen 与 rejected 成对出现（§3.1, p5–6）</td></tr>
+<tr><td>出师的专用编辑</td><td><span class="tbs" data-term="storyreward"><input type="checkbox" id="tbs9" class="tbs-toggle"><label for="tbs9" class="tbs-term">StoryReward</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">StoryReward</span><span class="tbs-en">StoryReward</span><label for="tbs9" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">本文训练的专用故事偏好奖励模型，8B 规模，分 Llama 与 Qwen 两版。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">底座为 Llama-3.1-8B-Instruct 与 Qwen3-8B；batch size 1、1 epoch，学习率分别 9×10⁻⁶ 与 2×10⁻⁵（§3.2, p6）。主榜平均准确率：StoryReward-Qwen 75.0%、StoryReward-Llama 61.4%（表 1, p7）。</span></span><a class="tbs-more" href="#term-storyreward">查看完整释义 ›</a></span></span></td><td>—</td><td>8B 专用奖励模型，主榜平均 75.0%，超过 GPT-4o 的 66.3%（表 1, p7）</td></tr>
+<tr><td>一稿多投后挑最好的一版</td><td><span class="tbs" data-term="bon"><input type="checkbox" id="tbs10" class="tbs-toggle"><label for="tbs10" class="tbs-term">Best-of-N</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">Best-of-N</span><span class="tbs-en">Best-of-N <span class="abbr">BoN</span></span><label for="tbs10" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">测试时扩展策略：同一提示生成 N 个答案，用奖励模型挑一个。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文用 MoPS 数据集约 100 个命题，每命题用 Llama-3.1-70B-Instruct、温度 1 生成 16 篇，人工双人独立排序 + 资深第三人裁定，再比各 RM 的挑选结果（§5, p8）。StoryReward 对五个奖励模型的胜率 63%–75%、负率 3%–11%（图 3, p8）；但在 STORYRMB 自身做 head-to-head 时胜率降到 44%–61%（图 4, p19）。</span></span><a class="tbs-more" href="#term-bon">查看完整释义 ›</a></span></span></td><td>BoN</td><td>生成 16 篇让 RM 挑 1 篇的测试时扩展；本文用来验证实战有效性（§5, p8）</td></tr>
+<tr><td>编辑的私人偏好（只爱长短句交错）</td><td><span class="tbs" data-term="burst"><input type="checkbox" id="tbs11" class="tbs-toggle"><label for="tbs11" class="tbs-term">语言突发性</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">语言突发性</span><span class="tbs-en">Linguistic Burstiness</span><label for="tbs11" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">文本中信息与结构分布不均匀的现象；本文用句长分布的峰度当代理指标。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">Kurtosis = E[(X−µ)⁴]/σ⁴ − 3，µ 为平均句长、σ 为句长标准差（式 6, p20）；高峰度意味着极短句与极长句频繁交替，被认为刻画人类写作的结构复杂度。实测：StoryReward-Qwen 所选故事峰度 1.0064（+11.8%），人类认定的 ground truth 为 0.8999（0.0%）（表 8, p25）。原文承认这构成潜在偏置，把机制分析留作 future work（附录 H.4, p20）。</span></span><a class="tbs-more" href="#term-burst">查看完整释义 ›</a></span></span></td><td>—</td><td>用句长峰度做代理指标；StoryReward-Qwen 选出的稿子峰度高于人类基准（附录 H.4, p20）</td></tr></table>
+<p>这张表里最容易被忽略的是最后一行。<span class="tbs" data-term="verbosity"><input type="checkbox" id="tbs12" class="tbs-toggle"><label for="tbs12" class="tbs-term">冗长偏置</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">冗长偏置</span><span class="tbs-en">Verbosity Bias</span><label for="tbs12" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">奖励模型偏爱更长而非更好的回答的系统性倾向。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">原文在动机部分把它列为现有奖励模型的已知缺陷之一（§1, p2，引 Saito et al. 与 Peng et al., 2025）。本文自己的峰度发现属于另一类「代理偏置」——把风格特征当成质量（附录 H.4, p20）。</span></span><a class="tbs-more" href="#term-verbosity">查看完整释义 ›</a></span></span>是学界已知的旧毛病（偏爱更长而非更好，§1, p2），而本文自己又发现了一个新毛病：模型可能把「像人写的」当成「写得更好」。这一点在第 9 段展开。</p></div></div><div class="stage"><h4><span class="num">3</span>研究背景：故事越写越顺，评测却停在「换个更大模型试试」</h4><div class="stage-body"><p>故事生成的任务定义很朴素：给一个命题（premise），生成连贯、有结构、有吸引力的叙事（§1, p1）。随着大模型的语言能力上来，流水线式做法越来越多——大纲法、分层规划、多 agent 协作都被拿来驱动长篇叙事（§6.1, p9）。但原文引用的一个对照数字很难看：LLM 生成的故事通过专家评测的概率，只有专业作者的三分之一到十分之一（§1, p1，转引 Chakrabarty et al., 2024；<strong>这是转引数据，不是本文自己的实验</strong>）。</p>
+<p>原文把根因归到训练信号上。主流路线是 RLHF：先训一个奖励模型捕捉人类偏好，再用它的打分去优化生成模型（§1, p2）。但现有奖励模型有两个结构性缺口——<span class="tbs" data-term="rlhf"><input type="checkbox" id="tbs13" class="tbs-toggle"><label for="tbs13" class="tbs-term">RLHF</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">人类反馈强化学习</span><span class="tbs-en">RLHF <span class="abbr">RLHF</span></span><label for="tbs13" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">先训奖励模型捕捉人类偏好、再用其打分优化生成模型的训练范式。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">原文指出该范式下模型的故事水平受限于奖励模型的口味；与之对照的是可验证奖励（RLVR），后者适合数学、编程这类有标准答案的任务，而写作没有标准答案、本质主观（§1, p2；§6.2, p9）。</span></span><a class="tbs-more" href="#term-rlhf">查看完整释义 ›</a></span></span>的口味大多来自通用领域，没有专门建模故事特有的偏好；而且它们带<span class="tbs" data-term="verbosity"><input type="checkbox" id="tbs14" class="tbs-toggle"><label for="tbs14" class="tbs-term">冗长偏置</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">冗长偏置</span><span class="tbs-en">Verbosity Bias</span><label for="tbs14" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">奖励模型偏爱更长而非更好的回答的系统性倾向。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">原文在动机部分把它列为现有奖励模型的已知缺陷之一（§1, p2，引 Saito et al. 与 Peng et al., 2025）。本文自己的峰度发现属于另一类「代理偏置」——把风格特征当成质量（附录 H.4, p20）。</span></span><a class="tbs-more" href="#term-verbosity">查看完整释义 ›</a></span></span>，偏爱更长的回答而不是更好的回答（§1, p2）。</p>
+<p>更麻烦的是，写作和数学、编程不一样。数学与编程可以用规则验证器给出「对／错」的二元反馈，也就是可验证奖励（RLVR）；写作没有标准答案，本质主观，文本还容易啰嗦（§6.2, p9）。而故事偏好本身又是多维的：创造力、连贯性、人物塑造、流畅度、切题度都得兼顾，很难从通用偏好直接泛化（§1, p2）。原文引 2024 年的故事评测综述（Yang &amp; Jin, 2024）作结：LLM 生成故事的自动评测本身仍是开放问题。</p>
+<p>于是本文把自己的任务切成两半：先造一把能量出「编辑懂不懂口味」的尺子，再造一份能教会编辑口味的教材（§1, p2–3）。</p></div></div><div class="stage"><h4><span class="num">4</span>核心问题：三个问题，一个比一个难回答</h4><div class="stage-body"><p>把上面那段背景拆开，论文实际要回答三个互相咬合的问题（§1, p2–3）：</p>
+<ul class="keypoint"><li><strong>问题一：怎么系统性地测出「一个奖励模型到底懂不懂故事偏好」？</strong><br>当时的做法多是零散对比——拿几个 RM 在几个数据集上跑一跑。缺的是一个能诊断的基准：既要给出总体成绩，还要说清它是在哪个维度上失手。论文的答案是基准 STORYRMB（§2, p3）。</li>
+<li><strong>问题二：怎么在拿不到大量标注预算的前提下，得到能反映真实人类偏好的训练数据？</strong><br>这是全文最实际的约束。原文披露它的标注总成本约 1 万美元（附录 C.2, p17），靠人工逐条标注显然不可扩展。缺的是把「人类偏好」这个贵信号换成廉价替代物的办法。论文的答案是三条自动构造路径（§3.1, p5–6）。</li>
+<li><strong>问题三：训出来的专用奖励模型，在真实的选择场景里真的更会挑吗？</strong><br>基准上的分数高，不等于部署时有用。原文特意用推荐系统常用的 Best-of-N 场景做实战验证：一次生成 16 篇，让 RM 挑一篇（§5, p8）。</li></ul>
+<p>三个问题对应论文页首列出的三条贡献（§1, p3）：基准、数据、专用模型。要注意第三条贡献里那半句「进一步在真实应用中验证其有效性」——这正是第 7 段会重点看、第 12 段会打折扣的地方。</p></div></div><div class="stage"><h4><span class="num">5</span>关键洞见：把「写得好不好」换成一道选择题</h4><div class="stage-body"><p>这条线的价值不在模型本身，而在三个方法论动作。理解了它们，就能把这套做法搬到任何主观质量评测上。</p>
+<ul class="keypoint"><li><strong>洞见一：把主观打分改造成可判对错的选择题。</strong><br>让 RM 给一篇故事打 0–100 分，你永远不知道它打对没有；但让它「在四篇里选一篇」，就立刻有了对错——只要事先有人类认定的那一篇作标准答案。原文正是把任务定成四选一、用准确率当指标（§4.1, p6）。<br>这一步是整篇论文能成立的前提：<strong class="hl">把不可验证的主观质量，转成可验证的相对选择</strong>。</li>
+<li><strong>洞见二：不需要人类写评语，只需要人类写的故事和一点弱信号。</strong><br>原文没有让标注者去写「这篇哪里好」。它换了个思路：从豆瓣与 <span class="tbs" data-term="writingprompts"><input type="checkbox" id="tbs15" class="tbs-toggle"><label for="tbs15" class="tbs-term">WritingPrompts</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">WritingPrompts</span><span class="tbs-en">WritingPrompts</span><label for="tbs15" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">英文故事命题与人类撰写故事的公开数据集，本文英文语料与基准命题的来源。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">STORYRMB 的 600 条命题取自该数据集，每条附一篇人类撰写故事（§2.1, p3）；先滤掉少于 100 词的故事，再由标注者确认人类故事确实最优，标「unsure」的 91 条被丢弃，余 509 条「1 人类 + 3 LLM」实例（附录 C, p17）。数据集地址由原文脚注给出（§3.1, p5）。</span></span><a class="tbs-more" href="#term-writingprompts">查看完整释义 ›</a></span></span> 抓来人类已写好的故事，用平台自带的阅读量、题材标签、作者专栏这类弱信号当偏好，再让 LLM 反推命题、按指令改坏一处、或只给一半真人续写（§3.1, p5–6）。人类只提供「作品」和「边角料数据」，昂贵的判断交给对照结构本身。</li>
+<li><strong>洞见三：现有奖励模型的问题不在容量，在数据；而且对照组必须「差一档」。</strong><br>原文发现现有 RM 在「人类稿 vs 机器稿」这一子集上显著更差，说明它们倾向偏爱 LLM 生成的内容（§4.2, p7）。但更反直觉的是：把人类原文直接当正例去训，模型反而训不动——在 STORYRMB 上平均准确率不足 30%（附录 E.4, p18）。原因是人类与 LLM 稿的分布间隙太大，模型会走表层语言捷径。于是第三条路径「只给真人开头续写」才成为主力之一。教对照，不能把两个世界直接对撞，得让两边差一档。</li></ul></div></div><div class="stage"><h4><span class="num">6</span>方法架构：两条支路各自造物，最后汇到同一场考试</h4><div class="stage-body"><p>原文的方法可以画成两条互不干扰的支路，再加一次汇合。互不干扰这一点很重要：样书只用于考核、不进训练集，教材只用于训练、不参与考核。否则基准分数就没有意义了。</p>
+<ul class="keypoint"><li><strong>上半程——做样书（<span class="tbs" data-term="storyrmb"><input type="checkbox" id="tbs16" class="tbs-toggle"><label for="tbs16" class="tbs-term">STORYRMB</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">STORYRMB</span><span class="tbs-en">StoryRMB</span><label for="tbs16" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">首个面向奖励模型的故事偏好评测基准，含 1,133 条人工校验实例。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">每条实例＝一个命题 + 1 篇 chosen 故事 + 3 篇 rejected 故事（摘要, p1；§2.2, p4）。构造分两步：候选故事生成（GPT-4o / Gemini 2.5 Pro / Grok 4 / Qwen-Long 各写一篇，另含人类故事）与两阶段偏好判定（四家 LLM 打分投票 + 人工核验）（§2.1–2.2, p3–4）。子集分 LLM–LLM 对与 Human–LLM 对（§4.2, p7）。</span></span><a class="tbs-more" href="#term-storyrmb">查看完整释义 ›</a></span></span>）：</strong>先造<span class="tbs" data-term="premise"><input type="checkbox" id="tbs17" class="tbs-toggle"><label for="tbs17" class="tbs-term">命题</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">命题</span><span class="tbs-en">Premise</span><label for="tbs17" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">故事生成任务的输入提示，即「约稿单」。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">构造分两步：LLM 生成 624 条高质量命题（主题框架取自文学、哲学与电影母题，遵循「冲突或反转」结构，附录 A, p16），另从 WritingPrompts 采样过滤 600 条（§2.1, p3）。原文另有附录 A 称过滤后为 1,000 条、附录 B 称 LLM 生成命题为 533 条，三处数字不一致，原文未解释。</span></span><a class="tbs-more" href="#term-premise">查看完整释义 ›</a></span></span>池，再把每个命题展开成四篇候选故事，然后让四家<span class="tbs" data-term="judge"><input type="checkbox" id="tbs18" class="tbs-toggle"><label for="tbs18" class="tbs-term">大模型评委</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">大模型评委</span><span class="tbs-en">LLM-as-a-Judge</span><label for="tbs18" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">用大模型直接打分或两两比较来充当评价者的评测方式。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文两处用到：造基准时用 GLM-4.5、Qwen2.5-Max、Claude-3.5-Sonnet、DeepSeek-R1 四家打分投票（§2.2, p4）；主榜里把 GPT-4o、Gemini-2.5-Pro、Grok 等作为「生成式评委」基线，最强 GPT-4o 平均 66.3%（表 1, p7）。</span></span><a class="tbs-more" href="#term-judge">查看完整释义 ›</a></span></span>逐维打分、算排序一致性，分歧大的交给人工，最后得到 1,133 条「1 篇 chosen + 3 篇 rejected」的实例并按主导维度分五组（§2, p3–5）。</li>
+<li><strong>下半程——造教材（约 10 万对<span class="tbs" data-term="pair"><input type="checkbox" id="tbs19" class="tbs-toggle"><label for="tbs19" class="tbs-term">偏好对</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">偏好对</span><span class="tbs-en">Preference Pair</span><label for="tbs19" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">训练奖励模型的基本单位：一条更受偏好的样本（chosen）与一条较差的样本（rejected）。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文共构造约 10 万对，来自三条自动路径（豆瓣同题材按读者量判优约 6,000 对；按受控指令改写人类故事约 30,000 对；只给真人开头的续写对照约 10,000 对）加一条 LLM 互评路径（§3.1, p5–6）。表 9（p25）给出训练数据实际为 93,729 条，平均 2,802 词、中位 1,858 词。</span></span><a class="tbs-more" href="#term-pair">查看完整释义 ›</a></span></span>）：</strong>从中文平台豆瓣与英文数据集 WritingPrompts 抓人类故事，用三条自动路径加一条通用路径制造 chosen/rejected 对照，训出 8B 的<span class="tbs" data-term="storyreward"><input type="checkbox" id="tbs20" class="tbs-toggle"><label for="tbs20" class="tbs-term">StoryReward</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">StoryReward</span><span class="tbs-en">StoryReward</span><label for="tbs20" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">本文训练的专用故事偏好奖励模型，8B 规模，分 Llama 与 Qwen 两版。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">底座为 Llama-3.1-8B-Instruct 与 Qwen3-8B；batch size 1、1 epoch，学习率分别 9×10⁻⁶ 与 2×10⁻⁵（§3.2, p6）。主榜平均准确率：StoryReward-Qwen 75.0%、StoryReward-Llama 61.4%（表 1, p7）。</span></span><a class="tbs-more" href="#term-storyreward">查看完整释义 ›</a></span></span>（§3.1–3.2, p5–6）。</li>
+<li><strong>汇合——三重验证：</strong>主榜四选一准确率（表 1, p7）、专门考「真人稿 vs 机器稿」的子集（图 2, p8）、以及实战 <span class="tbs" data-term="bon"><input type="checkbox" id="tbs21" class="tbs-toggle"><label for="tbs21" class="tbs-term">Best-of-N</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">Best-of-N</span><span class="tbs-en">Best-of-N <span class="abbr">BoN</span></span><label for="tbs21" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">测试时扩展策略：同一提示生成 N 个答案，用奖励模型挑一个。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文用 MoPS 数据集约 100 个命题，每命题用 Llama-3.1-70B-Instruct、温度 1 生成 16 篇，人工双人独立排序 + 资深第三人裁定，再比各 RM 的挑选结果（§5, p8）。StoryReward 对五个奖励模型的胜率 63%–75%、负率 3%–11%（图 3, p8）；但在 STORYRMB 自身做 head-to-head 时胜率降到 44%–61%（图 4, p19）。</span></span><a class="tbs-more" href="#term-bon">查看完整释义 ›</a></span></span> 16 选 1（图 3, p8）。</li></ul>
+<p>下图按编辑部视角把全链路重绘，框内数字与节号全部取自原文。</p><svg viewBox="0 0 680 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="StoryAlign 全链路：样书构造、教材构造、训练与三重验证（据原文图 1、§3.1、§3.2、§4、§5 重绘）"><title>StoryAlign 全链路：样书构造、教材构造、训练与三重验证</title><rect x="0" y="0" width="680" height="800" fill="#141414" stroke="#2e2e2e" rx="10"/>
+<text x="24" y="32" fill="#ccff00" font-size="14" font-weight="700" font-family="sans-serif">StoryAlign 全链路：先做样书，再造教材，最后考试</text>
+<text x="24" y="52" fill="#8f8f8f" font-size="11" font-family="sans-serif">左列文字＝编辑部视角　　框内＝原文步骤（括号为锚点）　　§＝论文节号</text>
+<rect x="24" y="80" width="632" height="24" fill="#1a1a1a" stroke="#333" rx="4"/>
+<text x="40" y="96" fill="#ccff00" font-size="12" font-weight="700" font-family="sans-serif">上半程 ｜ 做一本考核用的评审样书 STORYRMB</text>
+<rect x="24" y="114" width="632" height="58" fill="#1e1e1e" stroke="#3a3a3a" rx="6"/>
+<text x="40" y="137" fill="#e8e8e8" font-size="12.5" font-weight="700" font-family="sans-serif">① 命题池：约稿单从哪来</text>
+<text x="40" y="157" fill="#9a9a9a" font-size="11" font-family="sans-serif">LLM 生成的 624 条高质量命题（§2.1, p3）＋ WritingPrompts 采样过滤的 600 条（§2.1, p3）</text>
+<line x1="340" y1="172" x2="340" y2="182" stroke="#4a4a4a" stroke-width="1.5"/><polygon points="340,188 335,178 345,178" fill="#4a4a4a"/>
+<rect x="24" y="186" width="632" height="58" fill="#1e1e1e" stroke="#3a3a3a" rx="6"/>
+<text x="40" y="209" fill="#e8e8e8" font-size="12.5" font-weight="700" font-family="sans-serif">② 四份匿名候选稿：每题四篇</text>
+<text x="40" y="229" fill="#9a9a9a" font-size="11" font-family="sans-serif">GPT-4o / Gemini 2.5 Pro / Grok 4 / Qwen-Long 各写一篇；含人类故事的 600 条取 3 篇＋原文（§2.1, p4）</text>
+<line x1="340" y1="244" x2="340" y2="254" stroke="#4a4a4a" stroke-width="1.5"/><polygon points="340,260 335,250 345,250" fill="#4a4a4a"/>
+<rect x="24" y="258" width="632" height="58" fill="#1e1e1e" stroke="#3a3a3a" rx="6"/>
+<text x="40" y="281" fill="#e8e8e8" font-size="12.5" font-weight="700" font-family="sans-serif">③ 四位初审编辑打分投票</text>
+<text x="40" y="301" fill="#9a9a9a" font-size="11" font-family="sans-serif">GLM-4.5 / Qwen2.5-Max / Claude-3.5-Sonnet / DeepSeek-R1 按五维打分，用 Kendall's Tau 算一致性 τ_avg（§2.2, p4）</text>
+<line x1="340" y1="316" x2="340" y2="326" stroke="#4a4a4a" stroke-width="1.5"/><polygon points="340,332 335,322 345,322" fill="#4a4a4a"/>
+<rect x="24" y="330" width="632" height="58" fill="#1e1e1e" stroke="#3a3a3a" rx="6"/>
+<text x="40" y="353" fill="#e8e8e8" font-size="12.5" font-weight="700" font-family="sans-serif">④ 编辑部吵起来就请人仲裁</text>
+<text x="40" y="373" fill="#9a9a9a" font-size="11" font-family="sans-serif">分歧大（小于 0.6）→ 人工全量标注 230 条；否则投票＋核验 394 条（附录 C, p17）</text>
+<line x1="340" y1="388" x2="340" y2="398" stroke="#4a4a4a" stroke-width="1.5"/><polygon points="340,404 335,394 345,394" fill="#4a4a4a"/>
+<rect x="24" y="402" width="632" height="58" fill="#20241a" stroke="#ccff00" rx="6"/>
+<text x="40" y="425" fill="#ccff00" font-size="12.5" font-weight="700" font-family="sans-serif">⑤ STORYRMB：1,133 条偏好实例（每题 1 篇 chosen + 3 篇 rejected）</text>
+<text x="40" y="445" fill="#b9c98a" font-size="11" font-family="sans-serif">五组分布：创意 292／连贯 265／流畅 225／人物 215／切题 136（§2.2, p4）</text>
+<rect x="24" y="478" width="632" height="24" fill="#1a1a1a" stroke="#333" rx="4"/>
+<text x="40" y="494" fill="#ccff00" font-size="12" font-weight="700" font-family="sans-serif">下半程 ｜ 给新编辑批量造对照稿，训出专用编辑</text>
+<rect x="24" y="512" width="632" height="58" fill="#1e1e1e" stroke="#3a3a3a" rx="6"/>
+<text x="40" y="535" fill="#e8e8e8" font-size="12.5" font-weight="700" font-family="sans-serif">⑥ 三条自动路径 + 一条通用路径 → 约 10 万对对照稿</text>
+<text x="40" y="555" fill="#9a9a9a" font-size="11" font-family="sans-serif">同题材比读者量 ≈6,000 ／ 按指令改坏一处 ≈30,000 ／ 只给真人开头续写 ≈10,000 ／ LLM 互评（§3.1, p5–6）</text>
+<line x1="340" y1="570" x2="340" y2="580" stroke="#4a4a4a" stroke-width="1.5"/><polygon points="340,586 335,576 345,576" fill="#4a4a4a"/>
+<rect x="24" y="584" width="632" height="58" fill="#1e1e1e" stroke="#3a3a3a" rx="6"/>
+<text x="40" y="607" fill="#e8e8e8" font-size="12.5" font-weight="700" font-family="sans-serif">⑦ 训练两版专用编辑（8B）</text>
+<text x="40" y="627" fill="#9a9a9a" font-size="11" font-family="sans-serif">底座 Llama-3.1-8B-Instruct 与 Qwen3-8B；batch size 1、1 epoch、学习率 9e-6 / 2e-5（§3.2, p6）</text>
+<line x1="340" y1="642" x2="340" y2="652" stroke="#4a4a4a" stroke-width="1.5"/><polygon points="340,658 335,648 345,648" fill="#4a4a4a"/>
+<rect x="24" y="656" width="632" height="58" fill="#20241a" stroke="#ccff00" rx="6"/>
+<text x="40" y="679" fill="#ccff00" font-size="12.5" font-weight="700" font-family="sans-serif">⑧ 三重验证：出师考试</text>
+<text x="40" y="699" fill="#b9c98a" font-size="11" font-family="sans-serif">主榜「四选一」准确率（表 1, p7）／ 专门考「真人稿 vs 机器稿」的子集（图 2, p8）／ 实战 BoN 16 选 1（图 3, p8）</text>
+<text x="24" y="744" fill="#7a7a7a" font-size="10.5" font-family="sans-serif">注：两条支路互相独立——样书只用于考核，不进训练集；教材只用于训练，不参与考核。</text>
+<text x="24" y="764" fill="#7a7a7a" font-size="10.5" font-family="sans-serif">图中所有数字与节号均取自原文，未作换算（按原文 §2.1、§2.2、§3.1、§3.2、§4、§5 与附录 B、C 重绘）。</text>
+</svg></div></div><div class="stage"><h4><span class="num">7</span>方法深挖：三条路径、两次仲裁、一道四阶段归类</h4><div class="stage-body"><p>这一段是全文最可复制的部分——它把「造对照稿」这件抽象的事，拆成了三条有明确约束的工程路径。原文给出的规模与约束如下（§3.1, p5–6）：</p>
+<table class="compare-table"><tr><th>路径</th><th>做法</th><th>规模</th><th>关键约束与风险（原文口径）</th></tr>
+<tr><td>① 同题材比读者量<br><span class="tbs" data-term="douban"><input type="checkbox" id="tbs22" class="tbs-toggle"><label for="tbs22" class="tbs-term">豆瓣</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">豆瓣</span><span class="tbs-en">Douban</span><label for="tbs22" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">中文线上文学平台，本文中文训练语料的来源。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">原文从豆瓣抓取人类撰写故事及其题材、阅读量等元数据，用于「同题材比读者量」路径（约 6,000 对）与按指令改写路径（§3.1, p5；表 9, p25 来源列）。原文声明严格遵守其版权协议（伦理声明, p10）。</span></span><a class="tbs-more" href="#term-douban">查看完整释义 ›</a></span></span> premise back-generation</td><td>把平台故事按题材标签或同一作者专栏聚类，同簇内取两篇，让 GPT-4o 依两篇共性反推一个命题；<strong>阅读量更高的一篇记为 chosen</strong></td><td>约 6,000 对</td><td>先用 GPT-4o 生成命题再判优；过滤掉阅读量极低的样本以保可靠。<strong class="hl">§1（p2）写的是按 upvote 数判优，§3.1（p5）写的是按 readership 数判优，两处口径不一致</strong></td></tr>
+<tr><td>② 按指令改坏一处<br>prompt-guided rewriting</td><td>人类故事＝chosen；用受控提示让 LLM 改写产 rejected，例如「只改结尾」「只调情绪基调」，故意破坏连贯或逻辑但保留可读性</td><td>约 30,000 对</td><td>前提假设是「人类写得更好」，原文只在 20 条样本上验证过（§3.1, p6）。这一条在消融里掉分最多（75.0 → 69.9）</td></tr>
+<tr><td>③ 只给真人开头续写<br>human-guided continuation</td><td>同命题跑两个 LLM，只有一个能读到真人续写；读过的那份＝chosen，没读过的＝rejected</td><td>约 10,000 对</td><td>最初方案是直接拿人类原文当 chosen，结果模型准确率不足 30%（附录 E.4, p18）——人类/LLM 分布间隙过大，模型走表层捷径。改为「只给开头」后才可用；同样只在 20 条上验证</td></tr>
+<tr><td>④ LLM 互评（UltraFeedback 式）</td><td>同一命题让 LLM 生成两篇，再让另一个 LLM 判哪篇更好（Cui et al., 2024）</td><td>原文未单列数量</td><td>完全不含人类信号，作为补充路径加入（§3.1, p6）</td></tr></table>
+<p>四条路径合计约 10 万对（§3.1, p6）。<strong>注意表 9（p25）给出的训练数据实际是 93,729 条</strong>，与正文「约 10 万」有出入；表 9 另给出平均长度 2,802 词、中位长度 1,858 词，来源标注为豆瓣、WritingPrompts 与 LLM。</p>
+<p>样书那一侧的判定也不是一步到位，而是先机器投票、再人工仲裁两级（§2.2, p4；附录 C, p17）：</p>
+<table class="compare-table"><tr><th>环节</th><th>具体规则</th><th>实际落到多少条</th></tr>
+<tr><td>机器排序与一致性</td><td>GLM-4.5 / Qwen2.5-Max / Claude-3.5-Sonnet / DeepSeek-R1 逐维打分，用 <span class="tbs" data-term="kendall"><input type="checkbox" id="tbs23" class="tbs-toggle"><label for="tbs23" class="tbs-term">Kendall's Tau</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">Kendall&#x27;s Tau</span><span class="tbs-en">Kendall&#x27;s Tau</span><label for="tbs23" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">衡量两个排序一致性的等级相关系数，取值 −1 到 1。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">τ = (Nc − Nd) / C(m,2)，Nc 为一致对数、Nd 为不一致对数（式 1, p4）；n 个模型两两取平均得 τ_avg（式 2, p4）。原文以 τ_avg 小于 0.6 判为强分歧并转人工；0.6 的经验含义约为 80% 一致对、20% 不一致对（附录 C, p17）。</span></span><a class="tbs-more" href="#term-kendall">查看完整释义 ›</a></span></span> 两两比较，取平均得 τ_avg（式 1、式 2, p4）</td><td>全部候选；四模型各自产出完整排序</td></tr>
+<tr><td>分歧阈值</td><td>τ_avg 小于 0.6 判为「强分歧」；原文给的经验依据是 τ_avg = 0.6 约等于 80% 一致对、20% 不一致对（附录 C, p17）</td><td>—</td></tr>
+<tr><td>人工全量标注</td><td>τ_avg 小于 0.6 的样本全部人工标</td><td>230 条</td></tr>
+<tr><td>人工核验</td><td>τ_avg 不小于 0.6 的样本，先多数投票出排序，再请人确认「排前面的确实更好」；拿不定就保留原排序</td><td>394 条；该流程比全量人工标注省约 30% 时间</td></tr>
+<tr><td>人类故事子集</td><td>WritingPrompts 那 600 条先滤掉少于 100 词的，再直接认定人类故事是四篇里最优、只请人确认这一点；标「unsure」的丢弃</td><td>丢 91 条，余 509 条「1 人类 + 3 LLM」实例</td></tr></table>
+<p>最后是给每条实例贴「主导维度」的四阶段归类算法（§2.2, p4–5；算法 1, 附录 F, p18）：先比均差（式 3，平局容差 τ = 0.5），平了就比与次优稿的差距（式 4），再平就比被拒稿的方差（式 5，取最小），还平就按固定维度序 d₁→…→d₅ 兜底。归类结果决定了表 1 里那五列——也就是「这条题考的是编辑的哪一栏能力」。</p></div></div><div class="stage"><h4><span class="num">8</span>实验与证据：主榜、人类子集、消融与实战，四关连着过</h4><div class="stage-body"><p>原文的实验有四关：主榜看总体、子集看偏置、消融看教材哪本有用、BoN 看实战。先把主榜摆出来（表 1, p7，全部 15 个系统）：</p>
+<table class="compare-table"><tr><th>模型</th><th>连贯</th><th>创意</th><th>人物</th><th>流畅</th><th>切题</th><th>平均</th></tr>
+<tr><td>InternLM2-20B-Reward</td><td>17.0</td><td>25.1</td><td>21.9</td><td>17.3</td><td>41.2</td><td>21.3</td></tr>
+<tr><td>InternLM2-7B-Reward</td><td>18.5</td><td>18.9</td><td>18.1</td><td>15.6</td><td>25.0</td><td>18.7</td></tr>
+<tr><td>Skywork-Reward-Gemma-2-27B-v0.2</td><td>36.6</td><td>29.8</td><td>22.8</td><td>40.0</td><td>34.6</td><td>32.7</td></tr>
+<tr><td>Skywork-Reward-Llama-3.1-8B-v0.2</td><td>29.4</td><td>32.3</td><td>26.5</td><td>36.0</td><td>30.9</td><td>31.0</td></tr>
+<tr><td>QRM-Llama3.1-8B-v2</td><td>15.1</td><td>17.9</td><td>9.3</td><td>13.3</td><td>19.9</td><td>14.9</td></tr>
+<tr><td>ArmoRM-Llama3-8B-v0.1</td><td>52.4</td><td>48.8</td><td>44.2</td><td>56.4</td><td>43.4</td><td>49.7</td></tr>
+<tr><td>GRM-Llama3.1-8B-rewardmodel-ft</td><td>35.1</td><td>28.1</td><td>23.7</td><td>35.1</td><td>35.3</td><td>31.1</td></tr>
+<tr><td>WQRM</td><td>16.6</td><td>27.1</td><td>24.2</td><td>31.1</td><td>19.9</td><td>24.0</td></tr>
+<tr><td>Llama3.1-8B-Instruct（基座）</td><td>22.3</td><td>30.5</td><td>25.1</td><td>16.9</td><td>24.9</td><td>24.3</td></tr>
+<tr><td>Qwen3-8B（基座）</td><td>55.8</td><td>53.1</td><td>47.0</td><td>60.4</td><td>48.5</td><td>53.5</td></tr>
+<tr><td>GPT-4o（最强基线）</td><td>63.4</td><td>63.7</td><td>66.0</td><td>73.3</td><td>67.6</td><td>66.3</td></tr>
+<tr><td>Gemini-2.5-Pro</td><td>57.7</td><td>51.7</td><td>57.2</td><td>64.4</td><td>52.2</td><td>56.8</td></tr>
+<tr><td>Grok-3</td><td>62.6</td><td>57.5</td><td>62.8</td><td>69.8</td><td>60.3</td><td>62.4</td></tr>
+<tr><td>StoryReward-Llama（本文）</td><td>64.5</td><td>60.8</td><td>62.3</td><td>53.8</td><td>67.7</td><td>61.4</td></tr>
+<tr><td>StoryReward-Qwen（本文）</td><td>77.5</td><td>78.8</td><td>71.6</td><td>74.2</td><td>69.1</td><td>75.0</td></tr></table>
+<p>原文从主榜读出三条（§4.1, p6–7）：现有 RM 与 LLM 评委普遍很差，最强只有 66.3%；各模型普遍在流畅度一栏更好、在创意与人物塑造这类需要深层叙事理解的维度上更低；自训模型取得最佳。</p>
+<p>但表里有一个原文正文没有单独讨论的事实，值得单独拎出来：<strong class="hl">StoryReward-Llama 平均只有 61.4%，低于 GPT-4o 的 66.3%</strong>，也仅与 Grok-3 的 62.4% 齐平；它的流畅度一栏 53.8% 甚至低于两个基座。摘要里「outperforming much larger models」这句，只在 StoryReward-Qwen 这一版上成立。（我的推断：这说明底座选择的影响大于「是否专门为故事训练」这件事本身。）</p>
+<p>下图把十个代表系统按平均准确率排成横向条形，第二张图拆开看五个维度上的差距落在哪里。</p><svg viewBox="0 0 680 570" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="STORYRMB 主榜平均准确率横向条形对比（十个代表系统，据原文表 1, p7）"><title>STORYRMB 主榜平均准确率横向条形对比</title><rect x="0" y="0" width="680" height="570" fill="#141414" stroke="#2e2e2e" rx="10"/>
+<text x="24" y="30" fill="#ccff00" font-size="14" font-weight="700" font-family="sans-serif">选稿准确率：最好的通才编辑也只挑对 66.3%</text>
+<text x="24" y="50" fill="#8f8f8f" font-size="11" font-family="sans-serif">数据＝表 1（p7）五维平均准确率（%），任务为四篇候选故事里选出被人类认定的那一篇；此处取十个代表系统</text>
+<line x1="250" y1="72" x2="250" y2="492" stroke="#333" stroke-width="1"/>
+<line x1="347.5" y1="72" x2="347.5" y2="492" stroke="#262626" stroke-width="1"/>
+<line x1="445" y1="72" x2="445" y2="492" stroke="#262626" stroke-width="1"/>
+<line x1="542.5" y1="72" x2="542.5" y2="492" stroke="#262626" stroke-width="1"/>
+<line x1="640" y1="72" x2="640" y2="492" stroke="#333" stroke-width="1"/>
+<text x="250" y="68" fill="#6f6f6f" font-size="10" text-anchor="middle" font-family="sans-serif">0</text>
+<text x="347.5" y="68" fill="#6f6f6f" font-size="10" text-anchor="middle" font-family="sans-serif">25</text>
+<text x="445" y="68" fill="#6f6f6f" font-size="10" text-anchor="middle" font-family="sans-serif">50</text>
+<text x="542.5" y="68" fill="#6f6f6f" font-size="10" text-anchor="middle" font-family="sans-serif">75</text>
+<text x="640" y="68" fill="#6f6f6f" font-size="10" text-anchor="middle" font-family="sans-serif">100</text>
+<text x="238" y="103" fill="#ccff00" font-size="11.5" text-anchor="end" font-family="sans-serif">StoryReward-Qwen（本文）</text>
+<rect x="250" y="88" width="292.5" height="22" fill="#ccff00" rx="3"/><text x="534" y="104" fill="#141414" font-size="11" font-weight="700" text-anchor="end" font-family="sans-serif">75.0</text>
+<text x="238" y="145" fill="#e8e8e8" font-size="11.5" text-anchor="end" font-family="sans-serif">GPT-4o（最强基线）</text>
+<rect x="250" y="130" width="258.6" height="22" fill="#3f3f3f" stroke="#5a5a5a" rx="3"/><text x="516" y="146" fill="#e8e8e8" font-size="11" font-weight="700" font-family="sans-serif">66.3</text>
+<text x="238" y="187" fill="#e8e8e8" font-size="11.5" text-anchor="end" font-family="sans-serif">Grok-3</text>
+<rect x="250" y="172" width="243.4" height="22" fill="#3f3f3f" stroke="#5a5a5a" rx="3"/><text x="501" y="188" fill="#e8e8e8" font-size="11" font-weight="700" font-family="sans-serif">62.4</text>
+<text x="238" y="229" fill="#9fd400" font-size="11.5" text-anchor="end" font-family="sans-serif">StoryReward-Llama（本文）</text>
+<rect x="250" y="214" width="239.5" height="22" fill="#8fbf00" rx="3"/><text x="481" y="230" fill="#141414" font-size="11" font-weight="700" text-anchor="end" font-family="sans-serif">61.4</text>
+<text x="238" y="271" fill="#e8e8e8" font-size="11.5" text-anchor="end" font-family="sans-serif">Gemini-2.5-Pro</text>
+<rect x="250" y="256" width="221.5" height="22" fill="#3f3f3f" stroke="#5a5a5a" rx="3"/><text x="479" y="272" fill="#e8e8e8" font-size="11" font-weight="700" font-family="sans-serif">56.8</text>
+<text x="238" y="313" fill="#e8e8e8" font-size="11.5" text-anchor="end" font-family="sans-serif">Qwen3-8B（基座）</text>
+<rect x="250" y="298" width="208.7" height="22" fill="#3f3f3f" stroke="#5a5a5a" rx="3"/><text x="466" y="314" fill="#e8e8e8" font-size="11" font-weight="700" font-family="sans-serif">53.5</text>
+<text x="238" y="355" fill="#e8e8e8" font-size="11.5" text-anchor="end" font-family="sans-serif">ArmoRM-Llama3-8B</text>
+<rect x="250" y="340" width="193.8" height="22" fill="#3f3f3f" stroke="#5a5a5a" rx="3"/><text x="451" y="356" fill="#e8e8e8" font-size="11" font-weight="700" font-family="sans-serif">49.7</text>
+<text x="238" y="397" fill="#e8e8e8" font-size="11.5" text-anchor="end" font-family="sans-serif">Skywork-Reward-Gemma-2-27B</text>
+<rect x="250" y="382" width="127.5" height="22" fill="#3f3f3f" stroke="#5a5a5a" rx="3"/><text x="385" y="398" fill="#e8e8e8" font-size="11" font-weight="700" font-family="sans-serif">32.7</text>
+<text x="238" y="439" fill="#e8e8e8" font-size="11.5" text-anchor="end" font-family="sans-serif">GRM-Llama3.1-8B</text>
+<rect x="250" y="424" width="121.3" height="22" fill="#3f3f3f" stroke="#5a5a5a" rx="3"/><text x="379" y="440" fill="#e8e8e8" font-size="11" font-weight="700" font-family="sans-serif">31.1</text>
+<text x="238" y="481" fill="#e8e8e8" font-size="11.5" text-anchor="end" font-family="sans-serif">QRM-Llama3.1-8B-v2</text>
+<rect x="250" y="466" width="58.1" height="22" fill="#3f3f3f" stroke="#5a5a5a" rx="3"/><text x="316" y="482" fill="#e8e8e8" font-size="11" font-weight="700" font-family="sans-serif">14.9</text>
+<text x="24" y="522" fill="#b9c98a" font-size="11" font-family="sans-serif">黄色＝本文自训的 8B 专用奖励模型。注意：同一套数据、同为 8B，换成 Llama 底座反而掉到 61.4%，低于 GPT-4o 的 66.3%。</text>
+<text x="24" y="542" fill="#7a7a7a" font-size="10.5" font-family="sans-serif">另有 InternLM2-20B / -7B、Skywork-Llama-3.1-8B、WQRM、Llama3.1-8B-Instruct 未画入，平均分别为 21.3 / 18.7 / 31.0 / 24.0 / 24.3（表 1, p7）。</text>
+</svg><svg viewBox="0 0 680 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GPT-4o 与 StoryReward-Qwen 在五个评价维度上的准确率分组对比（据原文表 1, p7）"><title>GPT-4o 与 StoryReward-Qwen 在五个评价维度上的准确率分组对比</title><rect x="0" y="0" width="680" height="430" fill="#141414" stroke="#2e2e2e" rx="10"/>
+<text x="24" y="30" fill="#ccff00" font-size="14" font-weight="700" font-family="sans-serif">涨在哪里：创意 +15.1，流畅只 +0.9</text>
+<text x="24" y="50" fill="#8f8f8f" font-size="11" font-family="sans-serif">数据＝表 1（p7）逐维准确率（%）；灰＝GPT-4o（最强基线），黄＝StoryReward-Qwen</text>
+<rect x="24" y="62" width="12" height="12" fill="#3f3f3f" stroke="#5a5a5a"/><text x="42" y="73" fill="#9a9a9a" font-size="11" font-family="sans-serif">GPT-4o</text>
+<rect x="112" y="62" width="12" height="12" fill="#ccff00"/><text x="130" y="73" fill="#9a9a9a" font-size="11" font-family="sans-serif">StoryReward-Qwen</text>
+<line x1="24" y1="330" x2="656" y2="330" stroke="#4a4a4a" stroke-width="1"/>
+<line x1="24" y1="263.5" x2="656" y2="263.5" stroke="#242424" stroke-width="1"/>
+<line x1="24" y1="197" x2="656" y2="197" stroke="#242424" stroke-width="1"/>
+<line x1="24" y1="130.5" x2="656" y2="130.5" stroke="#242424" stroke-width="1"/>
+<text x="20" y="333" fill="#6f6f6f" font-size="10" text-anchor="end" font-family="sans-serif">0</text>
+<text x="20" y="266" fill="#6f6f6f" font-size="10" text-anchor="end" font-family="sans-serif">25</text>
+<text x="20" y="200" fill="#6f6f6f" font-size="10" text-anchor="end" font-family="sans-serif">50</text>
+<text x="20" y="133" fill="#6f6f6f" font-size="10" text-anchor="end" font-family="sans-serif">75</text>
+<rect x="60" y="161.4" width="38" height="168.6" fill="#3f3f3f" stroke="#5a5a5a" rx="2"/><text x="79" y="155" fill="#9a9a9a" font-size="10.5" text-anchor="middle" font-family="sans-serif">63.4</text>
+<rect x="102" y="123.8" width="38" height="206.2" fill="#ccff00" rx="2"/><text x="121" y="117" fill="#ccff00" font-size="10.5" text-anchor="middle" font-family="sans-serif">77.5</text>
+<rect x="176" y="160.6" width="38" height="169.4" fill="#3f3f3f" stroke="#5a5a5a" rx="2"/><text x="195" y="154" fill="#9a9a9a" font-size="10.5" text-anchor="middle" font-family="sans-serif">63.7</text>
+<rect x="218" y="120.4" width="38" height="209.6" fill="#ccff00" rx="2"/><text x="237" y="114" fill="#ccff00" font-size="10.5" text-anchor="middle" font-family="sans-serif">78.8</text>
+<rect x="292" y="154.4" width="38" height="175.6" fill="#3f3f3f" stroke="#5a5a5a" rx="2"/><text x="311" y="148" fill="#9a9a9a" font-size="10.5" text-anchor="middle" font-family="sans-serif">66.0</text>
+<rect x="334" y="139.5" width="38" height="190.5" fill="#ccff00" rx="2"/><text x="353" y="133" fill="#ccff00" font-size="10.5" text-anchor="middle" font-family="sans-serif">71.6</text>
+<rect x="408" y="135" width="38" height="195" fill="#3f3f3f" stroke="#5a5a5a" rx="2"/><text x="427" y="129" fill="#9a9a9a" font-size="10.5" text-anchor="middle" font-family="sans-serif">73.3</text>
+<rect x="450" y="132.6" width="38" height="197.4" fill="#ccff00" rx="2"/><text x="469" y="126" fill="#ccff00" font-size="10.5" text-anchor="middle" font-family="sans-serif">74.2</text>
+<rect x="524" y="150.2" width="38" height="179.8" fill="#3f3f3f" stroke="#5a5a5a" rx="2"/><text x="543" y="144" fill="#9a9a9a" font-size="10.5" text-anchor="middle" font-family="sans-serif">67.6</text>
+<rect x="566" y="146.2" width="38" height="183.8" fill="#ccff00" rx="2"/><text x="585" y="140" fill="#ccff00" font-size="10.5" text-anchor="middle" font-family="sans-serif">69.1</text>
+<text x="100" y="350" fill="#c8c8c8" font-size="11.5" text-anchor="middle" font-family="sans-serif">连贯 Coherence</text>
+<text x="216" y="350" fill="#c8c8c8" font-size="11.5" text-anchor="middle" font-family="sans-serif">创意 Creativity</text>
+<text x="332" y="350" fill="#c8c8c8" font-size="11.5" text-anchor="middle" font-family="sans-serif">人物 Characterization</text>
+<text x="448" y="350" fill="#c8c8c8" font-size="11.5" text-anchor="middle" font-family="sans-serif">流畅 Fluency</text>
+<text x="564" y="350" fill="#c8c8c8" font-size="11.5" text-anchor="middle" font-family="sans-serif">切题 Relevance</text>
+<text x="100" y="370" fill="#7a7a7a" font-size="10.5" text-anchor="middle" font-family="sans-serif">+14.1</text>
+<text x="216" y="370" fill="#7a7a7a" font-size="10.5" text-anchor="middle" font-family="sans-serif">+15.1</text>
+<text x="332" y="370" fill="#7a7a7a" font-size="10.5" text-anchor="middle" font-family="sans-serif">+5.6</text>
+<text x="448" y="370" fill="#7a7a7a" font-size="10.5" text-anchor="middle" font-family="sans-serif">+0.9</text>
+<text x="564" y="370" fill="#7a7a7a" font-size="10.5" text-anchor="middle" font-family="sans-serif">+1.5</text>
+<text x="24" y="398" fill="#b9c98a" font-size="11" font-family="sans-serif">原文结论（§4.1, p6–7）：现有奖励模型普遍在流畅度上更好、在创意与人物塑造这类需要深层叙事理解的维度上更低。</text>
+<text x="24" y="416" fill="#7a7a7a" font-size="10.5" font-family="sans-serif">差额为本人依表 1 两列相减所得，原文未直接给出该差值（我的计算）。</text>
+</svg>
+<p>第二关是子集分析。<span class="tbs" data-term="storyrmb"><input type="checkbox" id="tbs24" class="tbs-toggle"><label for="tbs24" class="tbs-term">STORYRMB</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">STORYRMB</span><span class="tbs-en">StoryRMB</span><label for="tbs24" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">首个面向奖励模型的故事偏好评测基准，含 1,133 条人工校验实例。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">每条实例＝一个命题 + 1 篇 chosen 故事 + 3 篇 rejected 故事（摘要, p1；§2.2, p4）。构造分两步：候选故事生成（GPT-4o / Gemini 2.5 Pro / Grok 4 / Qwen-Long 各写一篇，另含人类故事）与两阶段偏好判定（四家 LLM 打分投票 + 人工核验）（§2.1–2.2, p3–4）。子集分 LLM–LLM 对与 Human–LLM 对（§4.2, p7）。</span></span><a class="tbs-more" href="#term-storyrmb">查看完整释义 ›</a></span></span> 天然分成两半：LLM–LLM 对（正例反例都是模型写的）与 Human–LLM 对（正例是人类写的、反例是模型写的）。原文发现现有模型在 Human–LLM 对上显著更差，说明它们倾向偏爱 LLM 生成的故事——原文引 Liu et al. (2023) 作为可能原因，即 LLM 偏爱 LLM 生成的内容（§4.2, p7；图 2, p8）。StoryReward 在 Human–LLM 对上表现更好，原文归因于它的训练数据里有效收录了人类撰写的故事（§4.2, p7）。</p>
+<p>第三关是消融：每次移除一条路径的等量训练数据、换成同量补充数据，底座固定 Qwen3-8B（附录 H.1, p19；表 2, p20）。</p>
+<table class="compare-table"><tr><th>设置</th><th>连贯</th><th>创意</th><th>人物</th><th>流畅</th><th>切题</th><th>平均</th></tr>
+<tr><td>StoryReward-Qwen（全量）</td><td>77.5</td><td>78.8</td><td>71.6</td><td>74.2</td><td>69.1</td><td>75.0</td></tr>
+<tr><td>(−) 移除「同题材比读者量」</td><td>82.3</td><td>70.4</td><td>78.6</td><td>68.9</td><td>75.0</td><td>73.9</td></tr>
+<tr><td>(−) 移除「只给真人开头续写」</td><td>81.5</td><td>70.4</td><td>76.2</td><td>67.1</td><td>72.8</td><td>72.8</td></tr>
+<tr><td>(−) 移除「按指令改坏一处」</td><td>73.4</td><td>68.1</td><td>71.3</td><td>65.2</td><td>68.7</td><td>69.9</td></tr></table>
+<p>掉分最多的是「按指令改坏一处」（−5.1），说明这一路造的对照最有效。但移除「同题材比读者量」后，连贯一栏反而从 77.5 升到 82.3、人物升到 78.6、切题升到 75.0，只有创意与流畅下降——原文未对这一逐维反升作解释（这一处我在第 12 段记为局限）。</p>
+<p>第四关是实战 <span class="tbs" data-term="bon"><input type="checkbox" id="tbs25" class="tbs-toggle"><label for="tbs25" class="tbs-term">Best-of-N</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">Best-of-N</span><span class="tbs-en">Best-of-N <span class="abbr">BoN</span></span><label for="tbs25" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">测试时扩展策略：同一提示生成 N 个答案，用奖励模型挑一个。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">本文用 MoPS 数据集约 100 个命题，每命题用 Llama-3.1-70B-Instruct、温度 1 生成 16 篇，人工双人独立排序 + 资深第三人裁定，再比各 RM 的挑选结果（§5, p8）。StoryReward 对五个奖励模型的胜率 63%–75%、负率 3%–11%（图 3, p8）；但在 STORYRMB 自身做 head-to-head 时胜率降到 44%–61%（图 4, p19）。</span></span><a class="tbs-more" href="#term-bon">查看完整释义 ›</a></span></span>：用 <span class="tbs" data-term="mops"><input type="checkbox" id="tbs26" class="tbs-toggle"><label for="tbs26" class="tbs-term">MoPS</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">MoPS</span><span class="tbs-en">Modular Story Premise Synthesis <span class="abbr">MoPS</span></span><label for="tbs26" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">故事命题数据集，本文 Best-of-N 实战验证用的题源。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">含约 100 个命题（Ma et al., 2024）。原文用它做 16 选 1 的 head-to-head：每个命题用 Llama-3.1-70B-Instruct、温度 1 生成 16 篇，人工双人独立排序、冲突由资深第三人裁定（§5, p8）。</span></span><a class="tbs-more" href="#term-mops">查看完整释义 ›</a></span></span> 数据集约 100 个命题（Ma et al., 2024），每个命题用 Llama-3.1-70B-Instruct、温度 1 生成 16 篇故事，请人工双人独立排序、冲突由资深第三人裁定，再用不同 RM 从 16 篇里挑一篇比胜负（§5, p8）。</p>
+<table class="compare-table"><tr><th>对手</th><th>StoryReward-Qwen 胜</th><th>Qwen 负</th><th>StoryReward-Llama 胜</th><th>Llama 负</th></tr>
+<tr><td>ArmoRM-Llama3-8B</td><td>69%</td><td>9%</td><td>63%</td><td>9%</td></tr>
+<tr><td>GRM-Llama3.1-8B</td><td>68%</td><td>6%</td><td>65%</td><td>5%</td></tr>
+<tr><td>QRM-Llama3.1-8B</td><td>75%</td><td>11%</td><td>75%</td><td>5%</td></tr>
+<tr><td>Skywork-Reward-Llama-3.1-8B</td><td>69%</td><td>9%</td><td>68%</td><td>5%</td></tr>
+<tr><td>Skywork-Reward-Gemma-2-27B</td><td>72%</td><td>3%</td><td>68%</td><td>3%</td></tr></table>
+<p>原文表述是「不到 30% 的情况会选到较差的故事」，并强调两版模型都只有 8B 规模、部署与推理成本低（§5, p8）。但换一个战场，边际就小得多：在 STORYRMB 自身做 head-to-head（附录 H.2 与图 4, p19），StoryReward-Qwen 的胜率只有 44%–61%、负率 23%–38%。原文对这一落差的解释是：区分「同为高质量的相似 LLM 生成稿」中的绝对最优者仍是难题（附录 H.2, p19）。</p>
+<p>另外原文用外部基准做了旁证（附录 H.3, p19–20；表 10, p26）：先对 <span class="tbs" data-term="eqbench"><input type="checkbox" id="tbs27" class="tbs-toggle"><label for="tbs27" class="tbs-term">EQ-Bench</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">EQ-Bench 创意写作 v3</span><span class="tbs-en">EQ-Bench Creative Writing v3</span><label for="tbs27" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">外部创意写作评测集，本文用作第二个战场做旁证。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">原文先对该基准配的故事评测法在 STORYRMB 上做元评测，得到 LLM–LLM 对 94%、Human–LLM 对 54% 的准确率；再用它给 BoN 选出的故事打分：StoryReward-Qwen 2.72 ＞ StoryReward-Llama 2.51 ＞ ArmoRM 2.36 ＞ QRM 2.31 ＞ Skywork-27B 2.28 ＞ GRM 2.24 = Skywork-8B 2.24（附录 H.3, p19–20；表 10, p26）。</span></span><a class="tbs-more" href="#term-eqbench">查看完整释义 ›</a></span></span> Creative Writing v3 配的评测法在 STORYRMB 上做元评测，得到 LLM–LLM 对 94%、Human–LLM 对仅 54%；再用这套方法给 BoN 选出的故事打分，StoryReward-Qwen 平均 2.72 分，高于 StoryReward-Llama 的 2.51、ArmoRM 的 2.36 与 QRM 的 2.31。</p></div></div><div class="stage"><h4><span class="num">9</span>反直觉发现：四个「按常理不该这样」的结果</h4><div class="stage-body"><p>这篇论文最有价值的不是那个 75.0%，而是四处与直觉相反的结果。它们直接影响「该怎么造评测数据」这个决策。</p>
+<ul class="keypoint"><li><strong>反直觉一：把人类原文当正例去训，模型反而训废了。</strong><br>原文披露，最初方案是直接用人类撰写的原文当 chosen，结果训出的奖励模型在 STORYRMB 上平均准确率不足 30%（附录 E.4, p18）。原文给的归因是：人类与 LLM 生成故事的分布间隙过大，奖励模型会去抓表层语言捷径，而不是学故事质量。原文另处也提到，早期直接拿人类 vs LLM 故事对比训练时「迅速收敛且效果次优」（§3.1, p6）。所以第三条路径才改成「只给真人开头、让模型续写」——<strong class="hl">对照组的质量差必须控制在「差一档」，而不是「差一个世界」</strong>。</li>
+<li><strong>反直觉二：模型越强，在「真人稿 vs 机器稿」这一栏反而越容易栽。</strong><br>原文的两子集分析显示，现有奖励模型在 Human–LLM 对上显著更差，即它们倾向把票投给 LLM 写的稿子（§4.2, p7；图 2, p8）。也就是说，一个在综合榜单上看起来很体面的模型，恰恰在最能体现「是否对齐人类口味」的那一栏上系统性失手。（我的推断：任何只报综合分的评测榜，都会把这一类失手藏起来。）</li>
+<li><strong>反直觉三：专用的 8B 打败了 GPT-4o，但同为 8B、只换底座就掉回 61.4%。</strong><br>StoryReward-Qwen 平均 75.0%，超过 GPT-4o 的 66.3%；而 StoryReward-Llama 只有 61.4%，低于 GPT-4o（表 1, p7）。两版用的是同一份约 10 万对教材、同一套超参流程（§3.2, p6）。换句话说，「专门为故事训练」这个动作并不是充分条件，底座本身的能力下限才是。</li>
+<li><strong>反直觉四：模型学会的新偏好，可能是「像人写的」而不是「写得好的」。</strong><br>原文用句长分布的峰度（kurtosis）当「语言突发性」的代理指标（式 6, p20）：<span class="tbs" data-term="burst"><input type="checkbox" id="tbs28" class="tbs-toggle"><label for="tbs28" class="tbs-term">语言突发性</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">语言突发性</span><span class="tbs-en">Linguistic Burstiness</span><label for="tbs28" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">文本中信息与结构分布不均匀的现象；本文用句长分布的峰度当代理指标。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">Kurtosis = E[(X−µ)⁴]/σ⁴ − 3，µ 为平均句长、σ 为句长标准差（式 6, p20）；高峰度意味着极短句与极长句频繁交替，被认为刻画人类写作的结构复杂度。实测：StoryReward-Qwen 所选故事峰度 1.0064（+11.8%），人类认定的 ground truth 为 0.8999（0.0%）（表 8, p25）。原文承认这构成潜在偏置，把机制分析留作 future work（附录 H.4, p20）。</span></span><a class="tbs-more" href="#term-burst">查看完整释义 ›</a></span></span>高峰度意味着极短句与极长句频繁交替，这被认为是人类写作的结构特征。结果发现 StoryReward-Qwen 所选故事的峰度是 1.0064（+11.8%），而人类认定的 ground truth 是 0.8999（0.0%）；预测错误时峰度更高（1.0149，+12.8%）（表 8, p25）。原文自己承认这是一个潜在偏置：因为训练数据含人类故事，模型可能把「语言突发性」当成了质量的代理；并明确把机制层面的深入分析留作 future work（附录 H.4, p20）。（我的推断：这就是一种奖励劫持——评测里若不含「像人写的但很差」这类反例，模型会持续把风格特征误当质量。）</li></ul></div></div><div class="stage"><h4><span class="num">10</span>一线可借鉴要点</h4><div class="stage-body"><p>面向中文文字创作方向（语言 / 写作 / 创作）的评测设计者、基准构造者与 SFT / RLHF 工程师。七条，四要素齐全（结论 / 依据 / 可迁移场景 / 迁移风险），其中四条是批判性的。</p>
+<ul class="keypoint"><li><strong>把主观质量评测改造成「N 选一」，先把对错定义出来。</strong><br>依据：原文把「故事好不好」变成「在四篇候选里选出人类认定的那一篇」，于是有了准确率这个可判对错的指标（§4.1, p6）。<br>可迁移场景：中文作文 / 文案 / 小说评测里，凡是能凑出「同一题目的多版答案 + 一份公认较好」的题目，都可以改写成四选一，直接复用这条指标口径。<br>迁移风险：题目得先能凑出四版可比答案。像「给定材料写方案」这类自由度极高的题，四版之间根本不可比，强行改造只会让准确率失去意义。</li>
+<li><strong>善用平台上的「边角料弱信号」，把昂贵的人工判断换成廉价替代物。</strong><br>依据：原文用豆瓣与 WritingPrompts 的故事，配题材标签、作者专栏、阅读量这类已有字段来定 chosen/rejected，三条路径合计约 10 万对（§3.1, p5–6）；相比之下全套人工标注成本约 1 万美元（附录 C.2, p17）。<br>可迁移场景：中文创作数据里可用的弱信号包括阅读量 / 收藏数 / 追更数 / 编辑加精、同一作者专栏的同题材作品、以及平台自带的分区标签。<br>迁移风险：弱信号本身不等于质量。阅读量受推荐算法影响很大，原文也做了「过滤掉阅读量极低的样本」这一步（§3.1, p5）；照搬时必须先在小样本上验证弱信号与人工判断的方向一致。</li>
+<li><strong>（批判性）对照组要「差一档」，直接拿人类原文当正例会训废模型。</strong><br>依据：直接用人类原文当 chosen 时，模型在 STORYRMB 上平均准确率不足 30%（附录 E.4, p18）；改成「只给真人开头续写」后才可用。<br>可迁移场景：造中文写作偏好数据时，正例不要用「人类满分稿」，而用「人类稿的受控优化版」或「AI 在有真人约束下的产出」，让两边差距落在同一分布内。<br>迁移风险：「差一档」的度很难一次定准。原文对「人类写得更好」这个前提只在 20 条样本上验证过（§3.1, p6），样本量极小，照搬前建议自己扩到 100 条以上再定。另外要接受一个事实：把人类数据当宝，反而可能是负收益。</li>
+<li><strong>（批判性）「首个基准」这句话要打折扣：同赛道已有更大规模的先行工作。</strong><br>依据：原文在相关工作里自己写明，LitBench（Fein et al., 2025）是「the first standardized benchmark and paired dataset for preference modeling in creative writing」，含 43,827 条人类标注偏好对，来自 Reddit（§6.2, p9）。<br>可迁移场景：在选型或写综述时，把 <span class="tbs" data-term="litbench"><input type="checkbox" id="tbs29" class="tbs-toggle"><label for="tbs29" class="tbs-term">LitBench</label><span class="tbs-panel"><span class="tbs-head"><span class="tbs-zh">LitBench</span><span class="tbs-en">LitBench</span><label for="tbs29" class="tbs-close" title="收起">✕</label></span><span class="tbs-row"><span class="tbs-lbl">定义</span><span class="tbs-txt">创意写作偏好建模的首个标准化基准与配对数据集，本文的先行工作。</span></span><span class="tbs-row"><span class="tbs-lbl">展开</span><span class="tbs-txt">由 Fein et al. (2025) 提出，从 Reddit 收集 43,827 条人类标注偏好对。原文在相关工作里自述其为「the first standardized benchmark and paired dataset for preference modeling in creative writing」（§6.2, p9）。与 STORYRMB 的区别在于任务更宽（创意写作 vs 故事偏好）且实例粒度不同。</span></span><a class="tbs-more" href="#term-litbench">查看完整释义 ›</a></span></span> 与 STORYRMB 并列评估——前者标注对数量约为后者的 38.7 倍（我的计算），但任务更宽（创意写作）而非专攻故事偏好。<br>迁移风险：本文的「首个」限定在「面向奖励模型的故事偏好评测」这个更窄的口径上。引用时若不写清限定词，容易把这个新颖性读得过大。</li>
+<li><strong>（批判性）中文语料进了训练，但没有进评测——中文场景的结论目前是空的。</strong><br>依据：训练语料明确跨中英双平台，中文侧来自豆瓣（§3.1, p5；表 9, p25 的来源列），而 STORYRMB 中有 600 条命题取自英文的 WritingPrompts、标注者全部是英语专业学生（§2.1, p3；附录 C.2, p17）。全文没有任何按语言分层的评测结果。<br>可迁移场景：要判断这套结论能否迁到中文写作评测，唯一可靠的方式是自建中文样书（同结构、中文标注者）并重跑一遍主榜与子集分析。<br>迁移风险：不要假设「训练里见过中文，中文就一定行」。原文未给出中文侧的准确率、也未给出中文训练数据的占比（原文未给出）。同时 75.0% 这个绝对值绑定于四选一设定与英文标注，换个语言不一定成立。</li>
+<li><strong>报分要报「维度 + 子集」，不要只报综合分。</strong><br>依据：主榜逐维差异极大——各模型普遍在流畅度上更好、在创意与人物上更低（§4.1, p6–7）；子集上 Human–LLM 对上现有模型显著更差（§4.2, p7）；消融里移除一条路径后连贯一栏反升 4.8 个点（表 2, p20）。<br>可迁移场景：中文写作评测报告里固定加两个切片——「人写 vs 机写」子集与「逐维」表格；这两张表比一个总分更能暴露系统性问题。<br>迁移风险：切片会让样本量变小、置信区间变宽。原文的五维归类是「按主导维度归到唯一一组」，如果一条实例同时考创意与人物，只能记一次；照搬时注意别把单维分数读成该能力的纯净测量。</li>
+<li><strong>用 8B 自训是现实路线，但要先挑对底座；同一份数据换底座可以差 13.6 个点。</strong><br>依据：StoryReward-Qwen 平均 75.0%、StoryReward-Llama 平均 61.4%，差 13.6 个点，而两者用的是同一份约 10 万对数据、同为 1 epoch、只有学习率不同（9e-6 vs 2e-5）（表 1, p7；§3.2, p6）。<br>可迁移场景：预算有限时优先自训 8B 专用评委，但必须把「换底座」当成一个正式消融来做，而不是默认沿用。<br>迁移风险：原文只试了两个底座，13.6 个点的差距无法归因到具体机制；若按此选型，至少要自己跑一遍底座对照，别直接照抄 Qwen3-8B 这个结论。</li></ul></div></div><div class="stage"><h4><span class="num">11</span>给读者的思考题</h4><div class="stage-body"><p>四道题，前三道指向具体动作，最后一道要求你去查证一个本文自己没验的结论。不给标准答案，只给思考路径。</p>
+<ul class="keypoint"><li><strong>题一：</strong>把你手上正在用的中文写作评测题过一遍，挑出能改写成「四选一」的那一类。你需要先凑出四份可比答案、并指出其中一份「人类更偏好」。哪一类题你凑得出来？哪一类凑不出来？<br>思考路径：凑不出来的通常是「结论自由度太大」的题，例如给定材料写方案、开放式议论文。原文的题库来自文学与电影母题，命题本身自带「冲突或反转」结构（附录 A, p16），这可能是它能凑出四版可比答案的前提。先看你的题有没有这个结构。</li>
+<li><strong>题二：</strong>你现在的评测里，评委（人或模型）是不是偏爱更长、更规整、句子更整齐的答案？设计一个小实验去证伪这个怀疑。<br>思考路径：原文用的是句长分布峰度（式 6, p20）——把同一批答案按「评委选中的」与「人类选中的」分两组，各算一次句长分布，看方向是否一致。中文的断句依赖标点，句长分布特性与英文不同，这条在中文上还没人验过（原文未给出）。你也可以从更简单的代理指标入手：平均句长、标点密度、段落长度方差。</li>
+<li><strong>题三：</strong>（要动手）挑 10 道中文写作题，做两组对照训练或评测。A 组正例用「人类高水平原文」，反例用 AI 直出；B 组正例用「人类原文的受控优化版」，反例用「人类原文被改坏一处」。比较模型排序与人类排序的一致率。<br>思考路径：原文预测 A 组会塌（准确率不足 30%，附录 E.4, p18）、B 组才可用。在你自己的数据上跑 10 道题就能看出方向；如果 A 组没有塌，注意检查你那批 AI 直出的稿子是否本来就接近人类水平——那就不是「差一个世界」，前提已经不成立。</li>
+<li><strong>题四：</strong>本文在相关工作里承认 LitBench（43,827 条偏好对）是创意写作偏好建模的首个基准（§6.2, p9）。去查一下这两个基准的实例构造方式差异，判断「故事偏好」与「创意写作偏好」这两个不同的任务边界在哪里。<br>思考思路：先别急着排序谁更好。看两点——一是实例的粒度（STORYRMB 是四篇同命题候选，LitBench 是偏好对），二是判断依据来自哪里（本文用平台弱信号 + LLM 反推，LitBench 用 Reddit 人工标注）。粒度与依据不同，结论的外推范围就不同。</li></ul></div></div><div class="stage"><h4><span class="num">12</span>局限、影响与阅读路线</h4><div class="stage-body"><p>先分清哪些是原文自述的局限，哪些是我在通读中另外标记的。</p>
+<ul class="keypoint"><li><strong>原文自述的局限：</strong>峰度偏置只做了统计层面的描述，原文明确说更系统的分析（如机制可解释性）超出范围、留作 future work（附录 H.4, p20）；消融只做了「单条路径移除换等量补充数据」这一种形式（附录 H.1, p19）；「人类写得更好」这个前提只在 20 条样本上验证（§3.1, p6）。</li>
+<li><strong>我在通读中另外标记的（我的推断）：</strong>① 消融里移除「同题材比读者量」后，连贯一栏反升 4.8 个点、人物升 7.0、切题升 5.9，原文未作解释（表 2, p20），这会影响「每条路径都正向贡献」的读法。② 全文没有任何中文侧评测结果，中文只以训练语料身份出现（§3.1, p5；附录 C.2, p17）。③ BoN 在 MoPS 上胜率 69%–75%，在 STORYRMB 自身只有 44%–61%（图 3 与图 4, p8/p19），实战收益与战场高度相关。</li>
+<li><strong>原文内部数字不一致（我在通读中记录，不影响结论方向，但引用时需留意）：</strong>命题数量在 §2.1（p3）写 624、附录 A（p16）写 1,000、附录 B（p16）写 533；候选生成模型在 §1（p2）写 Grok 3、§2.1（p4）写 Grok 4；判优信号在 §1（p2）写 upvote、§3.1（p5）写 readership；训练数据规模在正文写「约 10 万」、表 9（p25）写 93,729。以上四处，原文均未给出解释。</li>
+<li><strong>对中文写作评测的影响（我的推断）：</strong>本文最可迁移的不是 75.0% 这个数字，而是三件可复制的装置——把主观质量改造成 N 选一的可判对错任务、用平台弱信号低成本造偏好对、以及「对照组只差一档」这条构造纪律。至于「8B 专用评委能否在中文故事上打赢通用大模型」，本文没有提供任何证据，需要自建中文样书后重跑。</li></ul>
+<p>阅读路线（建议顺序，均为原文内位置）：</p>
+<table class="compare-table"><tr><th>目的</th><th>读哪里</th><th>为什么</th></tr>
+<tr><td>先抓住问题与贡献</td><td>§1（p1–3）+ 表 1（p7）</td><td>一页看清楚「66.3% 是什么任务、75.0% 是什么任务」</td></tr>
+<tr><td>要复刻数据管线</td><td>§3.1（p5–6）+ 附录 E（p17–18、表 3–6, p21–24）</td><td>三条路径的提示词模板与约束全在这里；<strong class="hl">附录 E.4 那段「不足 30%」的失败记录是全文最该读的一页</strong></td></tr>
+<tr><td>要看怎么造基准</td><td>§2.2（p4–5）+ 附录 C（p17）+ 算法 1（p18/p21）</td><td>Kendall's Tau 阈值、230/394 的分工、四阶段维度归类</td></tr>
+<tr><td>要看偏置与实战</td><td>§4.2（p7）+ §5（p8）+ 附录 H.4（p20）+ 表 8（p25）</td><td>Human–LLM 子集、BoN head-to-head、峰度偏置</td></tr></table>
+<p>原文与资源：论文页 <a href="https://arxiv.org/abs/2605.04831">arXiv:2605.04831</a> ｜ 全文 PDF <a href="https://arxiv.org/pdf/2605.04831">arxiv.org/pdf/2605.04831</a> ｜ 代码与数据链接取自原文摘要原文：<a href="https://github.com/THU-KEG/StoryAlign">github.com/THU-KEG/StoryAlign</a>。会议页为 ICLR 2026 OpenReview（forum id a3JmkJtTDV），原文首页即标注 "Published as a conference paper at ICLR 2026"（p1）。<br>提示：多处第三方解读页把仓库写在另一个路径名下，与原文摘要给出的链接不一致（本线只采信原文摘要，第三方写法仅作线索留档在选题卡 heat_evidence）。作者单位：清华大学计算机科学与技术系（p1）。数据来源平台：豆瓣 douban.com 与 WritingPrompts 数据集（§3.1, p5 脚注）。</p></div></div></article></section>
+  <div class="sec-divider"><span></span></div><section id="glossary" class="section section--glossary"><header class="sec-head"><span class="sec-dot"></span><h2 class="sec-title">📖 专有名词表</h2><span class="sec-count">18 条</span></header><article class="glossary-card reveal" id="term-rm"><div class="term-head"><span class="term-zh">奖励模型</span><span class="term-en">Reward Model</span><span class="chip chip-abbr">RM</span></div><div class="term-def">把「哪一篇更好」变成一个可打分函数的模型；评测时给候选集逐篇打分，取最高分者。</div><div class="term-expand">本文的任务形式：给定四篇候选故事 {s₁…s₄}，RM 逐篇打分 f(sᵢ)，argmax f(sᵢ) = s* 即判对，指标为准确率（§4.1, p6）。基线含两类：显式奖励模型（InternLM2-Reward、Skywork-Reward、ArmoRM、QRM、GRM、WQRM）与 LLM 生成式评委（GPT-4o、Gemini-2.5-Pro、Grok、Llama-3.1-8B-Instruct、Qwen3-8B）（§4.1, p6）。</div></article><article class="glossary-card reveal" id="term-preference"><div class="term-head"><span class="term-zh">人类故事偏好</span><span class="term-en">Human Story Preference</span></div><div class="term-def">人类读者在两个故事之间更偏好哪一个；主观、多维，是本文要建模的目标。</div><div class="term-expand">原文指出主流 RLHF 只训一个通用奖励模型，容易忽略故事特有偏好，并带有冗长偏置（§1, p2）；故事偏好需同时兼顾创造力、连贯性、人物塑造、流畅度与切题度，很难从通用偏好直接泛化（§1, p2）。</div></article><article class="glossary-card reveal" id="term-dim"><div class="term-head"><span class="term-zh">五个评价维度</span><span class="term-en">Five Evaluation Dimensions</span></div><div class="term-def">本文把故事质量拆成五栏：连贯、创意、人物塑造、流畅、切题。</div><div class="term-expand">coherence / creativity / characterization / fluency / relevance，参照 Yang &amp; Jin (2024) 的故事评测综述（§2.2, p4）。STORYRMB 的 1,133 条实例按「最起决定作用的那一维」归类，得到 creativity 292 / coherence 265 / fluency 225 / characterization 215 / relevance 136（§2.2, p4）。</div></article><article class="glossary-card reveal" id="term-storyrmb"><div class="term-head"><span class="term-zh">STORYRMB</span><span class="term-en">StoryRMB</span></div><div class="term-def">首个面向奖励模型的故事偏好评测基准，含 1,133 条人工校验实例。</div><div class="term-expand">每条实例＝一个命题 + 1 篇 chosen 故事 + 3 篇 rejected 故事（摘要, p1；§2.2, p4）。构造分两步：候选故事生成（GPT-4o / Gemini 2.5 Pro / Grok 4 / Qwen-Long 各写一篇，另含人类故事）与两阶段偏好判定（四家 LLM 打分投票 + 人工核验）（§2.1–2.2, p3–4）。子集分 LLM–LLM 对与 Human–LLM 对（§4.2, p7）。</div></article><article class="glossary-card reveal" id="term-pair"><div class="term-head"><span class="term-zh">偏好对</span><span class="term-en">Preference Pair</span></div><div class="term-def">训练奖励模型的基本单位：一条更受偏好的样本（chosen）与一条较差的样本（rejected）。</div><div class="term-expand">本文共构造约 10 万对，来自三条自动路径（豆瓣同题材按读者量判优约 6,000 对；按受控指令改写人类故事约 30,000 对；只给真人开头的续写对照约 10,000 对）加一条 LLM 互评路径（§3.1, p5–6）。表 9（p25）给出训练数据实际为 93,729 条，平均 2,802 词、中位 1,858 词。</div></article><article class="glossary-card reveal" id="term-storyreward"><div class="term-head"><span class="term-zh">StoryReward</span><span class="term-en">StoryReward</span></div><div class="term-def">本文训练的专用故事偏好奖励模型，8B 规模，分 Llama 与 Qwen 两版。</div><div class="term-expand">底座为 Llama-3.1-8B-Instruct 与 Qwen3-8B；batch size 1、1 epoch，学习率分别 9×10⁻⁶ 与 2×10⁻⁵（§3.2, p6）。主榜平均准确率：StoryReward-Qwen 75.0%、StoryReward-Llama 61.4%（表 1, p7）。</div></article><article class="glossary-card reveal" id="term-bon"><div class="term-head"><span class="term-zh">Best-of-N</span><span class="term-en">Best-of-N</span><span class="chip chip-abbr">BoN</span></div><div class="term-def">测试时扩展策略：同一提示生成 N 个答案，用奖励模型挑一个。</div><div class="term-expand">本文用 MoPS 数据集约 100 个命题，每命题用 Llama-3.1-70B-Instruct、温度 1 生成 16 篇，人工双人独立排序 + 资深第三人裁定，再比各 RM 的挑选结果（§5, p8）。StoryReward 对五个奖励模型的胜率 63%–75%、负率 3%–11%（图 3, p8）；但在 STORYRMB 自身做 head-to-head 时胜率降到 44%–61%（图 4, p19）。</div></article><article class="glossary-card reveal" id="term-burst"><div class="term-head"><span class="term-zh">语言突发性</span><span class="term-en">Linguistic Burstiness</span></div><div class="term-def">文本中信息与结构分布不均匀的现象；本文用句长分布的峰度当代理指标。</div><div class="term-expand">Kurtosis = E[(X−µ)⁴]/σ⁴ − 3，µ 为平均句长、σ 为句长标准差（式 6, p20）；高峰度意味着极短句与极长句频繁交替，被认为刻画人类写作的结构复杂度。实测：StoryReward-Qwen 所选故事峰度 1.0064（+11.8%），人类认定的 ground truth 为 0.8999（0.0%）（表 8, p25）。原文承认这构成潜在偏置，把机制分析留作 future work（附录 H.4, p20）。</div></article><article class="glossary-card reveal" id="term-verbosity"><div class="term-head"><span class="term-zh">冗长偏置</span><span class="term-en">Verbosity Bias</span></div><div class="term-def">奖励模型偏爱更长而非更好的回答的系统性倾向。</div><div class="term-expand">原文在动机部分把它列为现有奖励模型的已知缺陷之一（§1, p2，引 Saito et al. 与 Peng et al., 2025）。本文自己的峰度发现属于另一类「代理偏置」——把风格特征当成质量（附录 H.4, p20）。</div></article><article class="glossary-card reveal" id="term-judge"><div class="term-head"><span class="term-zh">大模型评委</span><span class="term-en">LLM-as-a-Judge</span></div><div class="term-def">用大模型直接打分或两两比较来充当评价者的评测方式。</div><div class="term-expand">本文两处用到：造基准时用 GLM-4.5、Qwen2.5-Max、Claude-3.5-Sonnet、DeepSeek-R1 四家打分投票（§2.2, p4）；主榜里把 GPT-4o、Gemini-2.5-Pro、Grok 等作为「生成式评委」基线，最强 GPT-4o 平均 66.3%（表 1, p7）。</div></article><article class="glossary-card reveal" id="term-rlhf"><div class="term-head"><span class="term-zh">人类反馈强化学习</span><span class="term-en">RLHF</span><span class="chip chip-abbr">RLHF</span></div><div class="term-def">先训奖励模型捕捉人类偏好、再用其打分优化生成模型的训练范式。</div><div class="term-expand">原文指出该范式下模型的故事水平受限于奖励模型的口味；与之对照的是可验证奖励（RLVR），后者适合数学、编程这类有标准答案的任务，而写作没有标准答案、本质主观（§1, p2；§6.2, p9）。</div></article><article class="glossary-card reveal" id="term-kendall"><div class="term-head"><span class="term-zh">Kendall&#x27;s Tau</span><span class="term-en">Kendall&#x27;s Tau</span></div><div class="term-def">衡量两个排序一致性的等级相关系数，取值 −1 到 1。</div><div class="term-expand">τ = (Nc − Nd) / C(m,2)，Nc 为一致对数、Nd 为不一致对数（式 1, p4）；n 个模型两两取平均得 τ_avg（式 2, p4）。原文以 τ_avg 小于 0.6 判为强分歧并转人工；0.6 的经验含义约为 80% 一致对、20% 不一致对（附录 C, p17）。</div></article><article class="glossary-card reveal" id="term-premise"><div class="term-head"><span class="term-zh">命题</span><span class="term-en">Premise</span></div><div class="term-def">故事生成任务的输入提示，即「约稿单」。</div><div class="term-expand">构造分两步：LLM 生成 624 条高质量命题（主题框架取自文学、哲学与电影母题，遵循「冲突或反转」结构，附录 A, p16），另从 WritingPrompts 采样过滤 600 条（§2.1, p3）。原文另有附录 A 称过滤后为 1,000 条、附录 B 称 LLM 生成命题为 533 条，三处数字不一致，原文未解释。</div></article><article class="glossary-card reveal" id="term-douban"><div class="term-head"><span class="term-zh">豆瓣</span><span class="term-en">Douban</span></div><div class="term-def">中文线上文学平台，本文中文训练语料的来源。</div><div class="term-expand">原文从豆瓣抓取人类撰写故事及其题材、阅读量等元数据，用于「同题材比读者量」路径（约 6,000 对）与按指令改写路径（§3.1, p5；表 9, p25 来源列）。原文声明严格遵守其版权协议（伦理声明, p10）。</div></article><article class="glossary-card reveal" id="term-writingprompts"><div class="term-head"><span class="term-zh">WritingPrompts</span><span class="term-en">WritingPrompts</span></div><div class="term-def">英文故事命题与人类撰写故事的公开数据集，本文英文语料与基准命题的来源。</div><div class="term-expand">STORYRMB 的 600 条命题取自该数据集，每条附一篇人类撰写故事（§2.1, p3）；先滤掉少于 100 词的故事，再由标注者确认人类故事确实最优，标「unsure」的 91 条被丢弃，余 509 条「1 人类 + 3 LLM」实例（附录 C, p17）。数据集地址由原文脚注给出（§3.1, p5）。</div></article><article class="glossary-card reveal" id="term-mops"><div class="term-head"><span class="term-zh">MoPS</span><span class="term-en">Modular Story Premise Synthesis</span><span class="chip chip-abbr">MoPS</span></div><div class="term-def">故事命题数据集，本文 Best-of-N 实战验证用的题源。</div><div class="term-expand">含约 100 个命题（Ma et al., 2024）。原文用它做 16 选 1 的 head-to-head：每个命题用 Llama-3.1-70B-Instruct、温度 1 生成 16 篇，人工双人独立排序、冲突由资深第三人裁定（§5, p8）。</div></article><article class="glossary-card reveal" id="term-eqbench"><div class="term-head"><span class="term-zh">EQ-Bench 创意写作 v3</span><span class="term-en">EQ-Bench Creative Writing v3</span></div><div class="term-def">外部创意写作评测集，本文用作第二个战场做旁证。</div><div class="term-expand">原文先对该基准配的故事评测法在 STORYRMB 上做元评测，得到 LLM–LLM 对 94%、Human–LLM 对 54% 的准确率；再用它给 BoN 选出的故事打分：StoryReward-Qwen 2.72 ＞ StoryReward-Llama 2.51 ＞ ArmoRM 2.36 ＞ QRM 2.31 ＞ Skywork-27B 2.28 ＞ GRM 2.24 = Skywork-8B 2.24（附录 H.3, p19–20；表 10, p26）。</div></article><article class="glossary-card reveal" id="term-litbench"><div class="term-head"><span class="term-zh">LitBench</span><span class="term-en">LitBench</span></div><div class="term-def">创意写作偏好建模的首个标准化基准与配对数据集，本文的先行工作。</div><div class="term-expand">由 Fein et al. (2025) 提出，从 Reddit 收集 43,827 条人类标注偏好对。原文在相关工作里自述其为「the first standardized benchmark and paired dataset for preference modeling in creative writing」（§6.2, p9）。与 STORYRMB 的区别在于任务更宽（创意写作 vs 故事偏好）且实例粒度不同。</div></article></section>
+</main>
+
+<footer class="footer">
+  <p>共 1 篇 · 18 个名词 · 20260925 自动整理</p>
+  <p class="disclaimer">本导读基于论文<strong>全文</strong>撰写，具体数值与结论以原文为准。归属原文版权归原作者所有。</p>
+</footer>
+
+<script>
+/* ── 滚动揭示 + 导航高亮 + 阅读进度 ── */
+(function(){
+  function revealAll(){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in-view');});}
+  try{
+    if(!('IntersectionObserver' in window)){revealAll();return;}
+    var navLinks=document.querySelectorAll('.topbar-nav a');
+    var sections=document.querySelectorAll('.section[id]');
+    var navObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var id=en.target.id;
+          navLinks.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+id);});
+        }
+      });
+    },{rootMargin:'-70px 0px -65% 0px',threshold:0});
+    sections.forEach(function(s){navObs.observe(s);});
+    var revealEls=document.querySelectorAll('.reveal');
+    revealEls.forEach(function(el,i){el.style.transitionDelay=((i%6)*55)+'ms';});
+    var revObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){en.target.classList.add('in-view');revObs.unobserve(en.target);}
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    revealEls.forEach(function(el){revObs.observe(el);});
+    setTimeout(revealAll,1600);
+  }catch(e){revealAll();}
+  var bar=document.getElementById('readProgress');
+  if(bar){
+    var raf=null;
+    window.addEventListener('scroll',function(){
+      if(raf)return;
+      raf=requestAnimationFrame(function(){
+        var h=document.documentElement.scrollHeight-window.innerHeight;
+        bar.style.width=(h>0?Math.min(1,(window.scrollY||0)/h)*100:0)+'%';
+        raf=null;
+      });
+    },{passive:true});
+  }
+})();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   名词卡交互（v4.0）
+   · 互斥：同时只允许一个卡片打开；点另一个 → 旧的丝滑退出、新的丝滑进场
+   · 外部点击 / ✕ / Esc → 卡片丝滑消失
+   · 「查看完整释义」→ 记录当前位置 → 跳名词表对应条目 → 丝滑淡入「返回浏览位置」
+   · 返回按钮 → 平滑滚回原位置
+   · IMA 零 JS 时：纯 CSS :checked 仍可打开卡片，仅缺上述增强
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  var toggles=Array.prototype.slice.call(document.querySelectorAll('.tbs-toggle'));
+  if(!toggles.length)return;
+  var panelOf={};
+  toggles.forEach(function(t){panelOf[t.id]=t.parentNode.querySelector('.tbs-panel');});
+  var openId=null, savedY=0;
+
+  var backBtn=document.createElement('button');
+  backBtn.type='button';
+  backBtn.className='tbs-back-btn';
+  backBtn.textContent='\u2190 \u8fd4\u56de\u6d4f\u89c8\u4f4d\u7f6e';
+  document.body.appendChild(backBtn);
+
+  function leave(id){
+    var t=document.getElementById(id),p=panelOf[id];
+    if(t)t.checked=false;
+    if(p){p.classList.remove('is-open');p.classList.add('is-leaving');
+      setTimeout(function(){if(!p.classList.contains('is-open'))p.classList.remove('is-leaving');},300);}
+  }
+  function setOpen(id){
+    if(openId&&openId!==id)leave(openId);
+    var t=document.getElementById(id),p=panelOf[id];
+    if(t)t.checked=true;
+    if(p){p.classList.remove('is-leaving');p.classList.add('is-open');openId=id;}
+  }
+  function closeAll(){if(openId){leave(openId);openId=null;}}
+  function hideBack(){backBtn.classList.remove('show');}
+
+  document.querySelectorAll('.tbs-term').forEach(function(lbl){
+    lbl.addEventListener('click',function(){
+      var id=lbl.getAttribute('for');
+      setTimeout(function(){
+        var t=document.getElementById(id);
+        if(t&&t.checked){setOpen(id);}
+        else{var p=panelOf[id];
+             if(p){p.classList.remove('is-open');p.classList.add('is-leaving');}
+             if(openId===id)openId=null;}
+        hideBack();
+      },0);
+    });
+  });
+
+  document.querySelectorAll('.tbs-close').forEach(function(c){
+    c.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();closeAll();hideBack();});
+  });
+
+  document.addEventListener('click',function(e){
+    if(e.target===backBtn)return;
+    if(e.target.closest&&e.target.closest('.tbs'))return;
+    closeAll();hideBack();
+  });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){closeAll();hideBack();}
+  });
+
+  document.querySelectorAll('.tbs-more').forEach(function(a){
+    a.addEventListener('click',function(e){
+      e.preventDefault();
+      savedY=window.scrollY||window.pageYOffset||0;
+      closeAll();
+      var target=document.querySelector(a.getAttribute('href'));
+      if(target){
+        document.querySelectorAll('.glossary-card.is-target').forEach(function(c){c.classList.remove('is-target');});
+        target.scrollIntoView({behavior:'smooth',block:'start'});
+        if(target.classList&&target.classList.contains('glossary-card')){
+          target.classList.add('is-target');
+          setTimeout(function(){target.classList.remove('is-target');},2400);
+        }
+      }
+      setTimeout(function(){backBtn.classList.add('show');},430);
+    });
+  });
+
+  backBtn.addEventListener('click',function(){
+    hideBack();
+    window.scrollTo({top:savedY,behavior:'smooth'});
+  });
+})();
+</script>
+
+<footer class="site-foot"><nav class="pn" aria-label="上下篇"><a class="prev" href="paper-20260922.html"><small>← 上一篇 · 09.22</small>LegalCiteTrust · 中文法律长报告里，引用靠不靠得住</a><a class="next" href="paper-20260928.html"><small>下一篇 · 09.28 →</small>Who Wrote This Line? · AI 写的古典诗词，能被检测出来吗</a></nav><p class="copy">© 2026 简沛言 · 论文精读 · <a href="../作品集_vibecoding_DEMO_v8.html">返回作品集主页</a> · <a href="mailto:18382308038@163.com">18382308038@163.com</a></p></footer>
+<script src="blog.js"></script>
+</body>
+</html>
