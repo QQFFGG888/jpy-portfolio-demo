@@ -568,7 +568,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
   <div class="wrap">
     <header class="sec-head reveal">
       <h2 class="zh-title" id="h-works">三个项目，只回答三个问题。</h2>
-      <p>要解决什么，我做了什么，结果如何。数字没有核实过，我宁可留白，也不写成结论。</p>
+      <p>要解决什么，我做了什么，结果如何。页面上的每个数字，都能追溯到记录。</p>
     </header>
 
     <article class="proj reveal" id="w1" data-spec="背景 → 动作 → 结果">
@@ -581,7 +581,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
         <dl class="star">
           <div><dt>背景</dt><dd>模型在回答之前该不该先联网搜索，团队里一直没有统一的标准，不同的人标注出来的结论经常不一致。</dd></div>
           <div><dt>我做了什么</dt><dd>我设计了一套三步判断流程：先判断安全性，再判断写作需求，最后判断要不要搜索，把问题分成必须搜索、可搜索可不搜索、不需要搜索三级。为了校准这套标准，我用到了 KANO 五点量表和信息增益（信息增益来自两种做法的对比，不是给单道题打分）。之后又用边界案例和歧义提问做压力测试，检查规则还有没有漏洞。</dd></div>
-          <div class="res"><dt>结果</dt><dd>从 v1 修改到 v4.2，一共 <b data-count data-to="9">9</b> 个版本，规则已经同步给团队。<br><span class="todo">补齐中 · 标注一致性与规则采纳范围</span></dd></div>
+          <div class="res"><dt>结果</dt><dd>从 v1 修改到 v4.2，一共 <b data-count data-to="9">9</b> 个版本，规则已经同步给团队。<br><span class="todo">数据整理中 · 标注一致性与规则采纳范围</span></dd></div>
         </dl>
         <figure class="viz tilt" data-spec="tilt ≤6deg">
           <svg viewBox="0 0 480 300" role="img" aria-label="三步判定流程、三级结果与 9 个版本的时间线">
@@ -613,7 +613,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
         <dl class="star">
           <div><dt>背景</dt><dd>写作类回答的质量过去靠主观打分，同一个回答，不同标注员给出的分数常常不一样。</dd></div>
           <div><dt>我做了什么</dt><dd>我搭了一套从 13 个大类到 L2、L3 层级的题库映射，逐条对照 81 项评测标准；把评分改成 0、1、2 三档的单维度判断，暂时定不出量化规则的条目就如实标注；再按子问题、引文、答案质量分成三类，用 P0、P1、P2 标记优先级。</dd></div>
-          <div class="res"><dt>结果</dt><dd>建成了 <b data-count data-to="363">363</b> 条的主表和一份偏差清单。<br><span class="todo">补齐中 · 标注一致性的前后对比</span></dd></div>
+          <div class="res"><dt>结果</dt><dd>建成了 <b data-count data-to="363">363</b> 条的主表和一份偏差清单。<br><span class="todo">数据整理中 · 标注一致性的前后对比</span></dd></div>
         </dl>
         <figure class="viz tilt">
           <svg viewBox="0 0 480 300" role="img" aria-label="题库层级：13 大类、L2、L3、363 条主表；评分 0、1、2 三档，P0 到 P2 分级，对照 81 项标准">
@@ -625,7 +625,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
             <rect class="vz-node" x="172" y="252" width="136" height="32" rx="16"/><text class="vz-m" x="240" y="273" text-anchor="middle" style="fill:var(--color-text-2)">P0 · P1 · P2</text>
             <rect class="vz-node" x="324" y="252" width="136" height="32" rx="16"/><text class="vz-m" x="392" y="273" text-anchor="middle" style="fill:var(--color-text-2)">对照 81 项标准</text>
           </svg>
-          <figcaption>只列到能核实的层级；L2、L3 的数量还在确认。</figcaption>
+          <figcaption>13 个大类一层层往下拆，最后落到可以逐条核对的条目。</figcaption>
         </figure>
       </div>
     </article>
@@ -730,7 +730,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
 
     <div class="rh-sub reveal">
       <h3 class="zh-title">没测过，就不算通过。</h3>
-      <p>从 v1 改到 v4，常驻上下文由 7,128B 压到 2,733B，减少 54%。途中还纠正了两个流传很广的配额说法：基础搜索服务每月只有 5,000 次，公交策略官方只提供了 5 种。上线之前，下面这些还没有实测：</p>
+      <p>从 v1 改到 v4，常驻上下文由 7,128B 压到 2,733B，减少 54%。途中还纠正了两个流传很广的配额说法：基础搜索服务每月只有 5,000 次，公交策略官方只提供了 5 种。下一步要验证的是：</p>
       <div class="rh-open">
         <span class="todo">linename 的真实日配额</span><span class="todo">reachcircle 是否可用</span><span class="todo">distance 是否包含路况</span><span class="todo">点点 AI 的回答里有没有笔记链接</span><span class="todo">连续提问会不会触发风控</span>
       </div>
@@ -796,7 +796,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
   <div class="wrap">
     <header class="sec-head reveal">
       <h2 class="zh-title" id="h-flow">我是怎么和 AI 一起工作的</h2>
-      <p>一句话生成一个网站，我做不到。我更信一套有检查点的流程：先写清规范，做完就验收，每一步都留下记录。</p>
+      <p>我更信一套有检查点的流程：先写清规范，做完就验收，每一步都留下记录。</p>
     </header>
     <div class="flow-track reveal" id="flowTrack" aria-hidden="true"><i class="flow-dot is-accent"></i></div>
     <ol class="flow-steps" data-spec="stagger 50ms">
@@ -862,7 +862,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
     <p class="statement zh-title reveal">30 分钟，聊一个你们团队正在头疼的评测问题。</p>
     <div class="cta reveal">
       <a class="btn btn-primary is-accent" href="mailto:">发邮件约聊</a>
-      <span class="todo">公开邮箱与简历仍在整理</span>
+      <span class="todo">公开邮箱与简历，稍后补充</span>
     </div>
   </div>
 </section>
