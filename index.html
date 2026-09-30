@@ -401,6 +401,35 @@ li[aria-selected="true"] .band{transform:scaleX(1)}
 .menu .menu-pop a[aria-current="page"]{background:var(--color-text);color:var(--color-bg)}
 .menu .menu-pop a[aria-current="page"] small{color:inherit;opacity:.72}
 .menu-pop::before{content:"";position:absolute;left:0;right:0;top:-8px;height:8px}
+/* ============ 人生日志（CHANGELOG 时间线） ============ */
+.xp-line{display:grid}
+.xp-item{position:relative;padding:0 0 8px 36px}
+.xp-item::before{content:"";position:absolute;left:9px;top:34px;bottom:-10px;width:2px;background:var(--color-divider)}
+.xp-item:last-child::before{display:none}
+.xp-node{position:absolute;left:4px;top:18px;width:12px;height:12px;border-radius:var(--r-flat);background:var(--color-text-3)}
+.xp-item.is-head .xp-node{background:var(--color-text)}
+.xp-head{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center;gap:4px 16px;width:100%;min-height:56px;padding:12px 16px;border:0;border-radius:var(--r-ctl);background:none;color:var(--color-text);font:inherit;text-align:left;cursor:pointer;transition:background-color var(--t-fast) var(--ease)}
+.xp-head:hover{background:var(--color-surface-2)}
+.xp-head:active{transform:scale(.995)}
+.xp-tag{font-size:12px;color:var(--color-text-3);white-space:nowrap}
+.xp-item.is-head .xp-tag{background:var(--color-brand-pop);color:var(--on-pop);padding:3px 12px;border-radius:var(--r-pill)}
+.xp-period{font-family:var(--font-mono);font-size:13px;color:var(--color-text-3);white-space:nowrap}
+.xp-org{font-family:var(--font-zh-title);font-weight:400;font-size:clamp(1.25rem,2.4vw,1.625rem);line-height:1.15}
+.xp-chev{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;color:var(--color-text-2);transition:transform var(--t) var(--ease)}
+.xp-item.open .xp-chev{transform:rotate(180deg)}
+.xp-role{grid-column:2 / 5;font-size:15px;color:var(--color-text-2)}
+.xp-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--t) var(--ease)}
+.xp-item.open .xp-body{grid-template-rows:1fr}
+.xp-body>div{overflow:hidden}
+.xp-body p{max-width:62ch;padding-top:6px;color:var(--color-text-2)}
+.xp-chips{display:flex;flex-wrap:wrap;gap:6px;padding:12px 0 18px;list-style:none}
+.xp-chips li{font-family:var(--font-mono);font-size:12px;padding:3px 10px;border-radius:var(--r-pill);background:var(--color-surface-2);color:var(--color-text-2)}
+.xp-slash{display:flex;flex-wrap:wrap;gap:8px;margin-top:48px;align-items:center}
+.xp-slash .sl{font-size:14px;color:var(--color-text-2);padding:6px 14px;border-radius:var(--r-pill);background:var(--color-surface-2);transition:transform var(--t-fast) var(--ease-back)}
+.xp-slash .sl:hover{transform:translateY(var(--lift-1))}
+.xp-tools{margin-top:16px;font-family:var(--font-mono);font-size:12px;color:var(--color-text-3)}
+@media (prefers-reduced-motion:reduce){.xp-chev{transition:none}}
+
 /* ============ SPEC 叠层（按 S） ============ */
 .hud{display:none}
 body.spec .hud{display:grid;position:fixed;left:16px;bottom:16px;z-index:80;min-width:248px;gap:4px;padding:12px 16px;border-radius:var(--r-ctl);background:var(--color-surface);box-shadow:var(--shadow-pop);font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--color-text-2)}
@@ -505,7 +534,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
 <header class="nav" id="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#top" aria-label="简沛言 · 回到顶部" data-spec="--nav-h 56"><svg aria-hidden="true"><use href="#logo"/></svg><span class="px">JPY</span></a>
-    <nav class="links" aria-label="页面导航"><div class="menu"><a class="menu-btn" href="#works">作品</a><div class="menu-pop"><a href="#works"><small>01</small>核心项目</a><a href="#rent"><small>02</small>找房 Agent</a><a href="#ledger"><small>03</small>细节账本</a><a href="#flow"><small>04</small>工作流</a><a href="#contact"><small>07</small>联系</a></div></div><div class="menu"><a class="menu-btn" href="blog/index.html">博客</a><div class="menu-pop"><a href="blog/paper-20260928.html"><small>09.28 · 论文精读</small>Who Wrote This Line? · 古典诗词检测</a><a href="blog/paper-20260925.html"><small>09.25 · 论文精读</small>StoryAlign · 故事生成奖励模型</a><a href="blog/paper-20260922.html"><small>09.22 · 论文精读</small>LegalCiteTrust · 法律报告引用可信度</a><a href="blog/paper-20260919.html"><small>09.19 · 论文精读</small>Auditing Deep Research Writing · 深研报告可信度审计</a><a href="blog/paper-20260916.html"><small>09.16 · 论文精读</small>HoWToBench · 人类级写作能力评测</a><a href="blog/index.html"><small>ALL</small>全部博客</a></div></div></nav>
+    <nav class="links" aria-label="页面导航"><div class="menu"><a class="menu-btn" href="#works">作品</a><div class="menu-pop"><a href="#works"><small>01</small>核心项目</a><a href="#rent"><small>02</small>找房 Agent</a><a href="#xp"><small>03</small>人生日志</a><a href="#ledger"><small>04</small>细节账本</a><a href="#flow"><small>05</small>工作流</a><a href="#contact"><small>06</small>联系</a></div></div><div class="menu"><a class="menu-btn" href="blog/index.html">博客</a><div class="menu-pop"><a href="blog/paper-20260928.html"><small>09.28 · 论文精读</small>Who Wrote This Line? · 古典诗词检测</a><a href="blog/paper-20260925.html"><small>09.25 · 论文精读</small>StoryAlign · 故事生成奖励模型</a><a href="blog/paper-20260922.html"><small>09.22 · 论文精读</small>LegalCiteTrust · 法律报告引用可信度</a><a href="blog/paper-20260919.html"><small>09.19 · 论文精读</small>Auditing Deep Research Writing · 深研报告可信度审计</a><a href="blog/paper-20260916.html"><small>09.16 · 论文精读</small>HoWToBench · 人类级写作能力评测</a><a href="blog/index.html"><small>ALL</small>全部博客</a></div></div></nav>
     <div class="tools">
       <button class="tbtn" id="specBtn" type="button" aria-pressed="false" title="规范叠层（快捷键 S）">SPEC</button>
       <a class="ibtn" href="login.html" aria-label="登录" title="登录"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-3.4 3.8-5 7-5s5.8 1.6 7 5"/></svg></a>
@@ -517,7 +546,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
       </button>
     </div>
   </div>
-  <nav class="drawer" id="drawer" aria-label="移动端导航"><a href="#works">01 · 核心项目</a><a href="#rent">02 · 找房 Agent</a><a href="#ledger">03 · 细节账本</a><a href="#flow">04 · 工作流</a><a href="#contact">07 · 联系</a><p class="eyebrow" style="margin-top:8px">账号</p><a href="login.html">登录</a><a href="blog/index.html">全部论文精读</a><a href="blog/paper-20260928.html">Who Wrote This Line? · 古典诗词检测</a><a href="blog/paper-20260925.html">StoryAlign · 故事生成奖励模型</a><a href="blog/paper-20260922.html">LegalCiteTrust · 法律报告引用可信度</a><a href="blog/paper-20260919.html">Auditing Deep Research Writing · 深研报告可信度审计</a><a href="blog/paper-20260916.html">HoWToBench · 人类级写作能力评测</a></nav>
+  <nav class="drawer" id="drawer" aria-label="移动端导航"><a href="#works">01 · 核心项目</a><a href="#rent">02 · 找房 Agent</a><a href="#xp">03 · 人生日志</a><a href="#ledger">04 · 细节账本</a><a href="#flow">05 · 工作流</a><a href="#contact">06 · 联系</a><p class="eyebrow" style="margin-top:8px">账号</p><a href="login.html">登录</a><a href="blog/index.html">全部论文精读</a><a href="blog/paper-20260928.html">Who Wrote This Line? · 古典诗词检测</a><a href="blog/paper-20260925.html">StoryAlign · 故事生成奖励模型</a><a href="blog/paper-20260922.html">LegalCiteTrust · 法律报告引用可信度</a><a href="blog/paper-20260919.html">Auditing Deep Research Writing · 深研报告可信度审计</a><a href="blog/paper-20260916.html">HoWToBench · 人类级写作能力评测</a></nav>
 </header>
 
 <main id="top">
@@ -738,6 +767,103 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
   </div>
 </section>
 
+
+<!-- ============ 人生日志（CHANGELOG） ============ -->
+<section class="section" id="xp" aria-labelledby="h-xp">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <h2 class="zh-title" id="h-xp">人生日志，持续更新。</h2>
+      <p>建筑学硕士，现在做 AI 产品。时间线从现在往回翻，点开每一条看证据。</p>
+    </header>
+    <ol class="xp-line" aria-label="经历时间线">
+      <li class="xp-item is-head reveal">
+        <i class="xp-node" aria-hidden="true"></i>
+        <button class="xp-head" type="button" aria-expanded="true">
+          <span class="xp-tag px is-accent">HEAD</span>
+          <span class="xp-period mono">2026.07 – 现在</span>
+          <span class="xp-org">腾讯 · 元宝</span>
+          <svg class="xp-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="xp-role">AI 搜索评测产品经理</span>
+        </button>
+        <div class="xp-body"><div>
+          <p>给 AI 搜索与写作建评测标尺：沿意图理解、子问题拆解、检索召回、信源引用、内容生成五环设计评测方案，用 GSB 对比定位与竞品的差距，驱动模型定向优化，目标场景负反馈率显著下降。</p>
+          <ul class="xp-chips"><li>搜索评测</li><li>LLM-as-a-Judge</li><li>金标准集</li><li>低代码评测 pipeline</li></ul>
+        </div></div>
+      </li>
+      <li class="xp-item reveal"><i class="xp-node" aria-hidden="true"></i>
+        <button class="xp-head" type="button" aria-expanded="false">
+          <span class="xp-tag mono">2026.06 – 07</span><span class="xp-org">其域创新</span>
+          <svg class="xp-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="xp-role">点云工业软件产品经理</span>
+        </button>
+        <div class="xp-body"><div>
+          <p>负责「点云转 CAD」AI 功能：对比纯点云与点云加图像两条识别路线，输出 PRD 与 MVP 边界，推动上线并建立回归测试；把产品 wiki 迁移到 Git 自动部署，各产品线用 AI IDE 自主更新文档。</p>
+          <ul class="xp-chips"><li>AI 落地</li><li>PRD</li><li>GTM</li><li>文档自动化</li></ul>
+        </div></div>
+      </li>
+      <li class="xp-item reveal"><i class="xp-node" aria-hidden="true"></i>
+        <button class="xp-head" type="button" aria-expanded="false">
+          <span class="xp-tag mono">2026.02 – 05</span><span class="xp-org">京东</span>
+          <svg class="xp-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="xp-role">AIoT 智能家居产品经理</span>
+        </button>
+        <div class="xp-body"><div>
+          <p>智能卫浴软件侧：用市场、平台、用户三层框架拆解 UGC、建痛点标签体系；浴室镜 AI 肤质检测评估三类采集路线与 BOM 方案，支撑立项。</p>
+          <ul class="xp-chips"><li>用户洞察</li><li>竞品矩阵</li><li>AI 预研</li></ul>
+        </div></div>
+      </li>
+      <li class="xp-item reveal"><i class="xp-node" aria-hidden="true"></i>
+        <button class="xp-head" type="button" aria-expanded="false">
+          <span class="xp-tag mono">2025.06 – 09</span><span class="xp-org">影石创新</span>
+          <svg class="xp-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="xp-role">门店展陈设计项目管理</span>
+        </button>
+        <div class="xp-body"><div>
+          <p>统筹 30+ 门店从建联到开业的全周期交付；推动展陈 AB 测试 5+ 次，进店率与连带成交率提升 10%，建店时效提升 15%。</p>
+          <ul class="xp-chips"><li>30+ 门店</li><li>AB 测试</li><li>+10% 进店率</li><li>+15% 建店时效</li></ul>
+        </div></div>
+      </li>
+      <li class="xp-item reveal"><i class="xp-node" aria-hidden="true"></i>
+        <button class="xp-head" type="button" aria-expanded="false">
+          <span class="xp-tag mono">2026.04 – 现在</span><span class="xp-org">知乎 · 大模型开放式难题评测</span>
+          <svg class="xp-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="xp-role">测评专家（项目）</span>
+        </button>
+        <div class="xp-body"><div>
+          <p>聚焦艺术、房地产、文学方向构建 20+ 道难题与 rubric；在 AI 竞技场盲测 60+ 组双模型对比，输出模型排序与判定依据。</p>
+          <ul class="xp-chips"><li>20+ 难题</li><li>60+ 组盲测</li><li>Rubric</li></ul>
+        </div></div>
+      </li>
+      <li class="xp-item reveal"><i class="xp-node" aria-hidden="true"></i>
+        <button class="xp-head" type="button" aria-expanded="false">
+          <span class="xp-tag mono">2026.03 – 05</span><span class="xp-org">多氪 · AI 产品测评</span>
+          <svg class="xp-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="xp-role">产品视角主理（项目）</span>
+        </button>
+        <div class="xp-body"><div>
+          <p>主导 30+ 款 AI 产品测评，从 0 到 1 建成机评加人评的双重体系，沉淀标准化评测方法论。</p>
+          <ul class="xp-chips"><li>30+ 产品</li><li>机评 + 人评</li><li>方法论</li></ul>
+        </div></div>
+      </li>
+      <li class="xp-item reveal"><i class="xp-node" aria-hidden="true"></i>
+        <button class="xp-head" type="button" aria-expanded="false">
+          <span class="xp-tag mono">2019 – 2027</span><span class="xp-org">重庆大学 · 建筑学硕士</span>
+          <svg class="xp-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="xp-role">本科：西北工业大学 · 建筑学</span>
+        </button>
+        <div class="xp-body"><div>
+          <p>硕士在读，GPA 3.5，一等奖学金；本科前 10%，陕西省实体空间搭建竞赛三等奖。空间的训练给了我排版、材质与光的直觉，现在全部用在这个网页上。</p>
+          <ul class="xp-chips"><li>985 × 2</li><li>一等奖学金</li><li>前 10%</li></ul>
+        </div></div>
+      </li>
+    </ol>
+    <div class="xp-slash reveal" aria-label="斜杠与工具">
+      <span class="sl">AI 产品</span><span class="sl">评测体系</span><span class="sl">建筑学硕士</span><span class="sl">用 AI 造工具的人</span>
+    </div>
+    <p class="xp-tools reveal">Rhino · Blender · Unity · UE5 · MySQL · Prompt Engineering · OpenClaw / Harness · 日语 N4</p>
+  </div>
+</section>
+
 <!-- ============ 03 细节账本 ============ -->
 <section class="section" id="ledger" aria-labelledby="h-ledger" style="background:var(--color-surface)">
   <div class="wrap">
@@ -945,28 +1071,52 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!RM){
   });
 }
 
-/* ---------- 工牌：Verlet 积分绳 + 刚体两点工牌 ---------- */
+/* ---------- 工牌：Verlet 绳 v2 —— 子步积分 / 墙面碰撞 / 拉伸上限 / 甩动惯性 ---------- */
 var Rope=(function(){
-  var stage=$('#stage'), cv=$('#rope'), ctx=cv.getContext('2d'), badge=$('#badge');
-  var W=0,H=0,bw=240,bh=340,P=[],C=[],N=14,L=0,running=false,visible=true,calm=0,drag=null,col={},started=false;
-  var G=.42,DAMP=.986,IT=14,VMAX=38;
+  var stage=$('#stage'),cv=$('#rope'),ctx=cv.getContext('2d'),badge=$('#badge');
+  var W=0,H=0,bw=240,bh=340,P=[],C=[],N=16,L=0,running=false,visible=true,calm=0,drag=null,col={},started=false,ang=0;
+  var G=.6,DAMP=.987,IT=16,VMAX=30,REST=.4,FRICT=.75,STRETCH=1.05,GRAB=34;
   function recolor(){var cs=getComputedStyle(stage);col.strap=cs.getPropertyValue('--strap').trim()||'#3a3a3a';col.hi=cs.getPropertyValue('--strap-hi').trim()||'rgba(255,255,255,.14)';col.clip=cs.getPropertyValue('--clip').trim()||'#9a9a9a';if(started)draw();}
   function build(swing){
     var r=stage.getBoundingClientRect();W=r.width;H=r.height;var dpr=Math.min(2,window.devicePixelRatio||1);
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
     bw=badge.offsetWidth;bh=badge.offsetHeight;L=Math.max(64,H-bh-40);
-    var ax=W*.5,ay=-8,sl=L/(N-1),ang=swing?.62:0;P=[];C=[];
-    for(var i=0;i<N;i++){var x=ax+Math.sin(ang)*sl*i,y=ay+Math.cos(ang)*sl*i;P.push({x:x,y:y,px:x,py:y,w:i===0?0:1})}
-    var T=P[N-1],bx=T.x+Math.sin(ang)*bh,by=T.y+Math.cos(ang)*bh;P.push({x:bx,y:by,px:bx,py:by,w:1});
+    var ax=W*.5,ay=-10,sl=L/(N-1),a0=swing?.62:0;P=[];C=[];
+    for(var i=0;i<N;i++){var x=ax+Math.sin(a0)*sl*i,y=ay+Math.cos(a0)*sl*i;P.push({x:x,y:y,px:x,py:y,w:i===0?0:1})}
+    var T=P[N-1],bx=T.x+Math.sin(a0)*bh,by=T.y+Math.cos(a0)*bh;P.push({x:bx,y:by,px:bx,py:by,w:1});
     for(var j=0;j<N-1;j++)C.push([j,j+1,sl]);C.push([N-1,N,bh]);
   }
-  function step(){
+  function grab(){ // 软抓取：抓取点每步最多追 GRAB 距离，松手时速度自然留在绳上
+    if(!drag)return;var T=P[N-1],B=P[N],gx=T.x+(B.x-T.x)*drag.k,gy=T.y+(B.y-T.y)*drag.k;
+    var tx=drag.x-gx,ty=drag.y-gy,d=Math.hypot(tx,ty);if(d>GRAB){tx=tx/d*GRAB;ty=ty/d*GRAB}
+    T.x+=tx;T.y+=ty;B.x+=tx;B.y+=ty;
+  }
+  function stretch(){ // 拉伸上限：超过 5% 直接硬投影，防橡皮筋抖动爆炸
+    for(var i=0;i<C.length;i++){var A=P[C[i][0]],B=P[C[i][1]],l=C[i][2],dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||1e-6;
+      if(d>l*STRETCH){var ov=(d-l*STRETCH)/d,s=A.w+B.w||1;A.x+=dx*ov*(A.w/s)*2;A.y+=dy*ov*(A.w/s)*2;B.x-=dx*ov*(B.w/s)*2;B.y-=dy*ov*(B.w/s)*2}}
+  }
+  function walls(){ // 绳点不出舞台（左/右/下），碰壁带恢复系数与摩擦
+    for(var i=1;i<P.length;i++){var p=P[i];
+      if(p.x<4){var vx=p.x-p.px;p.x=4;p.px=p.x+vx*REST;p.py=p.y-(p.y-p.py)*(1-FRICT)}
+      if(p.x>W-4){var vx2=p.x-p.px;p.x=W-4;p.px=p.x+vx2*REST;p.py=p.y-(p.y-p.py)*(1-FRICT)}
+      if(p.y>H-6){var vy=p.y-p.py;p.y=H-6;p.py=p.y+vy*REST;p.px=p.x-(p.x-p.px)*(1-FRICT)}}
+  }
+  function collide(){ // 工牌整体（旋转包围盒）不出舞台，防穿模
+    var T=P[N-1],B=P[N],dx=B.x-T.x,dy=B.y-T.y,d=Math.hypot(dx,dy)||1e-6,ax=Math.abs(dx/d),ay=Math.abs(dy/d),hw=bw/2,hh=bh/2,m=2;
+    var ex=hw*ay+hh*ax,ey=hw*ax+hh*ay,cx=(T.x+B.x)/2,cy=(T.y+B.y)/2,ox=0,oy=0;
+    if(cx-ex<m)ox=m-(cx-ex);if(cx+ex>W-m)ox=(W-m)-(cx+ex);
+    if(cy-ey<m)oy=m-(cy-ey);if(cy+ey>H-m)oy=(H-m)-(cy+ey);
+    if(ox){T.x+=ox;B.x+=ox;[T,B].forEach(function(p){var vx=p.x-p.px;p.px=p.x+vx*REST})}
+    if(oy){T.y+=oy;B.y+=oy;[T,B].forEach(function(p){var vy=p.y-p.py;p.py=p.y+vy*REST;p.px=p.x-(p.x-p.px)*FRICT})}
+  }
+  function step(){ // 一个物理子步
     var i,k,p;
     for(i=1;i<P.length;i++){p=P[i];var vx=(p.x-p.px)*DAMP,vy=(p.y-p.py)*DAMP;p.px=p.x;p.py=p.y;p.x+=vx;p.y+=vy+G}
     for(k=0;k<IT;k++){
       for(i=0;i<C.length;i++){var A=P[C[i][0]],B=P[C[i][1]],len=C[i][2];var dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||1e-6,s=A.w+B.w;if(!s)continue;var df=(d-len)/d/s;A.x+=dx*df*A.w;A.y+=dy*df*A.w;B.x-=dx*df*B.w;B.y-=dy*df*B.w}
-      if(drag){var T=P[N-1],Bt=P[N];var gx=T.x+(Bt.x-T.x)*drag.k,gy=T.y+(Bt.y-T.y)*drag.k;var ox=drag.x-gx,oy=drag.y-gy;T.x+=ox;T.y+=oy;Bt.x+=ox;Bt.y+=oy}
+      grab();stretch();
     }
+    walls();collide();
     for(i=1;i<P.length;i++){p=P[i];var ux=p.x-p.px,uy=p.y-p.py,v=Math.hypot(ux,uy);if(v>VMAX){p.px=p.x-ux/v*VMAX;p.py=p.y-uy/v*VMAX}}
   }
   function energy(){var e=0;for(var i=1;i<P.length;i++)e+=Math.abs(P[i].x-P[i].px)+Math.abs(P[i].y-P[i].py);return e/P.length}
@@ -978,13 +1128,16 @@ var Rope=(function(){
     ctx.strokeStyle=col.strap;ctx.lineWidth=10;ctx.setLineDash([]);ctx.stroke();
     ctx.strokeStyle=col.hi;ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
     var T=P[N-1],B=P[N],a=Math.atan2(-(B.x-T.x),B.y-T.y);
-    badge.style.transform='translate('+(T.x-bw/2).toFixed(2)+'px,'+T.y.toFixed(2)+'px) rotate('+a.toFixed(4)+'rad)';
-    ctx.save();ctx.translate(T.x,T.y);ctx.rotate(a);ctx.fillStyle=col.clip;ctx.fillRect(-9,-16,18,20);ctx.fillStyle=col.strap;ctx.fillRect(-4,-12,8,8);ctx.restore();
+    ang+=(a-ang)*.4;   // 旋转平滑，抑制约束振荡造成的视觉抖动
+    badge.style.transform='translate('+(T.x-bw/2).toFixed(2)+'px,'+T.y.toFixed(2)+'px) rotate('+ang.toFixed(4)+'rad)';
+    ctx.save();ctx.translate(T.x,T.y);ctx.rotate(ang);ctx.fillStyle=col.clip;ctx.fillRect(-9,-16,18,20);ctx.fillStyle=col.strap;ctx.fillRect(-4,-12,8,8);ctx.restore();
   }
-  function loop(){step();draw();if(!drag&&energy()<.012)calm++;else calm=0;if(calm>120||!visible){running=false;return}requestAnimationFrame(loop)}
+  function loop(){ // 每帧 2 个物理子步：更稳的约束收敛，拖拽与甩动更跟手
+    for(var s=0;s<2;s++)step();
+    draw();if(!drag&&energy()<.012)calm++;else calm=0;if(calm>120||!visible){running=false;return}requestAnimationFrame(loop)}
   function wake(){if(RM||SHOT||running||!started)return;running=true;calm=0;requestAnimationFrame(loop)}
   function local(e){var r=stage.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
-  function clampDrag(){var ax=P[0].x,ay=P[0].y,dx=drag.x-ax,dy=drag.y-ay,d=Math.hypot(dx,dy),m=(L+bh*drag.k)*1.12;if(d>m){drag.x=ax+dx/d*m;drag.y=ay+dy/d*m}}
+  function clampDrag(){var ax=P[0].x,ay=P[0].y,dx=drag.x-ax,dy=drag.y-ay,d=Math.hypot(dx,dy),m=(L+bh*drag.k)*1.08;if(d>m){drag.x=ax+dx/d*m;drag.y=ay+dy/d*m}}
   badge.addEventListener('pointerdown',function(e){if(RM||SHOT)return;var q=local(e),T=P[N-1],B=P[N],ux=B.x-T.x,uy=B.y-T.y;var k=((q.x-T.x)*ux+(q.y-T.y)*uy)/(bh*bh);drag={x:q.x,y:q.y,k:Math.max(.05,Math.min(1,k))};badge.setPointerCapture(e.pointerId);badge.classList.add('grab');wake();e.preventDefault()});
   badge.addEventListener('pointermove',function(e){if(!drag)return;var q=local(e);drag.x=q.x;drag.y=q.y;clampDrag()});
   function end(){drag=null;badge.classList.remove('grab')}
@@ -1145,7 +1298,7 @@ addEventListener('scroll',function(){if(HUD.on)HUD.render()},{passive:true});
 /* ---------- 导航当前区块 ---------- */
 var navLinks=$$('.links a');
 var secIO=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;navLinks.forEach(function(a){a.setAttribute('aria-current',a.getAttribute('href')==='#'+e.target.id?'true':'false')})})},{rootMargin:'-45% 0px -50% 0px'});
-['works','rent','ledger','flow','select','contact'].forEach(function(id){secIO.observe(document.getElementById(id))});
+['works','rent','xp','ledger','flow','select','contact'].forEach(function(id){secIO.observe(document.getElementById(id))});
 
 /* ---------- 键盘 ---------- */
 addEventListener('keydown',function(e){
