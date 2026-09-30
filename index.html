@@ -1074,7 +1074,7 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!RM){
 /* ---------- 工牌：Verlet 绳 v3 —— 页面级 180° 自由摆动（≥1024px） ---------- */
 var Rope=(function(){
   var stage=$('#stage'),cv=$('#rope'),ctx=cv.getContext('2d'),badge=$('#badge');
-  var W=0,H=0,bw=240,bh=340,P=[],C=[],N=16,L=0,running=false,visible=true,calm=0,drag=null,col={},started=false,ang=0,wide=false;
+  var W=0,H=0,AX=720,AY=-14,bw=240,bh=340,P=[],C=[],N=16,L=0,running=false,visible=true,calm=0,drag=null,col={},started=false,ang=0,wide=false;
   var G=.6,DAMP=.987,IT=16,VMAX=34,REST=.42,FRICT=.72,STRETCH=1.06,GRAB=36,reel=1;
   function isWide(){return matchMedia('(min-width:1024px)').matches}
   function applyMode(){ // 页面级模式：画布与工牌挂到 body（.stage 有视差 transform，会把 fixed 变成相对它定位）
@@ -1094,11 +1094,13 @@ var Rope=(function(){
     applyMode();
     var r=stage.getBoundingClientRect();
     W=wide?innerWidth:r.width;H=wide?innerHeight:r.height;
+    /* 锚点=舞台顶部中央（视口坐标，取加载/resize 时刻）；初始位置与 v11 一致 */
+    AX=wide?(r.left+r.width/2):W*.5;AY=wide?Math.max(-14,r.top-10):-10;
     var dpr=Math.min(2,window.devicePixelRatio||1);
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
     bw=badge.offsetWidth;bh=badge.offsetHeight;
-    L=wide?Math.max(360,Math.min(H*.62,760)):Math.max(64,H-bh-40);
-    var ax=W*.5,ay=wide?-14:-10,sl=L/(N-1),a0=wide?0:(swing?.62:0);P=[];C=[];
+    L=wide?Math.max(420,Math.min(H*.66,820)):Math.max(64,H-bh-40);
+    var ax=AX,ay=AY,sl=L/(N-1),a0=(swing&&!wide)?.62:0;
     for(var i=0;i<N;i++){var x=ax+Math.sin(a0)*sl*i,y=ay+Math.cos(a0)*sl*i;P.push({x:x,y:y,px:x,py:y,w:i===0?0:1})}
     var T=P[N-1],bx=T.x+Math.sin(a0)*bh,by=T.y+Math.cos(a0)*bh;P.push({x:bx,y:by,px:bx,py:by,w:1});
     for(var j=0;j<N-1;j++)C.push([j,j+1,sl]);C.push([N-1,N,bh]);
@@ -1157,7 +1159,7 @@ var Rope=(function(){
   function local(e){ // 页面级模式下事件坐标就是视口坐标
     if(wide)return{x:e.clientX,y:e.clientY};
     var r=stage.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
-  function clampDrag(){var ax=P[0].x,ay=P[0].y,dx=drag.x-ax,dy=drag.y-ay,d=Math.hypot(dx,dy),reach=(L+bh*drag.k)*reel*1.04;
+  function clampDrag(){var ax=AX,ay=AY,dx=drag.x-ax,dy=drag.y-ay,d=Math.hypot(dx,dy),reach=(L+bh*drag.k)*reel*1.04;
     if(d>reach){reel=Math.min(2.1,reel*d/reach);var nr=(L+bh*drag.k)*reel;drag.x=ax+dx/d*nr;drag.y=ay+dy/d*nr}
     if(reel>1&&d<(L+bh*drag.k)*.9){reel=Math.max(1,d/((L+bh*drag.k)*.95))}}   /* 收回多余绳长 */
   badge.addEventListener('pointerdown',function(e){if(RM||SHOT)return;var q=local(e),T=P[N-1],B=P[N],ux=B.x-T.x,uy=B.y-T.y;var k=((q.x-T.x)*ux+(q.y-T.y)*uy)/(bh*bh);drag={x:q.x,y:q.y,k:Math.max(.05,Math.min(1,k))};badge.setPointerCapture(e.pointerId);badge.classList.add('grab');wake();e.preventDefault()});
