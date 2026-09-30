@@ -776,7 +776,7 @@ body.spec [data-spec]::after{content:attr(data-spec);position:absolute;right:0;t
       <p>建筑学硕士，现在做 AI 产品。时间线从现在往回翻，点开每一条看证据。</p>
     </header>
     <ol class="xp-line" aria-label="经历时间线">
-      <li class="xp-item is-head reveal">
+      <li class="xp-item is-head open reveal">
         <i class="xp-node" aria-hidden="true"></i>
         <button class="xp-head" type="button" aria-expanded="true">
           <span class="xp-tag px is-accent">HEAD</span>
@@ -1071,49 +1071,67 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!RM){
   });
 }
 
-/* ---------- 工牌：Verlet 绳 v2 —— 子步积分 / 墙面碰撞 / 拉伸上限 / 甩动惯性 ---------- */
+/* ---------- 工牌：Verlet 绳 v3 —— 页面级 180° 自由摆动（≥1024px） ---------- */
 var Rope=(function(){
   var stage=$('#stage'),cv=$('#rope'),ctx=cv.getContext('2d'),badge=$('#badge');
-  var W=0,H=0,bw=240,bh=340,P=[],C=[],N=16,L=0,running=false,visible=true,calm=0,drag=null,col={},started=false,ang=0;
-  var G=.6,DAMP=.987,IT=16,VMAX=30,REST=.4,FRICT=.75,STRETCH=1.05,GRAB=34;
+  var W=0,H=0,bw=240,bh=340,P=[],C=[],N=16,L=0,running=false,visible=true,calm=0,drag=null,col={},started=false,ang=0,wide=false;
+  var G=.6,DAMP=.987,IT=16,VMAX=34,REST=.42,FRICT=.72,STRETCH=1.06,GRAB=36,reel=1;
+  function isWide(){return matchMedia('(min-width:1024px)').matches}
+  function applyMode(){ // 页面级模式：画布与工牌挂到 body（.stage 有视差 transform，会把 fixed 变成相对它定位）
+    wide=isWide();
+    if(wide){
+      if(badge.parentElement!==document.body){document.body.appendChild(cv);document.body.appendChild(badge)}
+      cv.style.cssText+=';position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:25;pointer-events:none';
+      badge.style.position='fixed';badge.style.zIndex='26';
+    }else{
+      if(cv.parentElement!==stage){stage.insertBefore(cv,stage.firstChild);stage.appendChild(badge)}
+      cv.style.cssText=cv.style.cssText.replace(/;?position:fixed[^;]*|;?z-index:26|;?pointer-events:none/g,'');
+      badge.style.position='';badge.style.zIndex='';
+    }
+  }
   function recolor(){var cs=getComputedStyle(stage);col.strap=cs.getPropertyValue('--strap').trim()||'#3a3a3a';col.hi=cs.getPropertyValue('--strap-hi').trim()||'rgba(255,255,255,.14)';col.clip=cs.getPropertyValue('--clip').trim()||'#9a9a9a';if(started)draw();}
   function build(swing){
-    var r=stage.getBoundingClientRect();W=r.width;H=r.height;var dpr=Math.min(2,window.devicePixelRatio||1);
+    applyMode();
+    var r=stage.getBoundingClientRect();
+    W=wide?innerWidth:r.width;H=wide?innerHeight:r.height;
+    var dpr=Math.min(2,window.devicePixelRatio||1);
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
-    bw=badge.offsetWidth;bh=badge.offsetHeight;L=Math.max(64,H-bh-40);
-    var ax=W*.5,ay=-10,sl=L/(N-1),a0=swing?.62:0;P=[];C=[];
+    bw=badge.offsetWidth;bh=badge.offsetHeight;
+    L=wide?Math.max(360,Math.min(H*.62,760)):Math.max(64,H-bh-40);
+    var ax=W*.5,ay=wide?-14:-10,sl=L/(N-1),a0=wide?0:(swing?.62:0);P=[];C=[];
     for(var i=0;i<N;i++){var x=ax+Math.sin(a0)*sl*i,y=ay+Math.cos(a0)*sl*i;P.push({x:x,y:y,px:x,py:y,w:i===0?0:1})}
     var T=P[N-1],bx=T.x+Math.sin(a0)*bh,by=T.y+Math.cos(a0)*bh;P.push({x:bx,y:by,px:bx,py:by,w:1});
     for(var j=0;j<N-1;j++)C.push([j,j+1,sl]);C.push([N-1,N,bh]);
   }
-  function grab(){ // 软抓取：抓取点每步最多追 GRAB 距离，松手时速度自然留在绳上
+  function grab(){ // 软抓取：抓取点每步最多追 GRAB 距离，甩动的速度自然留在绳上
     if(!drag)return;var T=P[N-1],B=P[N],gx=T.x+(B.x-T.x)*drag.k,gy=T.y+(B.y-T.y)*drag.k;
     var tx=drag.x-gx,ty=drag.y-gy,d=Math.hypot(tx,ty);if(d>GRAB){tx=tx/d*GRAB;ty=ty/d*GRAB}
     T.x+=tx;T.y+=ty;B.x+=tx;B.y+=ty;
   }
-  function stretch(){ // 拉伸上限：超过 5% 直接硬投影，防橡皮筋抖动爆炸
+  function stretch(){ // 拉伸上限：超过 6% 硬投影，防抖动爆炸
     for(var i=0;i<C.length;i++){var A=P[C[i][0]],B=P[C[i][1]],l=C[i][2],dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||1e-6;
-      if(d>l*STRETCH){var ov=(d-l*STRETCH)/d,s=A.w+B.w||1;A.x+=dx*ov*(A.w/s)*2;A.y+=dy*ov*(A.w/s)*2;B.x-=dx*ov*(B.w/s)*2;B.y-=dy*ov*(B.w/s)*2}}
+      if(d>l*reel*STRETCH){var ov=(d-l*reel*STRETCH)/d,s=A.w+B.w||1;A.x+=dx*ov*(A.w/s)*2;A.y+=dy*ov*(A.w/s)*2;B.x-=dx*ov*(B.w/s)*2;B.y-=dy*ov*(B.w/s)*2}}
   }
-  function walls(){ // 绳点不出舞台（左/右/下），碰壁带恢复系数与摩擦
+  function walls(){ // 边界只有视口四边（页面级模式）或舞台（舞台模式）；没有顶棚，可甩到锚点上方
+    var m=wide?10:4,fl=H-(wide?10:6);
     for(var i=1;i<P.length;i++){var p=P[i];
-      if(p.x<4){var vx=p.x-p.px;p.x=4;p.px=p.x+vx*REST;p.py=p.y-(p.y-p.py)*(1-FRICT)}
-      if(p.x>W-4){var vx2=p.x-p.px;p.x=W-4;p.px=p.x+vx2*REST;p.py=p.y-(p.y-p.py)*(1-FRICT)}
-      if(p.y>H-6){var vy=p.y-p.py;p.y=H-6;p.py=p.y+vy*REST;p.px=p.x-(p.x-p.px)*(1-FRICT)}}
+      if(p.x<m){var vx=p.x-p.px;p.x=m;p.px=p.x+vx*REST;p.py=p.y-(p.y-p.py)*(1-FRICT)}
+      if(p.x>W-m){var vx2=p.x-p.px;p.x=W-m;p.px=p.x+vx2*REST;p.py=p.y-(p.y-p.py)*(1-FRICT)}
+      if(p.y>fl){var vy=p.y-p.py;p.y=fl;p.py=p.y+vy*REST;p.px=p.x-(p.x-p.px)*(1-FRICT)}}
   }
-  function collide(){ // 工牌整体（旋转包围盒）不出舞台，防穿模
-    var T=P[N-1],B=P[N],dx=B.x-T.x,dy=B.y-T.y,d=Math.hypot(dx,dy)||1e-6,ax=Math.abs(dx/d),ay=Math.abs(dy/d),hw=bw/2,hh=bh/2,m=2;
+  function collide(){ // 工牌旋转包围盒不出视口，防穿模；上下左右都有弹性
+    var T=P[N-1],B=P[N],dx=B.x-T.x,dy=B.y-T.y,d=Math.hypot(dx,dy)||1e-6,ax=Math.abs(dx/d),ay=Math.abs(dy/d),hw=bw/2,hh=bh/2,m=wide?8:2;
     var ex=hw*ay+hh*ax,ey=hw*ax+hh*ay,cx=(T.x+B.x)/2,cy=(T.y+B.y)/2,ox=0,oy=0;
     if(cx-ex<m)ox=m-(cx-ex);if(cx+ex>W-m)ox=(W-m)-(cx+ex);
     if(cy-ey<m)oy=m-(cy-ey);if(cy+ey>H-m)oy=(H-m)-(cy+ey);
     if(ox){T.x+=ox;B.x+=ox;[T,B].forEach(function(p){var vx=p.x-p.px;p.px=p.x+vx*REST})}
     if(oy){T.y+=oy;B.y+=oy;[T,B].forEach(function(p){var vy=p.y-p.py;p.py=p.y+vy*REST;p.px=p.x-(p.x-p.px)*FRICT})}
   }
-  function step(){ // 一个物理子步
+  function step(){
     var i,k,p;
     for(i=1;i<P.length;i++){p=P[i];var vx=(p.x-p.px)*DAMP,vy=(p.y-p.py)*DAMP;p.px=p.x;p.py=p.y;p.x+=vx;p.y+=vy+G}
     for(k=0;k<IT;k++){
-      for(i=0;i<C.length;i++){var A=P[C[i][0]],B=P[C[i][1]],len=C[i][2];var dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||1e-6,s=A.w+B.w;if(!s)continue;var df=(d-len)/d/s;A.x+=dx*df*A.w;A.y+=dy*df*A.w;B.x-=dx*df*B.w;B.y-=dy*df*B.w}
+      for(i=0;i<C.length;i++){var A=P[C[i][0]],B=P[C[i][1]],len=C[i][2];var dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||1e-6,s=A.w+B.w;if(!s)continue;var df=(d-len*reel)/d/s;A.x+=dx*df*A.w;A.y+=dy*df*A.w;B.x-=dx*df*B.w;B.y-=dy*df*B.w}
       grab();stretch();
     }
     walls();collide();
@@ -1128,23 +1146,27 @@ var Rope=(function(){
     ctx.strokeStyle=col.strap;ctx.lineWidth=10;ctx.setLineDash([]);ctx.stroke();
     ctx.strokeStyle=col.hi;ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
     var T=P[N-1],B=P[N],a=Math.atan2(-(B.x-T.x),B.y-T.y);
-    ang+=(a-ang)*.4;   // 旋转平滑，抑制约束振荡造成的视觉抖动
+    ang+=(a-ang)*.4;
     badge.style.transform='translate('+(T.x-bw/2).toFixed(2)+'px,'+T.y.toFixed(2)+'px) rotate('+ang.toFixed(4)+'rad)';
     ctx.save();ctx.translate(T.x,T.y);ctx.rotate(ang);ctx.fillStyle=col.clip;ctx.fillRect(-9,-16,18,20);ctx.fillStyle=col.strap;ctx.fillRect(-4,-12,8,8);ctx.restore();
   }
-  function loop(){ // 每帧 2 个物理子步：更稳的约束收敛，拖拽与甩动更跟手
+  function loop(){
     for(var s=0;s<2;s++)step();
-    draw();if(!drag&&energy()<.012)calm++;else calm=0;if(calm>120||!visible){running=false;return}requestAnimationFrame(loop)}
+    draw();if(!drag&&energy()<.012)calm++;else calm=0;if(calm>140||!visible){running=false;return}requestAnimationFrame(loop)}
   function wake(){if(RM||SHOT||running||!started)return;running=true;calm=0;requestAnimationFrame(loop)}
-  function local(e){var r=stage.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
-  function clampDrag(){var ax=P[0].x,ay=P[0].y,dx=drag.x-ax,dy=drag.y-ay,d=Math.hypot(dx,dy),m=(L+bh*drag.k)*1.08;if(d>m){drag.x=ax+dx/d*m;drag.y=ay+dy/d*m}}
+  function local(e){ // 页面级模式下事件坐标就是视口坐标
+    if(wide)return{x:e.clientX,y:e.clientY};
+    var r=stage.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+  function clampDrag(){var ax=P[0].x,ay=P[0].y,dx=drag.x-ax,dy=drag.y-ay,d=Math.hypot(dx,dy),reach=(L+bh*drag.k)*reel*1.04;
+    if(d>reach){reel=Math.min(2.1,reel*d/reach);var nr=(L+bh*drag.k)*reel;drag.x=ax+dx/d*nr;drag.y=ay+dy/d*nr}
+    if(reel>1&&d<(L+bh*drag.k)*.9){reel=Math.max(1,d/((L+bh*drag.k)*.95))}}   /* 收回多余绳长 */
   badge.addEventListener('pointerdown',function(e){if(RM||SHOT)return;var q=local(e),T=P[N-1],B=P[N],ux=B.x-T.x,uy=B.y-T.y;var k=((q.x-T.x)*ux+(q.y-T.y)*uy)/(bh*bh);drag={x:q.x,y:q.y,k:Math.max(.05,Math.min(1,k))};badge.setPointerCapture(e.pointerId);badge.classList.add('grab');wake();e.preventDefault()});
   badge.addEventListener('pointermove',function(e){if(!drag)return;var q=local(e);drag.x=q.x;drag.y=q.y;clampDrag()});
   function end(){drag=null;badge.classList.remove('grab')}
   badge.addEventListener('pointerup',end);badge.addEventListener('pointercancel',end);
   var last=null;
-  stage.parentElement.addEventListener('pointermove',function(e){if(drag||!started||RM)return;var q=local(e);if(last){var vx=q.x-last.x;var B=P[N],T=P[N-1],cx=(B.x+T.x)/2,cy=(B.y+T.y)/2;if(Math.hypot(q.x-cx,q.y-cy)<220){B.px-=Math.max(-2,Math.min(2,vx*.05));wake()}}last=q});
-  new IntersectionObserver(function(es){visible=es[0].isIntersecting;if(visible)wake()}).observe(stage);
+  (wide?document:stage.parentElement).addEventListener('pointermove',function(e){if(drag||!started||RM)return;var q=local(e);if(last){var vx=q.x-last.x;var B=P[N],T=P[N-1],cx=(B.x+T.x)/2,cy=(B.y+T.y)/2;if(Math.hypot(q.x-cx,q.y-cy)<(wide?innerHeight:220)){B.px-=Math.max(-2,Math.min(2,vx*.05));wake()}}last=q},{passive:true});
+  new IntersectionObserver(function(es){visible=es[0].isIntersecting;if(visible)wake()}).observe(wide?document.body:stage);
   var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){if(!started)return;build(false);draw();wake()},160)});
   return{
     start:function(){build(!(RM||SHOT));started=true;recolor();draw();wake()},
@@ -1299,6 +1321,9 @@ addEventListener('scroll',function(){if(HUD.on)HUD.render()},{passive:true});
 var navLinks=$$('.links a');
 var secIO=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;navLinks.forEach(function(a){a.setAttribute('aria-current',a.getAttribute('href')==='#'+e.target.id?'true':'false')})})},{rootMargin:'-45% 0px -50% 0px'});
 ['works','rent','xp','ledger','flow','select','contact'].forEach(function(id){secIO.observe(document.getElementById(id))});
+
+/* ---------- 人生日志：点击展开/收起 ---------- */
+$$('.xp-head').forEach(function(h){h.addEventListener('click',function(){var it=h.closest('.xp-item');var on=it.classList.toggle('open');h.setAttribute('aria-expanded',on)})});
 
 /* ---------- 键盘 ---------- */
 addEventListener('keydown',function(e){
